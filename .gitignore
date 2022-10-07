@@ -15,9 +15,12 @@
 deploy.sh
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .idea/workspace.xml
 .idea/misc.xml
 =======
+=======
+>>>>>>> d197f154649ce313fcd093c792dd61d0f0442fff
 =======
 >>>>>>> d197f154649ce313fcd093c792dd61d0f0442fff
 .idea/misc.xml
@@ -32,6 +35,9 @@ deploy.sh
 .idea/sonarlint/issuestore/index.pb
 .idea/vcs.xml
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> d197f154649ce313fcd093c792dd61d0f0442fff
+=======
 >>>>>>> d197f154649ce313fcd093c792dd61d0f0442fff
 =======
 >>>>>>> d197f154649ce313fcd093c792dd61d0f0442fff
