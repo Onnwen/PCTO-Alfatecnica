@@ -23,11 +23,25 @@ DROP TABLE IF EXISTS `Companies`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Companies` (
-  `company_id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) DEFAULT NULL,
-  `location` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`company_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `site` varchar(100) NOT NULL,
+  `path_logo` varchar(40) NOT NULL,
+  `address` varchar(150) NOT NULL,
+  `CAP` int(10) NOT NULL,
+  `city` varchar(50) NOT NULL,
+  `province` varchar(50) NOT NULL,
+  `phoneNumber1` varchar(20) DEFAULT NULL,
+  `emailAddress1` varchar(50) DEFAULT NULL,
+  `personalReference` text DEFAULT NULL,
+  `phoneNumber2` varchar(20) DEFAULT NULL,
+  `cellPhoneNumber` varchar(20) DEFAULT NULL,
+  `emailAddress2` varchar(50) DEFAULT NULL,
+  `companyNotes` text DEFAULT NULL,
+  `clientNotes` text DEFAULT NULL,
+  `planimetry_image_url` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -36,6 +50,10 @@ CREATE TABLE `Companies` (
 
 LOCK TABLES `Companies` WRITE;
 /*!40000 ALTER TABLE `Companies` DISABLE KEYS */;
+INSERT INTO `Companies` VALUES
+(1,'Dallara','Varano de Melegari','img/loghi/azienda1.png','Via Provinciale, 33',43040,'Varano de Melegari','PR','3408871542','dallarastradale@dallara.auto',NULL,'0521887265','6528716254',NULL,NULL,NULL,NULL),
+(2,'Bercella','Varano de Melegari','img/loghi/azienda2.png','Via Enzo Ferrari, 10',43040,'Varano de Melegari','PR','3338765298','bercella@bercella.it',NULL,'0521829983','9992837625',NULL,NULL,NULL,NULL),
+(3,'NonSoloTabacchi','Ozzano Taro','img/loghi/azienda3.png','Via Nazionale, 64',43044,'Ozzano Taro','PR','3762983625','nonsolotabacchi@gmail.com',NULL,'0521765287','7725276534','tabaccheriaozzano_64@nonsolotabacchi.it',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `Companies` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -125,7 +143,7 @@ CREATE TABLE `Product_Category` (
   `visualization_type` int(11) DEFAULT NULL,
   `icon_image_path` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`product_category_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -134,6 +152,8 @@ CREATE TABLE `Product_Category` (
 
 LOCK TABLES `Product_Category` WRITE;
 /*!40000 ALTER TABLE `Product_Category` DISABLE KEYS */;
+INSERT INTO `Product_Category` VALUES
+(1,'Estintore',NULL,NULL);
 /*!40000 ALTER TABLE `Product_Category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -145,10 +165,9 @@ DROP TABLE IF EXISTS `Product_Data`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Product_Data` (
-  `sold_product_id` int(11) NOT NULL AUTO_INCREMENT,
+  `sold_product_id` int(11) DEFAULT NULL,
   `field_id` int(11) DEFAULT NULL,
-  `value` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`sold_product_id`)
+  `value` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -158,6 +177,16 @@ CREATE TABLE `Product_Data` (
 
 LOCK TABLES `Product_Data` WRITE;
 /*!40000 ALTER TABLE `Product_Data` DISABLE KEYS */;
+INSERT INTO `Product_Data` VALUES
+(1,1,'5kg'),
+(1,2,'Pompieri'),
+(1,3,'Rosso'),
+(2,1,'7,5kg'),
+(2,2,'Alfatecnica'),
+(2,3,'Blu'),
+(3,1,'10kg'),
+(3,2,'Pompieri'),
+(3,3,'Arancione');
 /*!40000 ALTER TABLE `Product_Data` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -173,7 +202,7 @@ CREATE TABLE `Product_Fields` (
   `product_category_id` int(11) DEFAULT NULL,
   `name` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`field_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -182,6 +211,10 @@ CREATE TABLE `Product_Fields` (
 
 LOCK TABLES `Product_Fields` WRITE;
 /*!40000 ALTER TABLE `Product_Fields` DISABLE KEYS */;
+INSERT INTO `Product_Fields` VALUES
+(1,1,'Peso'),
+(2,2,'Marchio'),
+(3,3,'Colore');
 /*!40000 ALTER TABLE `Product_Fields` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -199,7 +232,7 @@ CREATE TABLE `Sold_Products` (
   `x` int(11) DEFAULT NULL,
   `y` int(11) DEFAULT NULL,
   PRIMARY KEY (`sold_product_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -208,7 +241,34 @@ CREATE TABLE `Sold_Products` (
 
 LOCK TABLES `Sold_Products` WRITE;
 /*!40000 ALTER TABLE `Sold_Products` DISABLE KEYS */;
+INSERT INTO `Sold_Products` VALUES
+(1,1,1,0,0),
+(2,1,1,5,5),
+(3,2,1,3,3);
 /*!40000 ALTER TABLE `Sold_Products` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `User_Company`
+--
+
+DROP TABLE IF EXISTS `User_Company`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `User_Company` (
+  `user_id` int(11) NOT NULL,
+  `company_id` int(11) NOT NULL,
+  PRIMARY KEY (`user_id`,`company_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `User_Company`
+--
+
+LOCK TABLES `User_Company` WRITE;
+/*!40000 ALTER TABLE `User_Company` DISABLE KEYS */;
+/*!40000 ALTER TABLE `User_Company` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -224,10 +284,9 @@ CREATE TABLE `Users` (
   `hashed_password` varchar(128) DEFAULT NULL,
   `first_name` varchar(50) DEFAULT NULL,
   `last_name` varchar(50) DEFAULT NULL,
-  `company_id` int(11) DEFAULT NULL,
   `role` int(11) DEFAULT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -236,6 +295,8 @@ CREATE TABLE `Users` (
 
 LOCK TABLES `Users` WRITE;
 /*!40000 ALTER TABLE `Users` DISABLE KEYS */;
+INSERT INTO `Users` VALUES
+(1,'onnwen.cassitto@icloud.com','ciaociao','onnwen','cassitto',1);
 /*!40000 ALTER TABLE `Users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -248,4 +309,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-10-05 15:11:10
+-- Dump completed on 2022-10-07 18:40:23

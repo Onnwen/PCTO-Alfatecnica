@@ -3,11 +3,11 @@ require_once('connessione.php');
 
 $idAnag = isset($_POST['idAnag']) ? $_POST['idAnag'] : 0;
 if(!$idAnag == 0){
-  $select = "SELECT prodotti.id, prodotti_img.nome_prodotto, prodotti.pos_x, prodotti.pos_y, prodotti_img.path_img AS pathProd, planimetrie.path_img AS pathSfondo, planimetrie.width, planimetrie.height
-             FROM app JOIN planimetrie JOIN prodotti_img JOIN prodotti JOIN anagrafica
+  $select = "SELECT Sold_Products.sold_product_id, Product_Category.name, Sold_Products.x, Sold_Products.y, Product_Category.icon_image_path AS pathProd, planimetrie.path_img AS pathSfondo, planimetrie.width, planimetrie.height
+             FROM app JOIN planimetrie JOIN Sold_Products JOIN Companies
              ON planimetrie.id = app.idPlanimetria
-             AND app.idAnagrafica = anagrafica.id
-             AND app.idProdotto = prodotti.id
+             AND app.idAnagrafica = anagrafica.id # Incompleta
+             AND app.idProdotto = Sold_Products.sold_product_id
              AND prodotti.idProdImg = prodotti_img.id
              WHERE app.idAnagrafica = " . $idAnag;
   $result = $pdo->query($select);

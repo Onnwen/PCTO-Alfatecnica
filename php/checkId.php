@@ -2,7 +2,7 @@
 require_once('connessione.php');
 
 $count = 0;
-$selectId = "SELECT id FROM prodotti ORDER BY id DESC LIMIT 1";
+$selectId = "SELECT sold_products_id FROM Sold_Products ORDER BY sold_products_id DESC LIMIT 1";
 $res = $pdo->query($selectId);
 if($res){
   while($id = $res->fetch(PDO::FETCH_ASSOC)){
