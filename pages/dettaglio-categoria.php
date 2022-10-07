@@ -1,47 +1,47 @@
 <?php
-header("Access-Control-Allow-Origin: *");
+session_start();
+require_once("../php/connessione2.php");
+if(isset($_SESSION['session_id'])) {
+    $productCategoryID = $_GET['product_category_id'];
+    $companyID = $_GET['company_id'];
 
-$connection = mysqli_connect('thecouriernv.tplinkdns.com','alfatecnica','$Yne&Fu8hGVqu935rXeJV8Fo5','alfatecnica2');
+    $categoryNameSql = "SELECT `name` FROM `Product_Category` WHERE `product_category_id` = :productId;";
+    $pre = $pdo->prepare($categoryNameSql);
+    $pre->bindParam(':productId', $productCategoryID, PDO::PARAM_INT);
+    $pre->execute();
+    $categoryName = $pre->fetch(PDO::FETCH_ASSOC)['name'];
 
-if(mysqli_connect_errno()) {
-    $msg = "Database connection failed: ";
-    $msg .= mysqli_connect_error();
-    $msg .= " : " . mysqli_connect_errno();
-    exit($msg);
-}
-$productCategoryID = $_GET['product_category_id'];
-$companyID = $_GET['company_id'];
-
-$categoryNameSql = "SELECT `name` FROM `Product_Category` WHERE `product_category_id`={$productCategoryID};";
-$categoryNameResponse = mysqli_query($connection, $categoryNameSql);
-$categoryName = mysqli_fetch_assoc($categoryNameResponse)['name'];
-
-$selectFieldsNamesSql = "SELECT name AS field_name, field_id FROM Product_Fields INNER JOIN Sold_Products ON Sold_Products.sold_product_id = Product_Fields.product_category_id WHERE Product_Fields.product_category_id = {$productCategoryID};";
-$fieldsNamesResponse = mysqli_query($connection, $selectFieldsNamesSql);
-$fieldsNames = array();
-while ($field = mysqli_fetch_assoc($fieldsNamesResponse)) {
-    array_push($fieldsNames, $field);
-}
-
-$selectDataSql = "SELECT Product_Data.field_id, Product_Data.value, Sold_Products.sold_product_id FROM Sold_Products INNER JOIN Product_Data ON Product_Data.sold_product_id = Sold_Products.sold_product_id WHERE Sold_Products.product_category_id = {$productCategoryID} AND Sold_Products.company_id = {$companyID}  ORDER BY `Sold_Products`.`sold_product_id` ASC, Product_Data.field_id;;";
-$selectDataResponse = mysqli_query($connection, $selectDataSql);
-$data = array();
-while ($dataResponseRow = mysqli_fetch_assoc($selectDataResponse)) {
-    array_push($data, $dataResponseRow);
-}
-$soldProducts = array();
-$soldProduct = array();
-for ($i = 0; $i < count($data); $i++) {
-    if ($i < 1 || $data[$i]['sold_product_id'] == $data[$i-1]['sold_product_id']) {
-        array_push($soldProduct, $data[$i]);
+    $selectFieldsNamesSql = "SELECT name AS field_name, field_id FROM Product_Fields INNER JOIN Sold_Products ON Sold_Products.sold_product_id = Product_Fields.product_category_id WHERE Product_Fields.product_category_id = :productId;";
+    $fieldsNames = array();
+    $pre = $pdo->prepare($selectFieldsNamesSql);
+    $pre->bindParam(':productId', $productCategoryID, PDO::PARAM_INT);
+    $pre->execute();
+    while ($field = $pre->fetch(PDO::FETCH_ASSOC)) {
+        array_push($fieldsNames, $field);
     }
-    else {
-        array_push($soldProducts, $soldProduct);
-        $soldProduct = [];
-        array_push($soldProduct, $data[$i]);
+
+    $selectDataSql = "SELECT Product_Data.field_id, Product_Data.value, Sold_Products.sold_product_id FROM Sold_Products INNER JOIN Product_Data ON Product_Data.sold_product_id = Sold_Products.sold_product_id WHERE Sold_Products.product_category_id = :productId AND Sold_Products.company_id = :companyId ORDER BY `Sold_Products`.`sold_product_id` ASC, Product_Data.field_id;;";
+    $data = array();
+    $pre = $pdo->prepare($selectDataSql);
+    $pre->bindParam(':productId', $productCategoryID, PDO::PARAM_INT);
+    $pre->bindParam(':companyId', $companyID, PDO::PARAM_INT);
+    $pre->execute();
+    while ($dataResponseRow = $pre->fetch(PDO::FETCH_ASSOC)) {
+        array_push($data, $dataResponseRow);
     }
-    if ($i == count($data)-1) {
-        array_push($soldProducts, $soldProduct);
+    $soldProducts = array();
+    $soldProduct = array();
+    for ($i = 0; $i < count($data); $i++) {
+        if ($i < 1 || $data[$i]['sold_product_id'] == $data[$i - 1]['sold_product_id']) {
+            array_push($soldProduct, $data[$i]);
+        } else {
+            array_push($soldProducts, $soldProduct);
+            $soldProduct = [];
+            array_push($soldProduct, $data[$i]);
+        }
+        if ($i == count($data) - 1) {
+            array_push($soldProducts, $soldProduct);
+        }
     }
 }
 ?>
