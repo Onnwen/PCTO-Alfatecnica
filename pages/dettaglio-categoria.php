@@ -126,6 +126,7 @@ for ($i = 0; $i < count($data); $i++) {
                                 foreach ($fieldsNames as $fieldName) {
                                     echo "<th scope='col'>{$fieldName['field_name']}</th>";
                                 }
+                                echo "<th scope='col'>Modifica</th>";
                             ?>
                         </tr>
                     </thead>
@@ -136,6 +137,7 @@ for ($i = 0; $i < count($data); $i++) {
                             foreach ($soldProduct as $field) {
                                 echo "<th scope='col'>{$field['value']}</th>";
                             }
+                            echo "<th scope='col'><button type='button' class='btn btn-danger btn-sm'>Cancella</button></th>";
                             echo "</tr>";
                         }
                         ?>
