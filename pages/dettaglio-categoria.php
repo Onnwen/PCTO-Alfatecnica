@@ -1,7 +1,7 @@
 <?php
 header("Access-Control-Allow-Origin: *");
 
-$connection = mysqli_connect('localhost','root','','alfatecnica2');
+$connection = mysqli_connect('thecouriernv.tplinkdns.com','alfatecnica','$Yne&Fu8hGVqu935rXeJV8Fo5','alfatecnica2');
 
 if(mysqli_connect_errno()) {
     $msg = "Database connection failed: ";
