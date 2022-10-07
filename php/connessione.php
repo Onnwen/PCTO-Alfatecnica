@@ -1,10 +1,10 @@
 <?php
 $db = [
     'db_engine' => 'mysql',
-    'db_host' => '127.0.0.1',
-    'db_name' => 'alfatecnica',
+    'db_host' => 'thecouriernv.tplinkdns.com',
+    'db_name' => 'alfatecnica2',
     'db_user' => 'alfatecnica',
-    'db_password' => '',
+    'db_password' => '$Yne&Fu8hGVqu935rXeJV8Fo5',
 ];
 
 $db_config = $db['db_engine'] . ":host=".$db['db_host'] . ";dbname=" . $db['db_name'];
