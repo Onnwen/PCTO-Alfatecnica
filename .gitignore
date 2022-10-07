@@ -9,13 +9,8 @@
 # Personal "deploy" script for Nginx
 deploy.sh
 
-# IntelliJ
-.idea/misc.xml
-.idea/modules.xml
-.idea/PCTO-Alfatecnica.iml
-.idea/sonarlint/issuestore/index.pb
-.idea/vcs.xml
-.idea/workspace.xml
+# I file del cazzo di Cassitto
 .idea/*
 .idea
 ._*
+.DS_Store
