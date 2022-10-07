@@ -1,9 +1,4 @@
 .vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-!.vscode/*.code-snippets
 
 # Local History for Visual Studio Code
 .history/
@@ -13,14 +8,8 @@
 
 # Personal "deploy" script for Nginx
 deploy.sh
-.idea/misc.xml
-.idea/modules.xml
-.idea/PCTO-Alfatecnica.iml
-.idea/sonarlint/issuestore/index.pb
-.idea/vcs.xml
-.idea/workspace.xml
-.idea/misc.xml
-.idea/modules.xml
-.idea/PCTO-Alfatecnica.iml
-.idea/sonarlint/issuestore/index.pb
-.idea/vcs.xml
+
+# I cazzo di file di Cassitto
+.idea/*
+.idea
+._*
