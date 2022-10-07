@@ -435,7 +435,7 @@ if(isset($_SESSION['session_id'])){
     $('#vista').click(function(){
       for(let i = 0; i < group.children.length; i++){
         var prova = group.children[i];
-        if(group.children[i].attrs.name != 'estintore'){
+        if(group.children[i].attrs.name != 'Estintore'){
           prova.visible(false);
         } else {
           prova.visible(true);
@@ -445,7 +445,7 @@ if(isset($_SESSION['session_id'])){
     $('#vista2').click(function(){
       for(let i = 0; i < group.children.length; i++){
         var prova = group.children[i];
-        if(group.children[i].attrs.name != 'idrante'){
+        if(group.children[i].attrs.name != 'Idrante'){
           prova.visible(false);
         } else {
           prova.visible(true);
