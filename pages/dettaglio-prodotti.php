@@ -4,7 +4,7 @@ require_once('../php/connessione.php');
 if(isset($_SESSION['session_id'])){
  ?>
 <!DOCTYPE html>
-<html lang="en">
+<body lang="en">
 
 <head>
   <meta charset="UTF-8">
@@ -138,7 +138,7 @@ if(isset($_SESSION['session_id'])){
 
   </div>
 
-</div>
+</body>
 
 <br>
 <br>
@@ -507,6 +507,7 @@ if(isset($_SESSION['session_id'])){
         <footer class="py-3 my-4">
           <p class="text-center text-muted ">© 2022 Alfatecnica, Inc</p>
         </footer>
+    </body>
 </html>
 <?php
 } else {

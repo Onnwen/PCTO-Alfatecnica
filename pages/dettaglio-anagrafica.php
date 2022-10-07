@@ -4,29 +4,28 @@ require_once("../php/connessione.php");
 if(isset($_SESSION['session_id'])){
   $idAnagrafica=isset($_GET['id_ana']) ? $_GET['id_ana'] : '';
   if($idAnagrafica !== '' || $idAnagrafica !== "undefined"){
-    $selectAna = "SELECT nome, indirizzo, CAP, citta, provincia, telefono1, email1, rif_personale, telefono2, cellulare, email2, noteAziendali, noteCliente
-                  FROM anagrafica WHERE id = :id";
+    $selectAna = "SELECT name, address, CAP, city, province, phoneNumber1, emailAddress1, personalReference, phoneNumber2, cellPhoneNumber, emailAddress2, companyNotes, clientNotes
+                  FROM Companies WHERE id = :id";
     $pre = $pdo->prepare($selectAna);
     $pre->bindParam(':id', $idAnagrafica, PDO::PARAM_INT);
     $pre->execute();
     while($row = $pre->fetch(PDO::FETCH_ASSOC)){
       $arrayAna = [
-        'nomeAzienda' => $row['nome'],
-        'indirizzo' => $row['indirizzo'],
+        'nomeAzienda' => $row['name'],
+        'indirizzo' => $row['address'],
         'cap' => $row['CAP'],
-        'citta' => $row['citta'],
-        'provincia' => $row['provincia'],
-        'telefono1' => $row['telefono1'],
-        'email1' => $row['email1'],
-        'rp' => $row['rif_personale'],
-        'telefono2' => $row['telefono2'],
-        'cellulare' => $row['cellulare'],
-        'email2' => $row['email2'],
-        'na' => $row['noteAziendali'],
-        'nc' => $row['noteCliente']
+        'citta' => $row['city'],
+        'provincia' => $row['province'],
+        'telefono1' => $row['phoneNumber1'],
+        'email1' => $row['emailAddress1'],
+        'rp' => $row['personalReference'],
+        'telefono2' => $row['phoneNumber2'],
+        'cellulare' => $row['cellPhoneNumber'],
+        'email2' => $row['emailAddress2'],
+        'na' => $row['companyNotes'],
+        'nc' => $row['clientNotes']
       ];
     }
-
  ?>
 <html>
 
@@ -112,7 +111,7 @@ if(isset($_SESSION['session_id'])){
                     <div class="card-body">
                         <h5 class="card-title"><i class="fa-solid fa-house fa-2xs"
                                 style="margin-right: 10px;"></i>Indirizzo:
-                            </h4>
+                            </h5>
                             <p class="card-text"><?php echo $arrayAna['indirizzo']; ?></p>
                     </div>
                 </div>
@@ -121,7 +120,7 @@ if(isset($_SESSION['session_id'])){
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title"><i class="fa-solid fa-city fa-2xs" style="margin-right: 10px;"></i>Città
-                            - Cap:</h4>
+                            - Cap:</h5>
                             <p class="card-text"><?php echo $arrayAna['citta'] . " - " . $arrayAna['cap']; ?></p>
                     </div>
                 </div>
@@ -130,7 +129,7 @@ if(isset($_SESSION['session_id'])){
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title"><i class="fa-solid fa-building fa-2xs"
-                                style="margin-right: 10px;"></i>Provincia:</h4>
+                                style="margin-right: 10px;"></i>Provincia:</h5>
                             <p class="card-text"><?php echo $arrayAna['provincia']; ?></p>
                     </div>
                 </div>
@@ -139,7 +138,7 @@ if(isset($_SESSION['session_id'])){
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title"><i class="fa-solid fa-phone fa-2xs"
-                                style="margin-right: 10px;"></i>Telefono/i:</h4>
+                                style="margin-right: 10px;"></i>Telefono/i:</h5>
                             <p class="card-text"><?php echo $arrayAna['telefono1']; ?></p>
                     </div>
                 </div>
@@ -150,7 +149,7 @@ if(isset($_SESSION['session_id'])){
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title"><i class="fa-solid fa-envelope fa-2xs"
-                                style="margin-right: 10px;"></i>Email:</h4>
+                                style="margin-right: 10px;"></i>Email:</h5>
                             <p class="card-text"><?php echo $arrayAna['email1']; ?></p>
                     </div>
                 </div>
@@ -159,7 +158,7 @@ if(isset($_SESSION['session_id'])){
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title"><i class="fa-solid fa-user fa-2xs"
-                                style="margin-right: 10px;"></i>Riferimento/i personale/i:</h4>
+                                style="margin-right: 10px;"></i>Riferimento/i personale/i:</h5>
                             <p class="card-text"><?php echo $arrayAna['rp']; ?></p>
                     </div>
                 </div>
@@ -168,7 +167,7 @@ if(isset($_SESSION['session_id'])){
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title"><i class="fa-solid fa-phone fa-2xs"
-                                style="margin-right: 10px;"></i>Telefono/i:</h4>
+                                style="margin-right: 10px;"></i>Telefono/i:</h5>
                             <p class="card-text"><?php echo $arrayAna['telefono2']; ?></p>
                     </div>
                 </div>
@@ -177,7 +176,7 @@ if(isset($_SESSION['session_id'])){
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title"><i class="fa-solid fa-phone fa-2xs"
-                                style="margin-right: 10px;"></i>T.Cellulare:</h4>
+                                style="margin-right: 10px;"></i>T.Cellulare:</h5>
                             <p class="card-text"><?php echo $arrayAna['cellulare']; ?></p>
                     </div>
                 </div>
@@ -186,7 +185,7 @@ if(isset($_SESSION['session_id'])){
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title"><i class="fa-solid fa-envelope fa-2xs"
-                                style="margin-right: 10px;"></i>Email:</h4>
+                                style="margin-right: 10px;"></i>Email:</h5>
                             <p class="card-text"><?php echo $arrayAna['email2']; ?></p>
                     </div>
                 </div>
@@ -195,7 +194,7 @@ if(isset($_SESSION['session_id'])){
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title"><i class="fa-solid fa-industry fa-2xs"
-                                style="margin-right: 10px;"></i>Note aziendali:</h4>
+                                style="margin-right: 10px;"></i>Note aziendali:</h5>
                             <p class="card-text"><?php echo $arrayAna['na']; ?></p>
                     </div>
                 </div>
@@ -204,7 +203,7 @@ if(isset($_SESSION['session_id'])){
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title"><i class="fa-solid fa-image-portrait fa-2xs"
-                                style="margin-right: 10px;"></i>Note per cliente:</h4>
+                                style="margin-right: 10px;"></i>Note per cliente:</h5>
                             <p class="card-text"><?php echo $arrayAna['nc']; ?></p>
                     </div>
                 </div>
@@ -280,7 +279,7 @@ if(isset($_SESSION['session_id'])){
                     <table class="table table-bordered">
                         <thead>
                             <tr style="text-align: center;">
-                                <th scope="col"><a href="Mdl-Imp-Sprinkler-a-secco.html" style="color: black; text-decoration: none;">Impianti</a></th>
+                                <th scope="col"><a href="Mdl-Imp-Sprinkler-a-secco.php" style="color: black; text-decoration: none;">Impianti</a></th>
                                 <th scope="col">Quantità</th>
                                 <th scope="col">Data ultima manutenzione</th>
                             </tr>
@@ -293,7 +292,7 @@ if(isset($_SESSION['session_id'])){
 
                                 <td style="text-align: center;">
                                     <button class="btn btn-outline-success"><i class="fa-solid fa-pen"></i></button>
-                                    <button class="btn btn-outline-info"><a href="Mdl_Estintori.html"
+                                    <button class="btn btn-outline-info"><a href="Mdl_Estintori.php"
                                             style="text-decoration-color: none;"><i
                                                 class="fa-solid fa-circle-info"></i></a></button>
                                     <button class="btn btn-outline-danger"><i
@@ -308,7 +307,7 @@ if(isset($_SESSION['session_id'])){
 
                                 <td style="text-align: center;">
                                     <button class="btn btn-outline-success"><i class="fa-solid fa-pen"></i></button>
-                                    <button class="btn btn-outline-info"><a href="Mdl_Idranti.html"
+                                    <button class="btn btn-outline-info"><a href="Mdl_Idranti.php"
                                             style="text-decoration-color: none;"><i
                                                 class="fa-solid fa-circle-info"></i></a></button>
                                     <button class="btn btn-outline-danger"><i
