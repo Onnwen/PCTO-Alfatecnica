@@ -1,9 +1,8 @@
 <?php
 require_once('connessione.php');
 
-$idAnag = isset($_POST['idAnag']) ? $_POST['idAnag'] : 0;
 if(!$idAnag == 0){
-  $select = "SELECT prodotti.id, prodotti_img.nome_prodotto, prodotti.pos_x, prodotti.pos_y, prodotti_img.path_img AS pathProd, planimetrie.path_img AS pathSfondo, planimetrie.width, planimetrie.height
+  $select = "SELECT Sold_Products.sold_product_id, Product_Category.name, Sold_Products.x, Sold_Products.y, Product_Category.icon_image_path AS pathProd, Companies.planimetry_image_url AS pathSfondo, planimetrie.width, planimetrie.height
              FROM app JOIN planimetrie JOIN prodotti_img JOIN prodotti JOIN anagrafica
              ON planimetrie.id = app.idPlanimetria
              AND app.idAnagrafica = anagrafica.id
