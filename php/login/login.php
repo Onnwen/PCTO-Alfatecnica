@@ -5,10 +5,10 @@ require_once('../connessione.php');
 $email = isset($_POST['email']) ? $_POST['email'] : '';
 $pw = isset($_POST['pw']) ? $_POST['pw'] : '';
 
-$select = "SELECT email, password
-           FROM utente
+$select = "SELECT email, hashed_password
+           FROM Users
            WHERE email = :email
-           AND password = :pw";
+           AND hashed_password = :pw";
 $pre = $pdo->prepare($select);
 $pre->bindParam(':email', $email, PDO::PARAM_STR);
 $pre->bindParam(':pw', $pw, PDO::PARAM_STR);
