@@ -13,3 +13,5 @@
 
 # Personal "deploy" script for Nginx
 deploy.sh
+.idea/workspace.xml
+.idea/misc.xml
