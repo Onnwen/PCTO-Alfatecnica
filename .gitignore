@@ -13,5 +13,19 @@
 
 # Personal "deploy" script for Nginx
 deploy.sh
+<<<<<<< HEAD
 .idea/workspace.xml
 .idea/misc.xml
+=======
+.idea/misc.xml
+.idea/modules.xml
+.idea/PCTO-Alfatecnica.iml
+.idea/sonarlint/issuestore/index.pb
+.idea/vcs.xml
+.idea/workspace.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/PCTO-Alfatecnica.iml
+.idea/sonarlint/issuestore/index.pb
+.idea/vcs.xml
+>>>>>>> d197f154649ce313fcd093c792dd61d0f0442fff
