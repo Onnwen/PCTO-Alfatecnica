@@ -1,0 +1,376 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap%27');
+
+html{
+    font-family: 'Lato', sans-serif;
+}
+/* AndrewDrink */
+:root{
+  --clrBtnStampaPlan: #2298B0;
+  --clrHoverInfo: #9EEBFA;
+  --clrHoverDelete: #F0A8AF;
+  --clrHoverModifica: #86E9BB;
+  --Transparent: transparent;
+}
+/*AndrewDrink */
+
+/* LOGIN */
+
+.form-signin {
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: auto;
+}
+
+.form-signin .checkbox {
+    font-weight: 400;
+}
+
+.form-signin .form-floating:focus-within {
+    z-index: 2;
+}
+
+.form-signin input[type="email"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+/* LISTA-ANAGRAFICA */
+/*.card-img-top{
+  height: auto;
+  width: auto;
+}*/
+
+.anagrafiche {
+    margin-top: 30px;
+}
+
+i.trash {
+    color: red;
+}
+
+i.edit {
+    color: black;
+}
+
+h4 {
+    text-decoration: underline;
+}
+
+.home-button {
+    text-decoration: underline;
+}
+
+.nome-azienda {
+    margin-top: 20px;
+}
+
+.planimetria {
+    border: 1px solid black;
+}
+
+.row-immagine {
+    position: relative;
+}
+
+.row-immagine img {
+    width: 100%;
+    height: auto;
+}
+
+/*.logo{
+  width: auto;
+  height: auto;
+}*/
+
+.row-immagine .zoom-in,
+.zoom-out {
+    position: absolute;
+    top: 5%;
+    left: 93%;
+    background-color: #555;
+    color: white;
+    font-size: 16px;
+    padding: 12px 24px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 5%;
+}
+
+.zoom-out {
+    top: 15%
+}
+
+.aggiungi-muovi {
+    display: flex;
+    position: absolute;
+    top: 90%;
+    place-content: end;
+}
+
+.aggiungi,
+.muovi {
+    background-color: #555;
+    color: white;
+    font-size: 16px;
+    padding: 12px 24px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+
+.aggiungi {
+    margin-right: 10px;
+}
+
+.row-immagine .zoom-in:hover,
+.zoom-out:hover,
+.aggiungi:hover,
+.muovi:hover {
+    background-color: black;
+}
+
+.aggiungi-prodotto {
+    width: auto;
+    border-radius: 5px;
+    border: none;
+    background: #555;
+    color: white;
+    padding: 12px 24px;
+}
+
+.pin {
+    position: absolute;
+    background: none;
+    border: none;
+    width: auto;
+    font-size: x-large;
+}
+
+.pin1 {
+    top: 59%;
+    left: 70%;
+}
+
+.pin2 {
+    top: 45%;
+    left: 47%;
+}
+
+.row-tabella {
+    margin-top: 15px;
+}
+
+.informazioni-prodotto-acquistato {
+    width: auto;
+    border: none;
+    border-radius: 5px;
+    background-color: #555;
+    color: white;
+    padding: 5px;
+}
+
+.informazioni-prodotto-acquistato:hover {
+    background: black;
+}
+
+.ipa-1,
+.ipa-2 {
+    margin-bottom: 5px;
+}
+
+.row-ipa {
+    flex-wrap: nowrap;
+}
+
+.cestino {
+    width: auto;
+    color: white;
+    padding: 5px;
+    color: black;
+    padding: 10px;
+    margin-left: 10px;
+}
+
+.cestino:hover {
+    color: black;
+}
+
+.bottone-mappa{
+    display: none!important;
+}
+
+/* Andrew drink */
+.prova{
+  height: 700px;
+  overflow: hidden;
+  /*background-image: url('download.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;*/
+  border: 4px solid grey;
+  border-radius: 5px;
+}
+#menu {
+  display: none;
+  position: absolute;
+  width: 100px;
+  /*background-color: var(--transparent);*/
+  box-shadow: 0 10px 10px 0 grey;
+  border-radius: 5px;
+}
+#menu button {
+  width: 100%;
+  /*background-color: var(--Transparent);*/
+  margin: 0;
+  padding: 10px;
+}
+.menu-stage-info{
+  border-left: .3px solid lightgray;
+  border-right: .3px solid lightgray;
+  border-top: .3px solid lightgray;
+  background-color: var(--bs-info);
+  border-radius: 5px 5px 0 0;
+  transition: background .2s linear;
+}
+.menu-stage-info:hover{
+  background-color: var(--clrHoverInfo);
+  transition: all .2s linear;
+}
+.menu-stage-modifica{
+  border-left: .3px solid lightgray;
+  border-right: .3px solid lightgray;
+  background-color: var(--bs-green);
+  transition: background .2s linear;
+}
+.menu-stage-modifica:hover{
+  background-color: var(--clrHoverModifica);
+  transition: all .2s linear;
+}
+.menu-stage-elimina{
+  border-left: .3px solid lightgray;
+  border-right: .3px solid lightgray;
+  border-bottom: .3px solid lightgray;
+  background-color: var(--bs-danger);
+  border-radius: 0 0 5px 5px;
+  transition: background .2s linear;
+}
+.menu-stage-elimina:hover{
+  background-color: var(--clrHoverDelete);
+  transition: all .2s linear;
+}
+.fix-btn-conf{
+  border-radius: 5px 5px 0 0 !important;
+  border-top: .3px solid lightgray;
+}
+.btn-annulla{
+  position: absolute;
+  top: 1%;
+  right: 1%;
+  width: auto;
+  display: none;
+}
+.btn-conf{
+  position: absolute;
+  top: 1%;
+  right: 10%;
+  width: auto;
+  display: none;
+}
+#button{
+  text-align: right;
+}
+#viewAll {
+  position: absolute;
+  top: 7px;
+  left: 7px;
+  width: auto;
+}
+#stampaPDFPlan{
+  background-color: var(--clrBtnStampaPlan);
+  width: 55px;
+  position: absolute;
+  bottom: 7px;
+  right: 7px;
+}
+.modifica{
+  float: right;
+}
+.success-action{
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  background-color: var(--bs-teal);
+  width: auto;
+  height: auto;
+  padding: 4px;
+  -webkit-box-shadow: outset 0px 0px 10px 10px grey;
+  box-shadow: outset 0px 0px 10px 10px grey;
+  z-index: 10px;
+  margin: -50px 0 0 -130px;
+  border-radius: 5px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .3s ease-in-out;
+}
+.shadow{
+  visibility: visible;
+  opacity: 1;
+  transition: opacity .5s ease-in-out;
+}
+.mrg-btn{
+  float: right;
+}
+@media screen and (max-width: 992px) {
+  .div-immagine{
+    height: 500px;
+  }
+}
+/* Andrew drink */
+
+@media screen and (max-width: 960px) {
+    .bottone-mappa{
+        display: block!important;
+        text-align: center;
+    }
+    .nome-azienda{
+        display: none!important;
+    }
+    /* AndrewDrink */
+    .div-immagine{
+      height: 400px;
+    }
+    /* AndrewDrink */
+}
+
+.stampa{
+    width: auto;
+    border-radius: 5px;
+    border: none;
+    background: #555;
+    color: white;
+    float: right;
+    height: 50px;
+    width: 100px;
+}
+.row-immagine .zoom-in:hover,
+.zoom-out:hover,
+.stampa:hover,
+.muovi:hover {
+    background-color: black;
+}
+
+.verde{
+  background-color: green;
+}
+.searchIcon .btn-outline-success:hover{color:white; background-color: green;}
+.searchIcon .btn-outline-success.selected{color:white; background-color: green;}

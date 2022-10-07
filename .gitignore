@@ -1,0 +1,15 @@
+.vscode/*
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
+
+# Personal "deploy" script for Nginx
+deploy.sh
+
+# I cazzo di file di Cassitto
+.idea/*
+.idea
+._*
