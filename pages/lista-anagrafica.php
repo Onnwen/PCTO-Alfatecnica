@@ -68,7 +68,7 @@ if(isset($_SESSION['session_id'])){
     <div class="container">
         <div class="row">
             <div class="col">
-                <button type="button" class="btn btn-outline-success"><i class="fa-solid fa-user-plus"></i>Aggiungi</button>
+                <button type="button" class="btn btn-outline-success" onclick="window.location.href='aggiungi-azienda.php'"><i class="fa-solid fa-user-plus"></i>Aggiungi</button>
             </div>
             <div class="col">
                 <input type="text" class="form-control" placeholder="Nome azienda" aria-label="Nome azienda">

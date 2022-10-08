@@ -9,11 +9,11 @@ $width = isset($_POST['w']) ? $_POST['w'] : 0;
 $height = isset($_POST['h']) ? $_POST['h'] : 0;
 $idPlan = isset($_POST['idPlan']) ? $_POST['idPlan'] : 0;
 
-if($posX != '' || $posY != '' || $idProdotto != 0 || $id != 0){
+if ($posX != '' || $posY != '' || $idProdotto != 0 || $id != 0) {
   $insProd = "INSERT INTO prodotti(id, pos_x, pos_y, idProdImg)
              VALUES('" . $id . "','" . $posX . "', '" . $posY . "', '" . $idProdotto . "')";
   $result = $pdo->query($insProd);
-  if($result)
+  if ($result)
     echo 1;
   else
     echo 0;
