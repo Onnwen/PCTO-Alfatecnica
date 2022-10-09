@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once("../php/connessione2.php");
+require_once("../php/connessione.php");
 if(isset($_SESSION['session_id'])) {
     $productCategoryID = $_GET['product_category_id'];
     $companyID = $_GET['company_id'];
