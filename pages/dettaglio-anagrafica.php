@@ -434,7 +434,7 @@ if(isset($_SESSION['session_id'])){
                                 '<td>' + resp[i].dataUltimaManutenzione + '</td>' +
                                 '<td style="text-align: center;">' +
                                 '<button style="margin: 2" class="btn btn-outline-success" onclick="onModifyClick(value)" value="'+ resp[i].idCategoria +'"><i class="fa-solid fa-pen"></i></button>' +
-                                '<button style="margin: 2" class="btn btn-outline-info" href="dettaglio-categoria.php?product_category_id=' + resp[i].idCategoria + '&company_id=' + idAnag + '"><i class="fa-solid fa-circle-info"></i></button>' +
+                                '<button style="margin: 2" class="btn btn-outline-info" onclick="window.location.href=\'dettaglio-categoria.php?product_category_id=' + resp[i].idCategoria + '&company_id=' + idAnag + '\'"><i class="fa-solid fa-circle-info"></i></button>' +
                                 '<button style="margin: 2" class="btn btn-outline-danger" onclick="onDeleteClick('+ resp[i].idCategoria+',value)" value="'+ resp[i].nomeCategoria +'"><i class="fa-solid fa-trash-can"></i></button>' +
                                 '<button style="margin: 2" class="btn btn-outline-success" onclick="onPrintClick(value)" value="'+ resp[i].idCategoria +'"><i class="fa-solid fa-print"></i></button>' +
                                 '</td>' +
