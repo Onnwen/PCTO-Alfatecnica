@@ -126,7 +126,6 @@ if(isset($_SESSION['session_id'])) {
                                 foreach ($fieldsNames as $fieldName) {
                                     echo "<th scope='col'>{$fieldName['field_name']}</th>";
                                 }
-                                echo "<th scope='col'>Modifica</th>";
                             ?>
                         </tr>
                     </thead>
@@ -137,8 +136,6 @@ if(isset($_SESSION['session_id'])) {
                             foreach ($soldProduct as $field) {
                                 echo "<th scope='col'>{$field['value']}</th>";
                             }
-                            echo "<th scope='col'><button type='button' class='btn btn-danger btn-sm'>Cancella</button></th>";
-                            echo "</tr>";
                         }
                         ?>
                     </tbody>
