@@ -196,7 +196,7 @@ if(isset($_SESSION['session_id'])){
             tabella.innerHTML += '<tr>'+
             '<th style="text-align: center;">' + resp[i].nome + '</th>'+
               '<td style="text-align: center;">'+
-               '<button class="btn btn-outline-success"><i class="fa-solid fa-pen"></i></button>'+
+               '<button class="btn btn-outline-success" onclick="window.location.href=\'modifica-azienda.php?id_ana=' + resp[i].id + '\'"><i class="fa-solid fa-pen"></i></button>'+
                '<button class="btn btn-outline-info" onclick="window.location.href=\'dettaglio-anagrafica.php?id_ana=' + resp[i].id + '\'"><i class="fa-solid fa-circle-info"></i></button>'+
                '<button class="btn btn-outline-danger"><i class="fa-solid fa-trash-can"></i></button>'+
               '</td>'+
