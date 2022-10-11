@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once("../php/connessione.php");
+if(isset($_SESSION['session_id'])){
 ?>
 
 <html>
@@ -112,3 +113,9 @@ require_once("../php/connessione.php");
 </body>
 
 </html>
+
+<?php
+}else{
+    include_once('404.html');
+}
+?>
