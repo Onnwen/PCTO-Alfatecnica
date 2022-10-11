@@ -26,13 +26,5 @@ if(!$idCategory == 0 && !$idCompany==0){
     else
         echo 0;
 
-    $deleteProductData = "DELETE FROM Product_Data WHERE product_category_id = :id;
-    $res = $pdo->prepare($deleteProductData);
-    $res->bindParam(":id", $idCategory, PDO::PARAM_INT);
-    $res->execute();
-    if($res)
-        echo 1;
-    else
-        echo 0;
 }
 ?>
