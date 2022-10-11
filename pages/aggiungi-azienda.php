@@ -107,6 +107,10 @@ if(isset($_SESSION['session_id'])){
         <input type="text" id="companyNotes"><br>
         <label for="clientNotes">Note per cliente:</label>
         <input type="text" id="clientNotes"><br>
+        <label for="planimetry_image">Planimetria</label>
+        <input type="file" id="planimetry_image"><br>
+        <label for="logo">Logo</label>
+        <input type="file" id="logo"><br>
     </form>
 
     <button onclick="insertInDatabase()">Conferma</button>
