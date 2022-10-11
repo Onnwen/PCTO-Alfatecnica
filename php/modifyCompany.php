@@ -38,7 +38,7 @@ $pre->bindParam(':emailAddress', $emailAddress, PDO::PARAM_STR);
 $pre->bindParam(':personalReference', $personalReference, PDO::PARAM_STR);
 $pre->bindParam(':phoneNumber2', $phoneNumber2, PDO::PARAM_STR);
 $pre->bindParam(':cellPhoneNumber', $cellPhoneNumber, PDO::PARAM_STR);
-$pre->bindParam(':emailAddress2', $emailAddress2, PDO::PARAM_STR); # CRASHA QUA
+$pre->bindParam(':emailAddress2', $emailAddress2, PDO::PARAM_STR);
 $pre->bindParam(':companyNotes', $companyNotes, PDO::PARAM_STR);
 $pre->bindParam(':clientNotes', $clientNotes, PDO::PARAM_STR);
 
