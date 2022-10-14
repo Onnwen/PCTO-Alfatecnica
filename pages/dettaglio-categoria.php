@@ -11,7 +11,7 @@ if(isset($_SESSION['session_id'])) {
     $pre->execute();
     $categoryName = $pre->fetch(PDO::FETCH_ASSOC)['name'];
 
-    $selectFieldsNamesSql = "SELECT name AS field_name, field_id FROM Product_Fields INNER JOIN Sold_Products ON Sold_Products.sold_product_id = Product_Fields.product_category_id WHERE Product_Fields.product_category_id = :productId;";
+    $selectFieldsNamesSql = "SELECT name AS field_name, field_id FROM Product_Fields WHERE Product_Fields.product_category_id = :productId;";
     $fieldsNames = array();
     $pre = $pdo->prepare($selectFieldsNamesSql);
     $pre->bindParam(':productId', $productCategoryID, PDO::PARAM_INT);
@@ -123,19 +123,24 @@ if(isset($_SESSION['session_id'])) {
                     <thead>
                         <tr style="text-align: center;">
                             <?php
-                                foreach ($fieldsNames as $fieldName) {
-                                    echo "<th scope='col'>{$fieldName['field_name']}</th>";
-                                }
+                            echo "<th scope='col'>N°</th>";
+                            foreach ($fieldsNames as $fieldName) {
+                                echo "<th scope='col'>{$fieldName['field_name']}</th>";
+                            }
+                            echo "<th scope='col'>Modifica</th>";
                             ?>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                        foreach ($soldProducts as $soldProduct) {
+                        for($soldProductIndex = 0; $soldProductIndex < count($soldProducts); $soldProductIndex++) {
                             echo "<tr>";
-                            foreach ($soldProduct as $field) {
-                                echo "<th scope='col'>{$field['value']}</th>";
+                            echo "<th>$soldProductIndex</th>";
+                            foreach ($soldProducts[$soldProductIndex] as $field) {
+                                echo "<th scope='col'><input class='form-control' type='text' value='{$field['value']}'></th>";
                             }
+                            echo "<th scope='col' style='text-align: center;'><button type='button' class='btn btn-success' style='margin-right: 5px;'>Salva</button><button type='button' class='btn btn-danger'>Elimina $lowerCategoryName</button></th>";
+                            echo "</tr>";
                         }
                         ?>
                     </tbody>
