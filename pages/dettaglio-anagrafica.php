@@ -332,7 +332,7 @@ if(isset($_SESSION['session_id'])){
             var layerSfondo = new Konva.Layer({
                 scaleX: 1,
                 scaleY: 1,
-                draggable: true
+                draggable: false
             });
             stage.add(layerSfondo);
             var layer = new Konva.Layer({
@@ -377,7 +377,7 @@ if(isset($_SESSION['session_id'])){
                                 image: imageObj,
                                 width: (20 * sfondoImg.attrs.width) / resp[i].w,
                                 height: (25 * sfondoImg.attrs.height) / resp[i].h,
-                                draggable: true,
+                                draggable: false,
                                 id: resp[i].id_prod,
                                 name: nome_prod
                             });
@@ -398,6 +398,7 @@ if(isset($_SESSION['session_id'])){
                 }, 'json');
 
             });
+
             var scaleBy = 1.05;
             stage.on('wheel', (e) => {
                 e.evt.preventDefault();
@@ -421,6 +422,7 @@ if(isset($_SESSION['session_id'])){
                 };
                 stage.position(newPos);
             });
+
             $(window).on('load', function() {
                 $.post('../php/viewCategories.php', {idAnag: idAnag}, function (resp) {
                     const tabella = document.getElementById('tabellaCategorie');
@@ -433,10 +435,10 @@ if(isset($_SESSION['session_id'])){
                                 '<td>' + resp[i].quantita + '</td>' +
                                 '<td>' + resp[i].dataUltimaManutenzione + '</td>' +
                                 '<td style="text-align: center;">' +
-                                '<button style="margin: 2" class="btn btn-outline-success" onclick="onModifyClick(value)" value="'+ resp[i].idCategoria +'"><i class="fa-solid fa-pen"></i></button>' +
+                                '<button style="margin: 2" class="btn btn-outline-success" onclick="window.location.href=\'modifica-categoria.php?product_category_id=' + resp[i].idCategoria + '&company_id=' + idAnag + '\'"><i class="fa-solid fa-pen"></i></button>' +
                                 '<button style="margin: 2" class="btn btn-outline-info" onclick="window.location.href=\'dettaglio-categoria.php?product_category_id=' + resp[i].idCategoria + '&company_id=' + idAnag + '\'"><i class="fa-solid fa-circle-info"></i></button>' +
                                 '<button style="margin: 2" class="btn btn-outline-danger" onclick="onDeleteClick('+ resp[i].idCategoria+',value)" value="'+ resp[i].nomeCategoria +'"><i class="fa-solid fa-trash-can"></i></button>' +
-                                '<button style="margin: 2" class="btn btn-outline-success" onclick="onPrintClick(value)" value="'+ resp[i].idCategoria +'"><i class="fa-solid fa-print"></i></button>' +
+                                '<button style="margin: 2" class="btn btn-outline-success" onclick="onPrintClick(value)" value="'+ resp[i].nomeCategoria +'"><i class="fa-solid fa-print"></i></button>' +
                                 '</td>' +
                                 '</tr>';
                         }
@@ -451,8 +453,10 @@ if(isset($_SESSION['session_id'])){
                 }, "json");
             });
 
+
+
             function onDeleteClick(idCategoria, nomeCategoria){
-                document.getElementById('textDeleteModal').innerHTML += 'Sei sicuro di voler cancellare la categoria <b>'+ nomeCategoria +'</b> dalla tua anagrafica, in questo modo rimuoverai tutti i prodotti appartenenti ad essa e ne cancellerai le revisioni fatte.';
+                document.getElementById('textDeleteModal').innerHTML = 'Sei sicuro di voler cancellare la categoria <b>'+ nomeCategoria +'</b> dalla tua anagrafica, in questo modo rimuoverai tutti i prodotti appartenenti ad essa e ne cancellerai le revisioni fatte.';
                 document.getElementById('exampleModalLabel').innerHTML += nomeCategoria;
                 $('#deleteModal').modal('show');
                 $('#deleteButton').click(function(){
@@ -476,9 +480,6 @@ if(isset($_SESSION['session_id'])){
                     var prova = group.children[i];
                     prova.visible(true);
                 }
-
-            }
-            function onModifyClick(categoria){
 
             }
             function vistaCategoria(categoria){
