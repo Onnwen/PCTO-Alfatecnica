@@ -4,12 +4,12 @@ require_once("../php/connessione.php");
 if(isset($_SESSION['session_id'])) {
     $productCategoryID = $_GET['product_category_id'];
     $companyID = $_GET['company_id'];
-
     $categoryNameSql = "SELECT `name` FROM `Product_Category` WHERE `product_category_id` = :productId;";
     $pre = $pdo->prepare($categoryNameSql);
     $pre->bindParam(':productId', $productCategoryID, PDO::PARAM_INT);
     $pre->execute();
     $categoryName = $pre->fetch(PDO::FETCH_ASSOC)['name'];
+    $lowerCategoryName = strtolower($categoryName);
 
     $selectFieldsNamesSql = "SELECT name AS field_name, field_id FROM Product_Fields WHERE Product_Fields.product_category_id = :productId;";
     $fieldsNames = array();
@@ -139,7 +139,7 @@ if(isset($_SESSION['session_id'])) {
                             foreach ($soldProducts[$soldProductIndex] as $field) {
                                 echo "<th scope='col'><input class='form-control' type='text' value='{$field['value']}'></th>";
                             }
-                            echo "<th scope='col' style='text-align: center;'><button type='button' class='btn btn-success' style='margin-right: 5px;'>Salva</button><button type='button' class='btn btn-danger'>Elimina $lowerCategoryName</button></th>";
+                            echo "<th scope='col' style='text-align: center; min-width: 250px; display: inline-block;'><button type='button' class='btn btn-success' style='margin-right: 5px;'>Salva</button><button type='button' class='btn btn-danger'>Elimina $lowerCategoryName</button></th>";
                             echo "</tr>";
                         }
                         ?>
