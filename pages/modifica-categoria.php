@@ -139,7 +139,7 @@ if(isset($_SESSION['session_id'])) {
                         foreach ($soldProducts[$soldProductIndex] as $field) {
                             echo "<th scope='col'><input class='form-control' type='text' value='{$field['value']}'></th>";
                         }
-                        echo "<th scope='col' style='text-align: center; min-width: 250px; display: inline-block;'><button type='button' class='btn btn-success' style='margin-right: 5px;'>Salva</button><button type='button' class='btn btn-danger'>Elimina $lowerCategoryName</button></th>";
+                        echo "<th scope='col' style='text-align: center; min-width: 250px; display: inline-block;'><button type='button' class='btn btn-success' style='margin-right: 5px;'>Salva</button><button type='button' class='btn btn-danger' onclick='deleteProduct({$soldProducts[$soldProductIndex][0]["sold_product_id"]})'>Elimina $lowerCategoryName</button></th>";
                         echo "</tr>";
                     }
                     ?>
@@ -155,5 +155,16 @@ if(isset($_SESSION['session_id'])) {
 <footer class="py-3 my-4 border-top ">
     <p class="text-center text-muted ">© 2022 Alfatecnica</p>
 </footer>
+
+<script>
+    function deleteProduct(id) {
+        $.post("../php/deleteProduct.php", { id: id},
+            function(){
+                console.log("Prodotto " + id  + " cancellato.");
+                location.reload();
+            });
+    }
+</script>
+
 </body>
 </html>
