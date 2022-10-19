@@ -137,9 +137,9 @@ if(isset($_SESSION['session_id'])) {
                         echo "<tr>";
                         echo "<th>$soldProductIndex</th>";
                         foreach ($soldProducts[$soldProductIndex] as $field) {
-                            echo "<th scope='col'><input class='form-control' type='text' value='{$field['value']}'></th>";
+                            echo "<th scope='col'><input class='form-control' type='text' value='{$field['value']}' onchange='dataChanged({$soldProducts[$soldProductIndex][0]["sold_product_id"]})'></th>";
                         }
-                        echo "<th scope='col' style='text-align: center; min-width: 250px; display: inline-block;'><button type='button' class='btn btn-success' style='margin-right: 5px;'>Salva</button><button type='button' class='btn btn-danger' onclick='deleteProduct({$soldProducts[$soldProductIndex][0]["sold_product_id"]})'>Elimina $lowerCategoryName</button></th>";
+                        echo "<th scope='col' style='text-align: center; min-width: 250px; display: inline-block;'><button id='saveButton{$soldProducts[$soldProductIndex][0]["sold_product_id"]}' type='button' class='btn btn-success' disabled style='margin-right: 5px;'>Salva</button><button type='button' class='btn btn-danger' onclick='deleteProduct({$soldProducts[$soldProductIndex][0]["sold_product_id"]})'>Elimina $lowerCategoryName</button></th>";
                         echo "</tr>";
                     }
                     ?>
@@ -163,6 +163,10 @@ if(isset($_SESSION['session_id'])) {
                 console.log("Prodotto " + id  + " cancellato.");
                 location.reload();
             });
+    }
+
+    function dataChanged(id) {
+        document.getElementById("saveButton" + id).removeAttribute("disabled");
     }
 </script>
 
