@@ -137,9 +137,9 @@ if(isset($_SESSION['session_id'])) {
                         echo "<tr>";
                         echo "<th>$soldProductIndex</th>";
                         foreach ($soldProducts[$soldProductIndex] as $field) {
-                            echo "<th scope='col'><input class='form-control' type='text' value='{$field['value']}' onchange='dataChanged({$soldProducts[$soldProductIndex][0]["sold_product_id"]})'></th>";
+                            echo "<th scope='col'><input id='field{$field['field_id']}-{$soldProducts[$soldProductIndex][0]["sold_product_id"]}' class='form-control' type='text' value='{$field['value']}' onchange='dataChanged({$soldProducts[$soldProductIndex][0]["sold_product_id"]}, {$field['field_id']})'></th>";
                         }
-                        echo "<th scope='col' style='text-align: center; min-width: 250px; display: inline-block;'><button id='saveButton{$soldProducts[$soldProductIndex][0]["sold_product_id"]}' type='button' class='btn btn-success' disabled style='margin-right: 5px;'>Salva</button><button type='button' class='btn btn-danger' onclick='deleteProduct({$soldProducts[$soldProductIndex][0]["sold_product_id"]})'>Elimina $lowerCategoryName</button></th>";
+                        echo "<th scope='col' style='text-align: center; min-width: 250px; display: inline-block;'><button id='saveButton{$soldProducts[$soldProductIndex][0]["sold_product_id"]}' type='button' class='btn btn-success' disabled style='margin-right: 5px;' onclick='updateProduct({$soldProducts[$soldProductIndex][0]["sold_product_id"]})'>Salva</button><button type='button' class='btn btn-danger' onclick='deleteProduct({$soldProducts[$soldProductIndex][0]["sold_product_id"]})'>Elimina $lowerCategoryName</button></th>";
                         echo "</tr>";
                     }
                     ?>
@@ -157,16 +157,31 @@ if(isset($_SESSION['session_id'])) {
 </footer>
 
 <script>
+    var changedFields = [];
+
     function deleteProduct(id) {
-        $.post("../php/deleteProduct.php", { id: id},
+        $.post("../php/deleteProduct.php", {id: id},
             function(){
                 console.log("Prodotto " + id  + " cancellato.");
                 location.reload();
             });
     }
 
-    function dataChanged(id) {
-        document.getElementById("saveButton" + id).removeAttribute("disabled");
+    function dataChanged(productId, fieldId) {
+        document.getElementById("saveButton" + productId).removeAttribute("disabled");
+        changedFields.push([productId, fieldId]);
+    }
+
+    function updateProduct(productId) {
+        changedFields.forEach(changedField => {
+            if (changedField[0] === productId) {
+                $.post("../php/updateProductFieldValue.php", {product_id: productId, field_id: changedField[1], value: document.getElementById("field" + changedField[1] + "-" + changedField[0]).value},
+                    function(){
+                        console.log("Campo " + changedField[1]  + " del prodotto " + changedField[0] + " aggiornato col valore " + document.getElementById("field" + changedField[1] + "-" + changedField[0]).value + ".");
+                        location.reload();
+                    });
+            }
+        });
     }
 </script>
 
