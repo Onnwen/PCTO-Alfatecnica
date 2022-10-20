@@ -4,7 +4,6 @@ require_once("../php/connessione.php");
 if(isset($_SESSION['session_id'])) {
     $productCategoryID = $_GET['product_category_id'];
     $companyID = $_GET['company_id'];
-
     $categoryNameSql = "SELECT `name` FROM `Product_Category` WHERE `product_category_id` = :productId;";
     $pre = $pdo->prepare($categoryNameSql);
     $pre->bindParam(':productId', $productCategoryID, PDO::PARAM_INT);
@@ -12,7 +11,7 @@ if(isset($_SESSION['session_id'])) {
     $categoryName = $pre->fetch(PDO::FETCH_ASSOC)['name'];
     $lowerCategoryName = strtolower($categoryName);
 
-    $selectFieldsNamesSql = "SELECT name AS field_name, field_id FROM Product_Fields INNER JOIN Sold_Products ON Sold_Products.sold_product_id = Product_Fields.product_category_id WHERE Product_Fields.product_category_id = :productId;";
+    $selectFieldsNamesSql = "SELECT name AS field_name, field_id FROM Product_Fields WHERE Product_Fields.product_category_id = :productId;";
     $fieldsNames = array();
     $pre = $pdo->prepare($selectFieldsNamesSql);
     $pre->bindParam(':productId', $productCategoryID, PDO::PARAM_INT);
@@ -108,7 +107,7 @@ if(isset($_SESSION['session_id'])) {
         <div class="d-flex justify-content-center nome-azienda">
             <div class="row">
                 <div class="col-12">
-                    <h4>Modifica <?php echo $categoryName; ?></h4>
+                    <h4><?php echo $categoryName; ?></h4>
                 </div>
             </div>
         </div>
@@ -122,28 +121,28 @@ if(isset($_SESSION['session_id'])) {
             <div class="table-responsive">
                 <table class="table table-bordered">
                     <thead>
-                        <tr style="text-align: center;">
-                            <?php
-                                foreach ($fieldsNames as $fieldName) {
-                                    echo "<th scope='col'>{$fieldName['field_name']}</th>";
-                                }
-                                echo "<th scope='col'>Modifica</th>";
-                            ?>
-                        </tr>
+                    <tr style="text-align: center;">
+                        <?php
+                        echo "<th scope='col'>N°</th>";
+                        foreach ($fieldsNames as $fieldName) {
+                            echo "<th scope='col'>{$fieldName['field_name']}</th>";
+                        }
+                        echo "<th scope='col'>Modifica</th>";
+                        ?>
+                    </tr>
                     </thead>
                     <tbody>
-                        <form>
-                            <?php
-                            foreach ($soldProducts as $soldProduct) {
-                                echo "<tr>";
-                                foreach ($soldProduct as $field) {
-                                    echo "<th scope='col'><input class='form-control' type='text' value='{$field['value']}'></th>";
-                                }
-                                echo "<th scope='col' style='text-align: center;'><button type='button' class='btn btn-success' style='margin-right: 5px;'>Salva</button><button type='button' class='btn btn-danger'>Elimina $lowerCategoryName</button></th>";
-                                echo "</tr>";
-                            }
-                            ?>
-                        </form>
+                    <?php
+                    for($soldProductIndex = 0; $soldProductIndex < count($soldProducts); $soldProductIndex++) {
+                        echo "<tr>";
+                        echo "<th>$soldProductIndex</th>";
+                        foreach ($soldProducts[$soldProductIndex] as $field) {
+                            echo "<th scope='col'><input id='field{$field['field_id']}-{$soldProducts[$soldProductIndex][0]["sold_product_id"]}' class='form-control' type='text' value='{$field['value']}' onchange='dataChanged({$soldProducts[$soldProductIndex][0]["sold_product_id"]}, {$field['field_id']})'></th>";
+                        }
+                        echo "<th scope='col' style='text-align: center; min-width: 250px; display: inline-block;'><button id='saveButton{$soldProducts[$soldProductIndex][0]["sold_product_id"]}' type='button' class='btn btn-success' disabled style='margin-right: 5px;' onclick='updateProduct({$soldProducts[$soldProductIndex][0]["sold_product_id"]})'>Salva</button><button type='button' class='btn btn-danger' onclick='deleteProduct({$soldProducts[$soldProductIndex][0]["sold_product_id"]})'>Elimina $lowerCategoryName</button></th>";
+                        echo "</tr>";
+                    }
+                    ?>
                     </tbody>
                 </table>
             </div>
@@ -156,5 +155,36 @@ if(isset($_SESSION['session_id'])) {
 <footer class="py-3 my-4 border-top ">
     <p class="text-center text-muted ">© 2022 Alfatecnica</p>
 </footer>
+
+<script>
+    var changedFields = [];
+
+    function deleteProduct(id) {
+        $.post("../php/deleteProduct.php", {id: id},
+            function(){
+                console.log("Prodotto " + id  + " cancellato.");
+                location.reload();
+            });
+    }
+
+    function dataChanged(productId, fieldId) {
+        document.getElementById("saveButton" + productId).removeAttribute("disabled");
+        changedFields.push([productId, fieldId]);
+    }
+
+    function updateProduct(productId) {
+        document.getElementById("saveButton" + productId).setAttribute("disabled", "");
+        changedFields.forEach(changedField => {
+            changedFields.indexOf(changedField) === 0 ? changedFields = [] : changedFields = changedFields.slice(changedFields.indexOf(changedField), 1);
+            if (changedField[0] === productId) {
+                $.post("../php/updateProductFieldValue.php", {product_id: productId, field_id: changedField[1], value: document.getElementById("field" + changedField[1] + "-" + changedField[0]).value},
+                    function(){
+                        console.log("Campo " + changedField[1]  + " del prodotto " + changedField[0] + " aggiornato col valore " + document.getElementById("field" + changedField[1] + "-" + changedField[0]).value + ".");
+                    });
+            }
+        });
+    }
+</script>
+
 </body>
 </html>

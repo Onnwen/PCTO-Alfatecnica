@@ -127,7 +127,6 @@ if(isset($_SESSION['session_id'])) {
                             foreach ($fieldsNames as $fieldName) {
                                 echo "<th scope='col'>{$fieldName['field_name']}</th>";
                             }
-                            echo "<th scope='col'>Modifica</th>";
                             ?>
                         </tr>
                     </thead>
@@ -137,9 +136,8 @@ if(isset($_SESSION['session_id'])) {
                             echo "<tr>";
                             echo "<th>$soldProductIndex</th>";
                             foreach ($soldProducts[$soldProductIndex] as $field) {
-                                echo "<th scope='col'><input class='form-control' type='text' value='{$field['value']}'></th>";
+                                echo "<th scope='col'>{$field['value']}</th>";
                             }
-                            echo "<th scope='col' style='text-align: center; min-width: 250px; display: inline-block;'><button type='button' class='btn btn-success' style='margin-right: 5px;'>Salva</button><button type='button' class='btn btn-danger'>Elimina $lowerCategoryName</button></th>";
                             echo "</tr>";
                         }
                         ?>
