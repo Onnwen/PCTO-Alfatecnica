@@ -173,12 +173,13 @@ if(isset($_SESSION['session_id'])) {
     }
 
     function updateProduct(productId) {
+        document.getElementById("saveButton" + productId).setAttribute("disabled", "");
         changedFields.forEach(changedField => {
+            changedFields.indexOf(changedField) === 0 ? changedFields = [] : changedFields = changedFields.slice(changedFields.indexOf(changedField), 1);
             if (changedField[0] === productId) {
                 $.post("../php/updateProductFieldValue.php", {product_id: productId, field_id: changedField[1], value: document.getElementById("field" + changedField[1] + "-" + changedField[0]).value},
                     function(){
                         console.log("Campo " + changedField[1]  + " del prodotto " + changedField[0] + " aggiornato col valore " + document.getElementById("field" + changedField[1] + "-" + changedField[0]).value + ".");
-                        location.reload();
                     });
             }
         });
