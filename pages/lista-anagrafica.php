@@ -33,24 +33,108 @@ if(isset($_SESSION['session_id'])){
     <hr>
     <br>
 
+    <!-- Aggiungi Popup -->
+    <div class="modal fade" id="addCompanyModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addCompanyModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addCompanyModalLabel">Aggiungi azienda</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="addNameLabel">Nome</span>
+                            <input class="form-control" type="text" id="name" aria-describedby="addNameLabel"><br>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="addCiteLabel">Sede</span>
+                            <input class="form-control" type="text" id="site" aria-describedby="addCiteLabel"><br>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="addAddressLabel">Indirizzo</span>
+                            <input class="form-control" type="text" id="address" aria-describedby="addAddressLabel"><br>
+                        </div>
+                        <div class="row">
+                            <div class="col-8">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="addCityLabel">Città</span>
+                                    <input class="form-control" type="text" id="city" aria-describedby="addCityLabel">
+                                    <span class="input-group-text" id="addCapLabel">CAP</span>
+                                    <input class="form-control" type="text" id="cap" aria-describedby="addCapLabel">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="addProvinceLabel">Provincia</span>
+                                    <input class="form-control" type="text" id="province" aria-describedby="addProvinceLabel">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="addPhoneNumberLabel">Numero di telefono</span>
+                            <input class="form-control" type="text" id="phoneNumber" aria-describedby="addPhoneNumberLabel">
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="addEmailAddressLabel">Indirizzo Email</span>
+                            <input class="form-control" type="text" id="emailAddress" aria-describedby="addEmailAddressLabel"><br>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="addPersonalReferenceLabel">Riferimento personale</span>
+                            <input class="form-control" type="text" id="personalReference" aria-describedby="addPersonalReferenceLabel"><br>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="addPhoneNumber2Label">Numero di telefono 2</span>
+                            <input class="form-control" type="text" id="phoneNumber2" aria-describedby="addPhoneNumber2Label"><br>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="addCellPhoneNumberLabel">Numero di cellulare</span>
+                            <input class="form-control" type="text" id="cellPhoneNumber" aria-describedby="addCellPhoneNumberLabel"><br>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="addEmailAddress2Label">Indirizzo email 2</span>
+                            <input class="form-control" type="text" id="emailAddress2" aria-describedby="addEmailAddress2Label"><br>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-text" id="addEmailAddress2Label">Note aziendali</span>
+                            <input class="form-control" type="text" id="emailAddress2" aria-describedby="addEmailAddress2Label"><br>
+                        </div>
+                        <label for="companyNotes">Note aziendali:</label>
+                        <input class="form-control" type="text" id="companyNotes"><br>
+                        <label for="clientNotes">Note per cliente:</label>
+                        <input class="form-control" type="text" id="clientNotes"><br>
+                        <label for="planimetry_image">Planimetria</label>
+                        <input class="form-control" type="file" id="planimetry_image"><br>
+                        <label for="logo">Logo</label>
+                        <input type="file" id="logo"><br>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                    <button type="button" class="btn btn-primary">Aggiungi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- AGGIUNTA E RICERCA -->
 
     <div class="container">
         <div class="row">
             <div class="col">
-                <button type="button" class="btn btn-outline-success" onclick="window.location.href='aggiungi-azienda.php'"><i class="fa-solid fa-user-plus"></i>Aggiungi</button>
+                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addCompanyModal"><i class="fa-solid fa-user-plus"></i>Aggiungi</button>
             </div>
             <div class="col">
-                <input type="text" class="form-control" placeholder="Nome azienda" aria-label="Nome azienda">
+                <input type="text" id="companyName" class="form-control" placeholder="Nome azienda" aria-label="Nome azienda">
             </div>
             <div class="col">
-                <input type="text" class="form-control" placeholder="Sede" aria-label="Sede">
+                <input type="text" id="companySite" class="form-control" placeholder="Sede" aria-label="Sede">
             </div>
             <div class="col">
-                <input type="text" class="form-control" placeholder="Data ultima prestazione" aria-label="Data ultima prestazione">
+                <input type="text" id="companyLastDate" class="form-control" placeholder="Data ultima prestazione" aria-label="Data ultima prestazione">
             </div>
             <div class="col searchIcon">
-                <button type="button" class="btn btn-outline-success"><i class="fa-solid fa-magnifying-glass"></i>Cerca</button>
+                <button type="button" class="btn btn-outline-success" onclick="search()"><i class="fa-solid fa-magnifying-glass"></i>Cerca</button>
                 <button type="button" class="btn btn-outline-success selected change_cards verde" id="cards"><i class="fa-solid fa-table-list bianco"></i></button>
                 <button type="button" class="btn btn-outline-success change_table verde" id="table"><i class="fa-solid fa-border-all bianco"></i></button>
             </div>
@@ -106,18 +190,64 @@ if(isset($_SESSION['session_id'])){
 
     <!-- PAGINATOR -->
 
+    <?php
+        $numeroElementi=5;
+        
+        $elementoIniziale=$numeroElementi*($pagina-1);
+        //$pagina=$_GET['pagina'];
+        $nome_azienda=$_GET['nome_azienda'];
+        $sede=$_GET['sede'];
+        //$data=$_GET['data_ultima_prestazione'];
+        
+        $condizioneVariabile='';
+        $primaCondizione=0;
+        if(trim($nome_azienda)!=''){
+            $condizioneVariabile.="WHERE name='".$nome_azienda."'";
+            $primaCondizione=1;
+        }
+        if(trim($sede)!=''){
+            if($primaCondizione==0){
+                $condizioneVariabile.="WHERE";
+            }else{
+                $condizioneVariabile.="AND";
+            }
+            $condizioneVariabile.=" site='".$sede."'";
+            $primaCondizione=1;
+        }
+	    $query="SELECT * FROM alfatecnica2 ".$condizioneVariabile." LIMIT ".$elementoIniziale.",".$numeroElementi;
+
+        $result = mysqli_query($conn,$query);
+        $num_rows = mysqli_num_rows($result);
+        if($num_rows>0){
+            while($row = mysqli_fetch_array($result) ){
+                $nome_azienda = $row['name'];
+                $id = $row['id'];
+            }
+        }
+    ?>
+
+    <script>
+        function search(){
+            window.location.href='lista-anagrafica.php?nome_azienda='+document.getElementById("companyName").value+'&sede='+document.getElementById("companySite").value;
+        }
+        var paginaCurr=1;
+        function paginatore(pagina){
+            paginaCurr=pagina;
+        }
+    </script>
+
     <nav aria-label="Page navigation example ">
         <ul class="pagination justify-content-center ">
             <li class="page-item ">
-                <a class="page-link " href="# " aria-label="Previous ">
+                <a class="page-link " href="javascript:void(0);" aria-label="Previous ">
                     <span aria-hidden="true ">&laquo;</span>
                 </a>
             </li>
-            <li class="page-item "><a class="page-link " href="# ">1</a></li>
-            <li class="page-item "><a class="page-link " href="# ">2</a></li>
-            <li class="page-item "><a class="page-link " href="# ">3</a></li>
+            <li class="page-item "><a href="javascript:void(0);" onClick="javascript:paginatore(1);">1</a>
+            <li class="page-item "><a href="javascript:void(0);" onClick="javascript:paginatore(2);">2</a>
+            <li class="page-item "><a href="javascript:void(0);" onClick="javascript:paginatore(3);">3</a>
             <li class="page-item ">
-                <a class="page-link " href="# " aria-label="Next ">
+                <a class="page-link " href="javascript:void(0);" aria-label="Next ">
                     <span aria-hidden="true ">&raquo;</span>
                 </a>
             </li>
