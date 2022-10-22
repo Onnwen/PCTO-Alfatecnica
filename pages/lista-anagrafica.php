@@ -95,18 +95,22 @@ if(isset($_SESSION['session_id'])){
                             <span class="input-group-text" id="addEmailAddress2Label">Indirizzo email 2</span>
                             <input class="form-control" type="text" id="emailAddress2" aria-describedby="addEmailAddress2Label"><br>
                         </div>
-                        <div class="input-group">
-                            <span class="input-group-text" id="addEmailAddress2Label">Note aziendali</span>
-                            <input class="form-control" type="text" id="emailAddress2" aria-describedby="addEmailAddress2Label"><br>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="addCompanyNotesLabel">Note aziendali</span>
+                            <input class="form-control" type="text" id="emailAddress2" aria-describedby="addCompanyNotesLabel"><br>
                         </div>
-                        <label for="companyNotes">Note aziendali:</label>
-                        <input class="form-control" type="text" id="companyNotes"><br>
-                        <label for="clientNotes">Note per cliente:</label>
-                        <input class="form-control" type="text" id="clientNotes"><br>
-                        <label for="planimetry_image">Planimetria</label>
-                        <input class="form-control" type="file" id="planimetry_image"><br>
-                        <label for="logo">Logo</label>
-                        <input type="file" id="logo"><br>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="addClientNotesLabel">Note per cliente</span>
+                            <input class="form-control" type="text" id="clientNotes" aria-describedby="addClientNotesLabel"><br>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="addPlanimetryLabel">Planimetria</span>
+                            <input class="form-control" type="file" id="planimetry_image" aria-describedby="addPlanimetryLabel"><br>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="addLogoLabel">Logo</span>
+                            <input class="form-control" type="file" id="logo" aria-describedby="addLogoLabel"><br>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
