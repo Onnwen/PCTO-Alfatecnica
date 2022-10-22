@@ -56,7 +56,7 @@ INSERT INTO `Companies` VALUES
 (1,'Dallara','Varano de Melegari','img/loghi/azienda1.png','Via Provinciale, 33',43040,'Varano de Melegari','PR','3408871542','dallarastradale@dallara.auto',NULL,'0521887265','6528716254',NULL,NULL,NULL,'img/planimetrie/download.png',532,392),
 (2,'Bercella','Varano de Melegari','img/loghi/azienda2.png','Via Enzo Ferrari, 10',43040,'Varano de Melegari','PR','3338765298','bercella@bercella.it',NULL,'0521829983','9992837625',NULL,NULL,NULL,'img/planimetrie/checojon-scaled.png',532,392),
 (3,'NonSoloTabacchi','Ozzano Taro','img/loghi/azienda3.png','Via Nazionale, 64',43044,'Ozzano Taro','PR','3762983625','nonsolotabacchi@gmail.com',NULL,'0521765287','7725276534','tabaccheriaozzano_64@nonsolotabacchi.it',NULL,NULL,'img/planimetrie/planimetrie-case.png',532,392),
-(6,'dsafsad','sadfsad','img/loghi/azienda1.png','sadfsadf',465465,'asdf','asdf','asdf','sadf','sadf','sadf','sdfa','sadfds','sadfsdfa','sadfsadf',NULL,NULL,NULL);
+(6,'Pluto','Pluto','img/loghi/azienda1.png','Pluto',1337,'Pluto','Pluto','Pluto','Pluto','Pluto','Pluto','Pluto','Pluto','Pluto','Pluto',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `Companies` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -181,7 +181,7 @@ CREATE TABLE `Product_Data` (
   KEY `Product_Data_Product_Fields_field_id_fk` (`field_id`),
   KEY `Product_Data_Sold_Products_sold_product_id_fk` (`sold_product_id`),
   CONSTRAINT `Product_Data_Product_Fields_field_id_fk` FOREIGN KEY (`field_id`) REFERENCES `Product_Fields` (`field_id`) ON UPDATE CASCADE,
-  CONSTRAINT `Product_Data_Sold_Products_sold_product_id_fk` FOREIGN KEY (`sold_product_id`) REFERENCES `Sold_Products` (`sold_product_id`) ON UPDATE CASCADE
+  CONSTRAINT `Product_Data_Sold_Products_sold_product_id_fk` FOREIGN KEY (`sold_product_id`) REFERENCES `Sold_Products` (`sold_product_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -192,15 +192,15 @@ CREATE TABLE `Product_Data` (
 LOCK TABLES `Product_Data` WRITE;
 /*!40000 ALTER TABLE `Product_Data` DISABLE KEYS */;
 INSERT INTO `Product_Data` VALUES
-(1,1,'5kg'),
-(1,2,'Pompieri'),
-(1,3,'Rosso'),
-(2,1,'7,5kg'),
-(2,2,'Alfatecnica'),
-(2,3,'Blu'),
-(3,1,'10kg'),
-(3,2,'Pompieri'),
-(3,3,'Arancione');
+(9,12,'1'),
+(9,13,'2'),
+(9,14,'3'),
+(9,15,'4'),
+(9,16,'CIAO'),
+(9,17,'6'),
+(9,18,'7'),
+(9,19,'HELLO'),
+(9,20,'9');
 /*!40000 ALTER TABLE `Product_Data` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -226,9 +226,26 @@ CREATE TABLE `Product_Fields` (
 LOCK TABLES `Product_Fields` WRITE;
 /*!40000 ALTER TABLE `Product_Fields` DISABLE KEYS */;
 INSERT INTO `Product_Fields` VALUES
-(1,1,'Peso'),
-(2,1,'Marchio'),
-(3,1,'Colore');
+(1,1,'Numero aziendale'),
+(2,1,'Tipo estintore (Kg)'),
+(3,1,'Costruzione '),
+(4,1,'Anno'),
+(5,1,'Matricola'),
+(6,1,'Capacità estinguente'),
+(7,1,'Dislocazione'),
+(8,1,'Revisione'),
+(9,1,'Ricollaudo'),
+(10,1,'Tipo manutenzione'),
+(11,1,'Data'),
+(12,2,'Numero aziendale'),
+(13,2,'Diam. Ug. Lancia (mm)'),
+(14,2,'Pressione statica (bar)'),
+(15,2,'Pressione dinamica (bar)'),
+(16,2,'Collaudo'),
+(17,2,'Esercizio'),
+(18,2,'Dislocazione'),
+(19,2,'Tipo manutenzione'),
+(20,2,'Data');
 /*!40000 ALTER TABLE `Product_Fields` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -257,12 +274,8 @@ CREATE TABLE `Revisions` (
 LOCK TABLES `Revisions` WRITE;
 /*!40000 ALTER TABLE `Revisions` DISABLE KEYS */;
 INSERT INTO `Revisions` VALUES
-(1,1,'2022-10-04'),
-(1,1,'2022-10-08'),
-(1,1,'2022-10-09'),
-(1,1,'2022-10-12'),
+(1,1,'2022-10-07'),
 (1,2,'2022-10-08'),
-(2,1,'2022-10-07'),
 (2,2,'2022-10-07');
 /*!40000 ALTER TABLE `Revisions` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -283,9 +296,9 @@ CREATE TABLE `Sold_Products` (
   PRIMARY KEY (`sold_product_id`),
   KEY `Sold_Products_Product_Category_product_category_id_fk` (`product_category_id`),
   KEY `Sold_Products_Companies_id_fk` (`company_id`),
-  CONSTRAINT `Sold_Products_Companies_id_fk` FOREIGN KEY (`company_id`) REFERENCES `Companies` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `Sold_Products_Companies_id_fk` FOREIGN KEY (`company_id`) REFERENCES `Companies` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `Sold_Products_Product_Category_product_category_id_fk` FOREIGN KEY (`product_category_id`) REFERENCES `Product_Category` (`product_category_id`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -295,14 +308,8 @@ CREATE TABLE `Sold_Products` (
 LOCK TABLES `Sold_Products` WRITE;
 /*!40000 ALTER TABLE `Sold_Products` DISABLE KEYS */;
 INSERT INTO `Sold_Products` VALUES
-(1,1,1,0,0),
-(2,1,1,50,50),
-(3,2,1,100,100),
-(7,1,2,50,50),
-(8,1,2,50,50),
 (9,2,2,20,20),
-(10,2,2,20,20),
-(13,1,1,1,1);
+(23,1,1,100,100);
 /*!40000 ALTER TABLE `Sold_Products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -371,4 +378,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-10-11 13:06:06
+-- Dump completed on 2022-10-22  8:45:55
