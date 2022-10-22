@@ -6,7 +6,7 @@ if(isset($_SESSION['session_id'])){
     $sede=isset($_GET['sede']) ? $_GET['sede'] : '';
 
     $numeroElementi=5;
-    $elementoIniziale=$numeroElementi*($pagina-1);
+    //$elementoIniziale=$numeroElementi*($pagina-1);
     $condizioneVariabile='';
     $primaCondizione=0;
     if(trim($nome_azienda)!=''){
@@ -22,7 +22,7 @@ if(isset($_SESSION['session_id'])){
         $condizioneVariabile.=" site='".$sede."'";
         $primaCondizione=1;
     }
-    $query="SELECT * FROM alfatecnica2 ".$condizioneVariabile." LIMIT ".$elementoIniziale.",".$numeroElementi;
+    $query="SELECT * FROM alfatecnica2 ".$condizioneVariabile;//." LIMIT ".$elementoIniziale.",".$numeroElementi;
     try {
         $pre = $pdo->prepare($query);
     } catch (Exception $e) {
