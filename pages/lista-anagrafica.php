@@ -2,7 +2,41 @@
 session_start();
 require_once("../php/connessione.php");
 if(isset($_SESSION['session_id'])){
- ?>
+    $numeroElementi=5;
+    
+    $elementoIniziale=$numeroElementi*($pagina-1);
+    //$pagina=$_GET['pagina'];
+    $nome_azienda=isset($_GET['nome_azienda']) ? $_GET['nome_azienda'] : '';
+    $sede=isset($_GET['sede']) ? $_GET['sede'] : '';
+    //$data=$_GET['data_ultima_prestazione'];
+    
+    $condizioneVariabile='';
+    $primaCondizione=0;
+    if(trim($nome_azienda)!=''){
+        $condizioneVariabile.="WHERE name='".$nome_azienda."'";
+        $primaCondizione=1;
+    }
+    if(trim($sede)!=''){
+        if($primaCondizione==0){
+            $condizioneVariabile.="WHERE";
+        }else{
+            $condizioneVariabile.="AND";
+        }
+        $condizioneVariabile.=" site='".$sede."'";
+        $primaCondizione=1;
+    }
+    $query="SELECT * FROM alfatecnica2 ".$condizioneVariabile." LIMIT ".$elementoIniziale.",".$numeroElementi;
+
+    $result = mysqli_query($conn,$query);
+    $num_rows = mysqli_num_rows($result);
+    if($num_rows>0){
+        while($row = mysqli_fetch_array($result) ){
+            $nome_azienda = $row['name'];
+            $id = $row['id'];
+        }
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -134,7 +168,7 @@ if(isset($_SESSION['session_id'])){
                 <input type="text" id="companyLastDate" class="form-control" placeholder="Data ultima prestazione" aria-label="Data ultima prestazione">
             </div>
             <div class="col searchIcon">
-                <button type="button" class="btn btn-outline-success" onclick="search()"><i class="fa-solid fa-magnifying-glass"></i>Cerca</button>
+                <button type="button" class="btn btn-outline-success" onclick="search();"><i class="fa-solid fa-magnifying-glass"></i>Cerca</button>
                 <button type="button" class="btn btn-outline-success selected change_cards verde" id="cards"><i class="fa-solid fa-table-list bianco"></i></button>
                 <button type="button" class="btn btn-outline-success change_table verde" id="table"><i class="fa-solid fa-border-all bianco"></i></button>
             </div>
@@ -189,53 +223,6 @@ if(isset($_SESSION['session_id'])){
     <br>
 
     <!-- PAGINATOR -->
-
-    <?php
-        $numeroElementi=5;
-        
-        $elementoIniziale=$numeroElementi*($pagina-1);
-        //$pagina=$_GET['pagina'];
-        $nome_azienda=$_GET['nome_azienda'];
-        $sede=$_GET['sede'];
-        //$data=$_GET['data_ultima_prestazione'];
-        
-        $condizioneVariabile='';
-        $primaCondizione=0;
-        if(trim($nome_azienda)!=''){
-            $condizioneVariabile.="WHERE name='".$nome_azienda."'";
-            $primaCondizione=1;
-        }
-        if(trim($sede)!=''){
-            if($primaCondizione==0){
-                $condizioneVariabile.="WHERE";
-            }else{
-                $condizioneVariabile.="AND";
-            }
-            $condizioneVariabile.=" site='".$sede."'";
-            $primaCondizione=1;
-        }
-	    $query="SELECT * FROM alfatecnica2 ".$condizioneVariabile." LIMIT ".$elementoIniziale.",".$numeroElementi;
-
-        $result = mysqli_query($conn,$query);
-        $num_rows = mysqli_num_rows($result);
-        if($num_rows>0){
-            while($row = mysqli_fetch_array($result) ){
-                $nome_azienda = $row['name'];
-                $id = $row['id'];
-            }
-        }
-    ?>
-
-    <script>
-        function search(){
-            window.location.href='lista-anagrafica.php?nome_azienda='+document.getElementById("companyName").value+'&sede='+document.getElementById("companySite").value;
-        }
-        var paginaCurr=1;
-        function paginatore(pagina){
-            paginaCurr=pagina;
-        }
-    </script>
-
     <nav aria-label="Page navigation example ">
         <ul class="pagination justify-content-center ">
             <li class="page-item ">
@@ -315,7 +302,13 @@ if(isset($_SESSION['session_id'])){
     });
 
 
-
+    function search(){
+        window.location.href='lista-anagrafica.php?nome_azienda='+document.getElementById("companyName").value+'&sede='+document.getElementById("companySite").value;
+    }
+    var paginaCurr=1;
+    function paginatore(pagina){
+        paginaCurr=pagina;
+    }
 </script>
 
 </html>
