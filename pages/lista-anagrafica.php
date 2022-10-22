@@ -2,14 +2,11 @@
 session_start();
 require_once("../php/connessione.php");
 if(isset($_SESSION['session_id'])){
-    $numeroElementi=5;
-    
-    $elementoIniziale=$numeroElementi*($pagina-1);
-    //$pagina=$_GET['pagina'];
     $nome_azienda=isset($_GET['nome_azienda']) ? $_GET['nome_azienda'] : '';
     $sede=isset($_GET['sede']) ? $_GET['sede'] : '';
-    //$data=$_GET['data_ultima_prestazione'];
-    
+
+    $numeroElementi=5;
+    $elementoIniziale=$numeroElementi*($pagina-1);
     $condizioneVariabile='';
     $primaCondizione=0;
     if(trim($nome_azienda)!=''){
@@ -26,6 +23,15 @@ if(isset($_SESSION['session_id'])){
         $primaCondizione=1;
     }
     $query="SELECT * FROM alfatecnica2 ".$condizioneVariabile." LIMIT ".$elementoIniziale.",".$numeroElementi;
+    try {
+        $pre = $pdo->prepare($query);
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        exit;
+    }
+    $pre->bindParam(':site', $sede, PDO::PARAM_INT);
+    $pre->bindParam(':name', $nome_azienda, PDO::PARAM_STR);
+    $pre->execute();
 
     $result = mysqli_query($conn,$query);
     $num_rows = mysqli_num_rows($result);
