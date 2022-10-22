@@ -33,9 +33,45 @@ if(isset($_SESSION['session_id'])){
     <hr>
     <br>
 
-    <!-- Aggiungi Popup -->
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmedModal" tabindex="-1" aria-labelledby="confirmedModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" style="color: darkgreen" id="confirmedModalLabel">Effettuato con successo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    L'operazione è avvenuta con successo.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="confirmedModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" style="color: darkred" id="confirmedModalLabel">Errore</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Le modifiche non sono state applicate. È stato riscontrato un errore durante il caricamento dei dati.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Company Modal -->
     <div class="modal fade" id="addCompanyModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addCompanyModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addCompanyModalLabel">Aggiungi azienda</h5>
@@ -43,17 +79,18 @@ if(isset($_SESSION['session_id'])){
                 </div>
                 <div class="modal-body">
                     <form>
+                        <label for="basic-url" class="form-label">Informazioni generali</label>
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="addNameLabel">Nome</span>
-                            <input class="form-control" type="text" id="name" aria-describedby="addNameLabel"><br>
+                            <input class="form-control" type="text" id="name" aria-describedby="addNameLabel">
                         </div>
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="addCiteLabel">Sede</span>
-                            <input class="form-control" type="text" id="site" aria-describedby="addCiteLabel"><br>
+                            <input class="form-control" type="text" id="site" aria-describedby="addCiteLabel">
                         </div>
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="addAddressLabel">Indirizzo</span>
-                            <input class="form-control" type="text" id="address" aria-describedby="addAddressLabel"><br>
+                            <input class="form-control" type="text" id="address" aria-describedby="addAddressLabel">
                         </div>
                         <div class="row">
                             <div class="col-8">
@@ -61,7 +98,7 @@ if(isset($_SESSION['session_id'])){
                                     <span class="input-group-text" id="addCityLabel">Città</span>
                                     <input class="form-control" type="text" id="city" aria-describedby="addCityLabel">
                                     <span class="input-group-text" id="addCapLabel">CAP</span>
-                                    <input class="form-control" type="text" id="cap" aria-describedby="addCapLabel">
+                                    <input class="form-control" type="text" id="CAP" aria-describedby="addCapLabel">
                                 </div>
                             </div>
                             <div class="col">
@@ -71,51 +108,77 @@ if(isset($_SESSION['session_id'])){
                                 </div>
                             </div>
                         </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="addPhoneNumberLabel">Numero di telefono</span>
-                            <input class="form-control" type="text" id="phoneNumber" aria-describedby="addPhoneNumberLabel">
-                        </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="addEmailAddressLabel">Indirizzo Email</span>
-                            <input class="form-control" type="text" id="emailAddress" aria-describedby="addEmailAddressLabel"><br>
-                        </div>
+                        <br/>
+                        <label for="basic-url" class="form-label">Recapiti</label>
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="addPersonalReferenceLabel">Riferimento personale</span>
-                            <input class="form-control" type="text" id="personalReference" aria-describedby="addPersonalReferenceLabel"><br>
-                        </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="addPhoneNumber2Label">Numero di telefono 2</span>
-                            <input class="form-control" type="text" id="phoneNumber2" aria-describedby="addPhoneNumber2Label"><br>
+                            <input class="form-control" type="text" id="personalReference" aria-describedby="addPersonalReferenceLabel">
                         </div>
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="addCellPhoneNumberLabel">Numero di cellulare</span>
-                            <input class="form-control" type="text" id="cellPhoneNumber" aria-describedby="addCellPhoneNumberLabel"><br>
+                            <input class="form-control" type="text" id="cellPhoneNumber" aria-describedby="addCellPhoneNumberLabel">
                         </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="addEmailAddress2Label">Indirizzo email 2</span>
-                            <input class="form-control" type="text" id="emailAddress2" aria-describedby="addEmailAddress2Label"><br>
+                        <div class="row">
+                            <div class="col">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="addPhoneNumberLabel">Numero di telefono</span>
+                                    <input class="form-control" type="text" id="phoneNumber" aria-describedby="addPhoneNumberLabel">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="addEmailAddressLabel">Indirizzo email</span>
+                                    <input class="form-control" type="text" id="emailAddress" aria-describedby="addEmailAddressLabel">
+                                </div>
+                            </div>
                         </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="addPhoneNumber2Label">Numero di telefono 2</span>
+                                    <input class="form-control" type="text" id="phoneNumber2" aria-describedby="addPhoneNumber2Label">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="addEmailAddress2Label">Indirizzo email 2</span>
+                                    <input class="form-control" type="text" id="emailAddress2" aria-describedby="addEmailAddress2Label">
+                                </div>
+                            </div>
+                        </div>
+                        <br/>
+                        <label for="basic-url" class="form-label">Note</label>
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="addCompanyNotesLabel">Note aziendali</span>
-                            <input class="form-control" type="text" id="emailAddress2" aria-describedby="addCompanyNotesLabel"><br>
+                            <input class="form-control" type="text" id="companyNotes" aria-describedby="addCompanyNotesLabel">
                         </div>
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="addClientNotesLabel">Note per cliente</span>
-                            <input class="form-control" type="text" id="clientNotes" aria-describedby="addClientNotesLabel"><br>
+                            <input class="form-control" type="text" id="clientNotes" aria-describedby="addClientNotesLabel">
                         </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="addPlanimetryLabel">Planimetria</span>
-                            <input class="form-control" type="file" id="planimetry_image" aria-describedby="addPlanimetryLabel"><br>
-                        </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="addLogoLabel">Logo</span>
-                            <input class="form-control" type="file" id="logo" aria-describedby="addLogoLabel"><br>
+                        <br/>
+                        <label for="basic-url" class="form-label">File</label>
+                        <div class="row">
+                            <div class="col">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="addPlanimetryLabel">Planimetria</span>
+                                    <input class="form-control" type="file" id="planimetry_image" aria-describedby="addPlanimetryLabel">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="addLogoLabel">Logo</span>
+                                    <input class="form-control" type="file" id="logo" aria-describedby="addLogoLabel">
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-                    <button type="button" class="btn btn-primary">Aggiungi</button>
+                    <button id="addButton" type="button" class="btn btn-primary" onclick="insertInDatabase();">
+                        Aggiungi
+                    </button>
                 </div>
             </div>
         </div>
@@ -272,8 +335,58 @@ if(isset($_SESSION['session_id'])){
         });
     });
 
+    function insertInDatabase() {
+        document.getElementById("addButton").setAttribute("disabled", "");
+        document.getElementById("addButton").innerHTML = '<div class="spinner-border spinner-border-sm" role="status"/>';
 
+        let name = $('#name').val();
+        let site = $('#site').val();
+        let address = $('#address').val();
+        let CAP = $('#CAP').val();
+        let city = $('#city').val();
+        let province = $('#province').val();
+        let phoneNumber = $('#phoneNumber').val();
+        let emailAddress = $('#emailAddress').val();
+        let personalReference = $('#personalReference').val();
+        let phoneNumber2 = $('#phoneNumber2').val();
+        let cellPhoneNumber = $('#cellPhoneNumber').val();
+        let emailAddress2 = $('#emailAddress2').val();
+        let companyNotes = $('#companyNotes').val();
+        let clientNotes = $('#clientNotes').val();
 
+        $.post('../php/addCompany.php', {
+            name: name,
+            site: site,
+            address: address,
+            CAP: CAP,
+            city: city,
+            province: province,
+            phoneNumber: phoneNumber,
+            emailAddress: emailAddress,
+            personalReference: personalReference,
+            phoneNumber2: phoneNumber2,
+            cellPhoneNumber: cellPhoneNumber,
+            emailAddress2: emailAddress2,
+            companyNotes: companyNotes,
+            clientNotes: clientNotes
+        })
+        .done(function(response){
+            document.getElementById("addButton").removeAttribute("disabled");
+            document.getElementById("addButton").innerHTML = 'Aggiungi';
+            $("#addCompanyModal").modal('hide');
+            if (response == 'invalidInsert') {
+                $("#errorModal").modal('show');
+            } else {
+                $("#confirmedModal").modal('show');
+            }
+        })
+        .fail(function() {
+            document.getElementById("addButton").removeAttribute("disabled");
+            document.getElementById("addButton").innerHTML = 'Aggiungi';
+            $("#addCompanyModal").modal('hide');
+            $("#errorModal").modal('show');
+        });
+    }
 </script>
 
 </html>
