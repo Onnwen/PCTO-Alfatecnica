@@ -192,7 +192,7 @@ if (isset($_SESSION['session_id'])) {
                     </div>
                     <div class="modal-footer">
                         <button id="companyModalCloseButton" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-                        <button id="companyModalConfirmButton" type="button" class="btn btn-primary" onclick="insertInDatabase();">Aggiungi</button>
+                        <button id="companyModalConfirmButton" type="button" class="btn btn-success" onclick="insertInDatabase();">Aggiungi</button>
                     </div>
                 </div>
             </div>
