@@ -43,7 +43,6 @@ if(isset($_SESSION['session_id'])) {
             array_push($soldProducts, $soldProduct);
         }
     }
-}
 ?>
 
 <html>
@@ -159,3 +158,8 @@ if(isset($_SESSION['session_id'])) {
 
 </body>
 </html>
+    <?php
+} else {
+    echo "<script>window.location.replace('../index.php');</script>";
+}
+?>
