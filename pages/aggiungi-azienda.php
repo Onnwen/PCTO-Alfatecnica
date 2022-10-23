@@ -118,8 +118,8 @@ if(isset($_SESSION['session_id'])){
 
 </html>
 
-<?php
-}else{
-    include_once('404.html');
+    <?php
+} else {
+    echo "<script>window.location.replace('../index.php');</script>";
 }
 ?>
