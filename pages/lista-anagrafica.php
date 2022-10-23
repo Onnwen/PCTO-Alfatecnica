@@ -2,7 +2,47 @@
 session_start();
 require_once("../php/connessione.php");
 if(isset($_SESSION['session_id'])){
- ?>
+    $nome_azienda=isset($_GET['nome_azienda']) ? $_GET['nome_azienda'] : '';
+    $sede=isset($_GET['sede']) ? $_GET['sede'] : '';
+
+    $numeroElementi=5;
+    //$elementoIniziale=$numeroElementi*($pagina-1);
+    $condizioneVariabile='';
+    $primaCondizione=0;
+    if(trim($nome_azienda)!=''){
+        $condizioneVariabile.="WHERE name='".$nome_azienda."'";
+        $primaCondizione=1;
+    }
+    if(trim($sede)!=''){
+        if($primaCondizione==0){
+            $condizioneVariabile.="WHERE";
+        }else{
+            $condizioneVariabile.="AND";
+        }
+        $condizioneVariabile.=" site='".$sede."'";
+        $primaCondizione=1;
+    }
+    $query="SELECT * FROM alfatecnica2 ".$condizioneVariabile;//." LIMIT ".$elementoIniziale.",".$numeroElementi;
+    try {
+        $pre = $pdo->prepare($query);
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        exit;
+    }
+    $pre->bindParam(':site', $sede, PDO::PARAM_INT);
+    $pre->bindParam(':name', $nome_azienda, PDO::PARAM_STR);
+    $pre->execute();
+
+    $result = mysqli_query($conn,$query);
+    $num_rows = mysqli_num_rows($result);
+    if($num_rows>0){
+        while($row = mysqli_fetch_array($result) ){
+            $nome_azienda = $row['name'];
+            $id = $row['id'];
+        }
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -213,16 +253,16 @@ if(isset($_SESSION['session_id'])){
                 <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#companyModal" data-bs-whatever="addCompany"><i class="fa-solid fa-user-plus"></i>Aggiungi</button>
             </div>
             <div class="col">
-                <input type="text" class="form-control" placeholder="Nome azienda" aria-label="Nome azienda">
+                <input type="text" id="companyName" class="form-control" placeholder="Nome azienda" aria-label="Nome azienda">
             </div>
             <div class="col">
-                <input type="text" class="form-control" placeholder="Sede" aria-label="Sede">
+                <input type="text" id="companySite" class="form-control" placeholder="Sede" aria-label="Sede">
             </div>
             <div class="col">
-                <input type="text" class="form-control" placeholder="Data ultima prestazione" aria-label="Data ultima prestazione">
+                <input type="text" id="companyLastDate" class="form-control" placeholder="Data ultima prestazione" aria-label="Data ultima prestazione">
             </div>
             <div class="col searchIcon">
-                <button type="button" class="btn btn-outline-success"><i class="fa-solid fa-magnifying-glass"></i>Cerca</button>
+                <button type="button" class="btn btn-outline-success" onclick="search();"><i class="fa-solid fa-magnifying-glass"></i>Cerca</button>
                 <button type="button" class="btn btn-outline-success selected change_cards verde" id="cards"><i class="fa-solid fa-table-list bianco"></i></button>
                 <button type="button" class="btn btn-outline-success change_table verde" id="table"><i class="fa-solid fa-border-all bianco"></i></button>
             </div>
@@ -277,17 +317,17 @@ if(isset($_SESSION['session_id'])){
     <br>
 
     <!-- PAGINATOR -->
-
     <nav aria-label="Page navigation example ">
         <ul class="pagination justify-content-center ">
             <li class="page-item ">
                 <a class="page-link " href="# " aria-label="Previous ">
                     <span aria-hidden="true">&laquo;</span>
+
                 </a>
             </li>
-            <li class="page-item "><a class="page-link " href="# ">1</a></li>
-            <li class="page-item "><a class="page-link " href="# ">2</a></li>
-            <li class="page-item "><a class="page-link " href="# ">3</a></li>
+            <li class="page-item "><a href="javascript:void(0);" onClick="javascript:paginatore(1);">1</a>
+            <li class="page-item "><a href="javascript:void(0);" onClick="javascript:paginatore(2);">2</a>
+            <li class="page-item "><a href="javascript:void(0);" onClick="javascript:paginatore(3);">3</a>
             <li class="page-item ">
                 <a class="page-link " href="# " aria-label="Next ">
                     <span aria-hidden="true">&raquo;</span>
@@ -437,7 +477,7 @@ if(isset($_SESSION['session_id'])){
         fillCompanyModal();
         const button = event.relatedTarget;
         const modalType = button.getAttribute('data-bs-whatever');
-
+        
         const modalTitle = companyModal.querySelector('.modal-title');
         const confirmButton = $('#companyModalConfirmButton');
 
@@ -483,6 +523,13 @@ if(isset($_SESSION['session_id'])){
     function modalConfirmation(confirmed) {
         $("#companyModal").modal(confirmed ? 'hide' : 'show');
         $("#confirmedModal").modal(!confirmed ? 'hide' : 'show');
+    }
+    function search(){
+        window.location.href='lista-anagrafica.php?nome_azienda='+document.getElementById("companyName").value+'&sede='+document.getElementById("companySite").value;
+    }
+    var paginaCurr=1;
+    function paginatore(pagina){
+        paginaCurr=pagina;
     }
 </script>
 
