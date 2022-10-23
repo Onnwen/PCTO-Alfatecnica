@@ -23,7 +23,23 @@ echo '<nav class="navbar navbar-expand-lg navbar-light" style="background-color:
                 </li>
                 </li>
             </ul>
-            <button type="button" class="btn btn-sm btn-outline-danger">Logout</button>
+            <button type="button" class="btn btn-sm btn-outline-danger" onclick="logout();">Logout</button>
         </div>
     </div>
-</nav>';
+</nav>
+<script>
+    const httpLogoutRequest = new XMLHttpRequest();
+    httpLogoutRequest.onreadystatechange = () => {
+        if (httpLogoutRequest.readyState === 4 && httpLogoutRequest.status === 200) {
+            console.log("CIAO")
+            window.location.replace("../index.php");
+        }
+    }
+    
+    function logout() {
+        httpLogoutRequest.open("GET", "../php/login/logout.php");
+        httpLogoutRequest.send();
+    }
+</script>
+';
+
