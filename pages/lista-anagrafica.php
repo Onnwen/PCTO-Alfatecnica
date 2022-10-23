@@ -52,15 +52,15 @@ if(isset($_SESSION['session_id'])){
     </div>
 
     <!-- Error Modal -->
-    <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="confirmedModalLabel" aria-hidden="true">
+    <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" style="color: darkred" id="confirmedModalLabel">È stato riscontrato un problema</h5>
+                    <h5 class="modal-title" style="color: darkred" id="errorModalLabel">È stato riscontrato un problema</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Le modifiche non sono state applicate. È stato riscontrato un errore durante il caricamento dei dati.
+                    È stato riscontrato un errore durante il caricamento dei dati. Nessuna modifica è stata applicata.
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
@@ -69,12 +69,27 @@ if(isset($_SESSION['session_id'])){
         </div>
     </div>
 
-    <!-- Add Company Modal -->
-    <div class="modal fade" id="addCompanyModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addCompanyModalLabel" aria-hidden="true">
+    <!-- Loading Modal -->
+    <div class="modal fade" id="loadingModal"  data-bs-backdrop="static" tabindex="-1" aria-labelledby="loadingModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loadingModalLabel">Attendi</h5>
+                    <div class="spinner-border spinner-border-sm" role="status"></div>
+                </div>
+                <div class="modal-body">
+                    Caricamento dei dati in corso.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Company Modal -->
+    <div class="modal fade" id="companyModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="companyModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addCompanyModalLabel">Aggiungi azienda</h5>
+                    <h5 class="modal-title" id="companyModalLabel">Aggiungi azienda</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -148,37 +163,43 @@ if(isset($_SESSION['session_id'])){
                         </div>
                         <br/>
                         <label for="basic-url" class="form-label">Note</label>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="addCompanyNotesLabel">Note aziendali</span>
-                            <input class="form-control" type="text" id="companyNotes" aria-describedby="addCompanyNotesLabel">
-                        </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="addClientNotesLabel">Note per cliente</span>
-                            <input class="form-control" type="text" id="clientNotes" aria-describedby="addClientNotesLabel">
-                        </div>
-                        <br/>
-                        <label for="basic-url" class="form-label">File</label>
                         <div class="row">
                             <div class="col">
                                 <div class="input-group mb-3">
-                                    <span class="input-group-text" id="addPlanimetryLabel">Planimetria</span>
-                                    <input class="form-control" type="file" id="planimetry_image" aria-describedby="addPlanimetryLabel">
+                                    <span class="input-group-text" id="addCompanyNotesLabel">Note aziendali</span>
+                                    <textarea class="form-control" type="text" id="companyNotes" aria-describedby="addCompanyNotesLabel"></textarea>
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="input-group mb-3">
-                                    <span class="input-group-text" id="addLogoLabel">Logo</span>
-                                    <input class="form-control" type="file" id="logo" aria-describedby="addLogoLabel">
+                                    <span class="input-group-text" id="addClientNotesLabel">Note per cliente</span>
+                                    <textarea class="form-control" type="text" id="clientNotes" aria-describedby="addClientNotesLabel"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="filesInput">
+                            <br/>
+                            <label for="basic-url" class="form-label">File</label>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="addPlanimetryLabel">Planimetria</span>
+                                        <input class="form-control" type="file" id="planimetry_image" aria-describedby="addPlanimetryLabel">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="addLogoLabel">Logo</span>
+                                        <input class="form-control" type="file" id="logo" aria-describedby="addLogoLabel">
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-                    <button id="addButton" type="button" class="btn btn-primary" onclick="insertInDatabase();">
-                        Aggiungi
-                    </button>
+                    <button id="companyModalCloseButton" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                    <button id="companyModalConfirmButton" type="button" class="btn btn-primary" onclick="insertInDatabase();">Aggiungi</button>
                 </div>
             </div>
         </div>
@@ -189,7 +210,7 @@ if(isset($_SESSION['session_id'])){
     <div class="container">
         <div class="row">
             <div class="col">
-                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addCompanyModal"><i class="fa-solid fa-user-plus"></i>Aggiungi</button>
+                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#companyModal" data-bs-whatever="addCompany"><i class="fa-solid fa-user-plus"></i>Aggiungi</button>
             </div>
             <div class="col">
                 <input type="text" class="form-control" placeholder="Nome azienda" aria-label="Nome azienda">
@@ -261,7 +282,7 @@ if(isset($_SESSION['session_id'])){
         <ul class="pagination justify-content-center ">
             <li class="page-item ">
                 <a class="page-link " href="# " aria-label="Previous ">
-                    <span aria-hidden="true ">&laquo;</span>
+                    <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
             <li class="page-item "><a class="page-link " href="# ">1</a></li>
@@ -269,7 +290,7 @@ if(isset($_SESSION['session_id'])){
             <li class="page-item "><a class="page-link " href="# ">3</a></li>
             <li class="page-item ">
                 <a class="page-link " href="# " aria-label="Next ">
-                    <span aria-hidden="true ">&raquo;</span>
+                    <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
         </ul>
@@ -317,7 +338,7 @@ if(isset($_SESSION['session_id'])){
             tabella.innerHTML += '<tr>'+
             '<th style="text-align: center;">' + resp[i].nome + '</th>'+
               '<td style="text-align: center;">'+
-               '<button class="btn btn-outline-success" onclick="window.location.href=\'modifica-azienda.php?id_ana=' + resp[i].id + '\'"><i class="fa-solid fa-pen"></i></button>'+
+               '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#companyModal" data-bs-whatever="' + resp[i].id + '"><i class="fa-solid fa-pen"></i></button>'+
                '<button class="btn btn-outline-info" onclick="window.location.href=\'dettaglio-anagrafica.php?id_ana=' + resp[i].id + '\'"><i class="fa-solid fa-circle-info"></i></button>'+
                '<button class="btn btn-outline-danger"><i class="fa-solid fa-trash-can"></i></button>'+
               '</td>'+
@@ -335,9 +356,8 @@ if(isset($_SESSION['session_id'])){
         });
     });
 
-    function insertInDatabase() {
-        document.getElementById("addButton").setAttribute("disabled", "");
-        document.getElementById("addButton").innerHTML = '<div class="spinner-border spinner-border-sm" role="status"/>';
+    function insertInDatabase(isUpdating) {
+        suspendCompanyModal(true);
 
         let name = $('#name').val();
         let site = $('#site').val();
@@ -354,7 +374,7 @@ if(isset($_SESSION['session_id'])){
         let companyNotes = $('#companyNotes').val();
         let clientNotes = $('#clientNotes').val();
 
-        $.post('../php/addCompany.php', {
+        $.post(isUpdating ? '../php/modifyCompany.php' : '../php/addCompany.php', {
             name: name,
             site: site,
             address: address,
@@ -370,22 +390,96 @@ if(isset($_SESSION['session_id'])){
             companyNotes: companyNotes,
             clientNotes: clientNotes
         })
-        .done(function(response){
-            document.getElementById("addButton").removeAttribute("disabled");
-            document.getElementById("addButton").innerHTML = 'Aggiungi';
-            $("#addCompanyModal").modal('hide');
-            if (response == 'invalidInsert') {
-                $("#errorModal").modal('show');
+        .done(function (response) {
+            suspendCompanyModal(false);
+            if (response === 'invalidInsert') {
+                modalError(true);
             } else {
-                $("#confirmedModal").modal('show');
+                modalConfirmation(true);
             }
         })
-        .fail(function() {
-            document.getElementById("addButton").removeAttribute("disabled");
-            document.getElementById("addButton").innerHTML = 'Aggiungi';
-            $("#addCompanyModal").modal('hide');
-            $("#errorModal").modal('show');
+        .fail(function () {
+            suspendCompanyModal(false);
+            modalError(true);
         });
+    }
+
+    function suspendCompanyModal(suspended) {
+        if (suspended) {
+            $('#companyModalCloseButton').prop('disabled', true);
+            const confirmButton = $('#companyModalConfirmButton');
+            confirmButton.prop('disabled', true);
+            confirmButton.html('<div class="spinner-border spinner-border-sm" role="status"/>');
+        }
+        else {
+            $('#companyModalCloseButton').removeAttr('disabled');
+            const confirmButton = $('#companyModalConfirmButton');
+            confirmButton.removeAttr('disabled');
+            confirmButton.html("Aggiungi");
+        }
+    }
+
+    function fillCompanyModal(companyInformation) {
+        if (companyInformation) {
+            $.each(companyInformation, function (key, data) {
+                $('#' + key).val(data);
+            })
+        }
+        else {
+            companyModal.querySelector('form').reset();
+        }
+    }
+
+    const companyModal = document.getElementById('companyModal')
+    companyModal.addEventListener('show.bs.modal', function (event) {
+        fillCompanyModal();
+        const button = event.relatedTarget;
+        const modalType = button.getAttribute('data-bs-whatever');
+
+        const modalTitle = companyModal.querySelector('.modal-title');
+        const confirmButton = $('#companyModalConfirmButton');
+
+        if (modalType === "addCompany") {
+            modalTitle.textContent = 'Aggiungi azienda';
+            $('#filesInput').show();
+            confirmButton.text("Aggiungi");
+            confirmButton.attr("onclick", "insertInDatabase(false)");
+        }
+        else {
+            // modalLoading(true);
+            confirmButton.attr("onclick", "insertInDatabase(true)");
+            $.get('../php/companyInformations.php', {
+                id_ana: modalType
+            })
+            .always(function() {
+                // modalLoading(false);
+            })
+            .done(function(response) {
+                const companyInformations = JSON.parse(response);
+                modalTitle.textContent = 'Modifica ' + companyInformations["name"];
+                fillCompanyModal(companyInformations);
+                $('#filesInput').hide();
+                $('#companyModalConfirmButton').text("Conferma modifiche");
+            })
+            .fail(function() {
+                modalError(true);
+            })
+        }
+    })
+    
+    function modalError(error) {
+        $("#companyModal").modal(error ? 'hide' : 'show');
+        $("#errorModal").modal(!error ? 'hide' : 'show');
+    }
+    
+    function modalLoading(loading) {
+        $("#companyModal").modal(loading ? 'hide' : 'show');
+        $("#loadingModal").modal(!loading ? 'hide' : 'show');
+    }
+    
+    function modalConfirmation(confirmed) {
+        $("#companyModal").modal(confirmed ? 'hide' : 'show');
+        $("#confirmedModal").modal(!confirmed ? 'hide' : 'show');
     }
 </script>
 
