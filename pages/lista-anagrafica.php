@@ -388,7 +388,8 @@ if(isset($_SESSION['session_id'])){
             cellPhoneNumber: cellPhoneNumber,
             emailAddress2: emailAddress2,
             companyNotes: companyNotes,
-            clientNotes: clientNotes
+            clientNotes: clientNotes,
+            id: editingCompany 
         })
         .done(function (response) {
             suspendCompanyModal(false);
@@ -430,6 +431,7 @@ if(isset($_SESSION['session_id'])){
         }
     }
 
+    var editingCompany = 0;
     const companyModal = document.getElementById('companyModal')
     companyModal.addEventListener('show.bs.modal', function (event) {
         fillCompanyModal();
@@ -446,6 +448,7 @@ if(isset($_SESSION['session_id'])){
             confirmButton.attr("onclick", "insertInDatabase(false)");
         }
         else {
+            editingCompany = modalType;
             // modalLoading(true);
             confirmButton.attr("onclick", "insertInDatabase(true)");
             $.get('../php/companyInformations.php', {
