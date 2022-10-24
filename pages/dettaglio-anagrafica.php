@@ -241,7 +241,7 @@ if(isset($_SESSION['session_id'])){
         <div class="container">
             <div class="row">
                 <div class="col-sm-12">
-                    <button class="btn btn-outline-info">Aggiungi</button>
+                    <button class="btn btn btn-outline-warning" onclick="onAddClick()">Aggiungi voce</button>
                 </div>
             </div>
             <div class="row row-tabella">
@@ -252,6 +252,7 @@ if(isset($_SESSION['session_id'])){
                             <tr style="text-align: center;">
                                 <th scope="col"><a href="Mdl-Imp-Sprinkler-a-secco.php" style="color: black; text-decoration: none;">Impianti</a></th>
                                 <th scope="col">Quantità</th>
+                                <th scope="col">Aggiungi</th>
                                 <th scope="col">Data ultima manutenzione</th>
                             </tr>
                             </thead>
@@ -264,12 +265,12 @@ if(isset($_SESSION['session_id'])){
             </div>
         </div>
 
-        <!-- Modal -->
-        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <!-- Modal cancellazione-->
+        <div class="modal fade" id="deleteModal" tabindex="-1"  aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Cancellazione </h1>
+                        <h1 class="modal-title fs-5" id="cancellazioneLabel">Cancellazione </h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div id="textDeleteModal" class="modal-body">
@@ -282,7 +283,60 @@ if(isset($_SESSION['session_id'])){
                 </div>
             </div>
         </div>
-        <!-- Fine -->
+
+        <!-- Modal scelta categoria prodotto-->
+        <div class="modal fade bd-example-modal" id="modalSelectCategory" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal- modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Aggiunga prodotto</h5>
+                        <button id="closeModalCategories1" type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <select onchange="onSelectCategoriesChange()" id="chooseCategory"></select>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button id="closeModalCategories1" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                        <button id="selectCategory" type="button" class="btn btn-warning" onclick="addProduct()" disabled>Seleziona</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal aggiunta prodotto-->
+        <div class="modal fade" id="addProduct" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 id="addTitle" class="modal-title">Aggiunga </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-5">
+                                    <form id="formAddProduct">
+                                    </form>
+                                </div>
+                                <div class="col-7">
+                                    <h4>Planimetra: </h4>
+                                    <div class="div-immagine prova" id="planimetry-addProduct"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                        <button id="addProductButton" type="button" class="btn btn-warning">Aggiungi</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Footer -->
         <footer class="py-3 my-4 border-top ">
@@ -335,7 +389,6 @@ if(isset($_SESSION['session_id'])){
                     if(resp != ''){
                         srcSfondo = resp[0].pathSfondo;
                         for(let i = 0; i < resp.length; i++){
-                            console.log(((resp[i].posX * sfondoImg.attrs.width) / resp[i].w).toPrecision(10));
                             var nome_prod = resp[i].nome_prod;
                             var posX = parseFloat(((resp[i].posX * sfondoImg.attrs.width) / resp[i].w).toPrecision(10));
                             var posY = parseFloat(((resp[i].posY * sfondoImg.attrs.height) / resp[i].h).toPrecision(10));
@@ -394,6 +447,7 @@ if(isset($_SESSION['session_id'])){
                 stage.position(newPos);
             });
 
+
             $(window).on('load', function() {
                 $.post('../php/viewCategories.php', {idAnag: idAnag}, function (resp) {
                     const tabella = document.getElementById('tabellaCategorie');
@@ -428,7 +482,7 @@ if(isset($_SESSION['session_id'])){
 
             function onDeleteClick(idCategoria, nomeCategoria){
                 document.getElementById('textDeleteModal').innerHTML = 'Sei sicuro di voler cancellare la categoria <b>'+ nomeCategoria +'</b> dalla tua anagrafica, in questo modo rimuoverai tutti i prodotti appartenenti ad essa e ne cancellerai le revisioni fatte.';
-                document.getElementById('exampleModalLabel').innerHTML += nomeCategoria;
+                document.getElementById('cancellazioneLabel').innerHTML = 'Cancellazione '+ nomeCategoria;
                 $('#deleteModal').modal('show');
                 $('#deleteButton').click(function(){
                     $.post('../php/deleteCategory.php', {idCategory:idCategoria,idCompany: idAnag}, function (resp) {});
@@ -451,8 +505,172 @@ if(isset($_SESSION['session_id'])){
                     var prova = group.children[i];
                     prova.visible(true);
                 }
-
             }
+            function onAddClick(){
+                const select = document.getElementById('chooseCategory');
+                $('#modalSelectCategory').modal('show');
+                $.post('../php/getProductsCategories.php',{}, function (resp) {
+                    if(!resp.length==0){
+                        select.innerHTML =
+                            '<div class="form-group">' +
+                            '<label>Categoria:</label>'+
+                            '<select class="form-select">'+
+                            '<option selected value=0>Seleziona una categoria</option>';
+                        for(var category of resp){
+                            select.innerHTML += '<option value=' + category.idCategory + '>' + category.productCategoryName + '</option>'
+                        }
+                        select.innerHTML +=
+                            '</select>' +
+                            '</div>';
+                    }
+                }, 'json');
+            }
+            function onSelectCategoriesChange() {
+                const select = document.getElementById('chooseCategory');
+                if(select.value == 0){
+                    document.getElementById('selectCategory').setAttribute("disabled", "");
+                }else {
+                    document.getElementById('selectCategory').removeAttribute("disabled");
+                }
+            }
+
+            $("#modalSelectCategory").on('hidden.bs.modal', function () {
+                document.getElementById('selectCategory').setAttribute("disabled", "");
+                document.getElementById('chooseCategory').value = 0;
+                $(this).find('form').trigger('reset');
+            });
+
+            function addProduct(){
+                $('#addProduct').modal('show');
+                $('#modalSelectCategory').modal('hide');
+                let idCategoria = document.getElementById('chooseCategory').value;
+                const form = document.getElementById('formAddProduct');
+                $.post('../php/getProductFields.php', {idCategoria: idCategoria}, function (resp) {
+                    if(!resp.length==0){
+                        form.innerHTML = '';
+                        for (let i = 0; i < resp.length; i++) {
+                            form.innerHTML += '<div class="form-group">' +
+                                '<label>' + resp[i].field_name + '</label>' +
+                                '<input type="text" class="form-control" id="' + resp[i].field_name + '" placeholder="Inserisci ' + resp[i].field_name + '">' +
+                                '</div>'
+                        }
+                        form.innerHTML +=
+                            '<div class="form-group"' +
+                            '<label>Posizione</label>' +
+                            '   <div class="form-row">' +
+                            '       <div class="row">' +
+                            '           <div class="col">' +
+                            '               <input type="text" id="posX" class="form-control" placeholder="Pos. X">' +
+                            '           </div>' +
+                            '           <div class="col">' +
+                            '               <input type="text" id="posY" class="form-control" placeholder="Pos. Y">' +
+                            '           </div>' +
+                            '       </div>' +
+                            '   </div>' +
+                            '</div>';
+                    }
+                    else {
+                        console.log("no resp")
+                    }
+                }, "json");
+
+                var risposta;
+                var nomeCategoria;
+                $.post('../php/getProductIcon.php', {idCategoria: idCategoria, idCompagnia: idAnag}, function (resp) {
+                    if (resp.length === 1) {
+                        risposta = resp[0];
+                    }
+                    nomeCategoria = risposta.categoryName;
+                    document.getElementById('addTitle').innerHTML += nomeCategoria;
+                    //fill the layer and the stage with the planimetry
+                    let sfondo = new Image();
+                    let div = document.getElementById('planimetry-addProduct');
+                    let stage = new Konva.Stage({
+                        container: 'planimetry-addProduct',
+                        width: div.clientWidth,
+                        height: div.clientHeight
+                    });
+                    let layerSfondo = new Konva.Layer({
+                        scaleX: 1,
+                        scaleY: 1,
+                        draggable: true
+                    });
+                    stage.add(layerSfondo);
+                    let layer = new Konva.Layer({
+                        scaleX: 1,
+                        scaleY: 1,
+                        draggable: false
+                    });
+                    stage.add(layer);
+                    let groupSfondo = new Konva.Group({
+                        scaleX: 1
+                    });
+                    layer.add(groupSfondo);
+                    let group = new Konva.Group({
+                        scaleX: 1
+                    });
+                    layer.add(group);
+                    let widthRatio = (div.clientWidth) / risposta.w;
+                    let heightRatio = (div.clientHeight) / risposta.h;
+                    let bestRatio = Math.min(widthRatio, heightRatio);
+                    let newWidth = risposta.w * bestRatio;
+                    let newHeight = risposta.h * bestRatio;
+                    let sfondoImg = new Konva.Image({
+                        image: sfondo,
+                        width: newWidth,
+                        height: newHeight,
+                        y: (div.clientHeight-newHeight)/2,
+                        draggable: false
+                    });
+                    groupSfondo.add(sfondoImg);
+
+                    //canvas to move on the stage
+                    let nome_prod = nomeCategoria;
+                    let imageObj = new Image();
+                    imageObj.src = "../" + risposta.productIcon;
+                    console.log(sfondoImg.y);
+                    nuovoProdotto = new Konva.Image({
+                        y: (div.clientHeight-newHeight)/2,
+                        image: imageObj,
+                        width: (20 * sfondoImg.attrs.width) / risposta.w,
+                        height: (25 * sfondoImg.attrs.height) / risposta.h,
+                        draggable: true,
+                        name: nome_prod
+                    });
+                    group.add(nuovoProdotto);
+
+                    //responsive map
+                    sfondo.src = "../" + srcSfondo;
+                    let scaleBy = 1.05;
+                    stage.on('wheel', (e) => {
+                        e.evt.preventDefault();
+                        let oldScale = stage.scaleX();
+                        let pointer = stage.getPointerPosition();
+
+                        let mousePointTo = {
+                            x: (pointer.x - stage.x()) / oldScale,
+                            y: (pointer.y - stage.y()) / oldScale,
+                        };
+                        let direction = e.evt.deltaY > 0 ? 1 : -1;
+                        if (e.evt.ctrlKey) {
+                            direction = -direction;
+                        }
+                        let newScale = direction > 0 ? oldScale * scaleBy : oldScale / scaleBy;
+                        stage.scale({ x: newScale, y: newScale });
+                        let newPos = {
+                            x: pointer.x - mousePointTo.x * newScale,
+                            y: pointer.y - mousePointTo.y * newScale,
+                        };
+                        stage.position(newPos);
+                    });
+                    stage.addEventListener('dragend', function () {
+                        console.log(sfondoImg.attrs.height, sfondoImg.attrs.width,risposta.h, risposta.w);
+                        document.getElementById("posX").value = parseFloat(((nuovoProdotto.x()*risposta.w)/sfondoImg.attrs.width).toPrecision(10));
+                        document.getElementById("posY").value = parseFloat(((nuovoProdotto.y()*risposta.h)/sfondoImg.attrs.height))-(div.clientHeight-newHeight)/2 + ((25 * sfondoImg.attrs.height) / risposta.h)/2;
+                    });
+                }, "json");
+            }
+
             function vistaCategoria(categoria){
                 for(let i = 0; i < group.children.length; i++){
                     var prova = group.children[i];
@@ -492,6 +710,6 @@ if(isset($_SESSION['session_id'])){
         <?php
     }
 } else {
-    echo "<script>window.location.replace('../index.php');</script>";
+    include_once('404.html');
 }
 ?>
