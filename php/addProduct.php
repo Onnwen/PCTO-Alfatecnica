@@ -1,29 +1,31 @@
 <?php
 require_once('connessione.php');
 
-$posX = isset($_POST['posX']) ? $_POST['posX'] : '';
-$posY = isset($_POST['posY']) ? $_POST['posY'] : '';
-$idProdotto = isset($_POST['idProdotto']) ? $_POST['idProdotto'] : 0;
-$id = isset($_POST['id']) ? $_POST['id'] : 0;
-$width = isset($_POST['w']) ? $_POST['w'] : 0;
-$height = isset($_POST['h']) ? $_POST['h'] : 0;
-$idPlan = isset($_POST['idPlan']) ? $_POST['idPlan'] : 0;
+$companyId = $_POST["company_id"];
+$productCategoryId = $_POST["product_category_id"];
+$x = $_POST["x"];
+$y = $_POST["y"];
+$date = $_POST["date"];
 
-if ($posX != '' || $posY != '' || $idProdotto != 0 || $id != 0) {
-  $insProd = "INSERT INTO prodotti(id, pos_x, pos_y, idProdImg)
-             VALUES('" . $id . "','" . $posX . "', '" . $posY . "', '" . $idProdotto . "')";
-  $result = $pdo->query($insProd);
-  if ($result)
-    echo 1;
-  else
-    echo 0;
+$productFieldsSql = "SELECT Product_Fields.field_id, Product_Fields.name FROM Product_Fields WHERE Product_Fields.product_category_id = :id;";
+$productFieldsQuery = $pdo->prepare($productFieldsSql);
+$productFieldsQuery->bindParam(':id', $productCategoryId, PDO::PARAM_INT);
+$productFieldsQuery->execute();
+
+try {
+  $pdo->beginTransaction();
+  $pdo->query("INSERT INTO Sold_Products(`company_id`, `product_category_id`, `x`, `y`) VALUES (" . $companyId . ", " . $productCategoryId . ", " . $x . ", " . $y . ");");
+  while ($row = $productFieldsQuery->fetch(PDO::FETCH_ASSOC)) {
+    $productFields[] = array(
+        "field_id" => $row["field_id"],
+        "field_name" => $row["name"]
+    );
+    $pdo->query("INSERT INTO Product_Data(`sold_product_id`, `field_id`, `value`) VALUES (LAST_INSERT_ID(), '" . $row["field_id"] . "', '" . $_POST[$row["field_id"]] . "');");
+  }
+  $pdo->query("INSERT INTO Revisions(`product_category_id`, `company_id`, `data`) VALUES (" . $productCategoryId . ", " . $companyId . ", '". $date . "');");
+  $pdo->commit();
+} catch (Exception $e) {
+  echo $e;
+  http_response_code(400);
+  exit;
 }
-if($width != 0 || $height != 0 ){
-  $insPlan = "UPDATE planimetrie SET width = '" . $width . "', height = '" . $height . "' WHERE id = " . $idPlan;
-  $result2 = $pdo->query($insPlan);
-  if($result2)
-    echo 1;
-  else
-    echo 0;
-}
- ?>

@@ -289,7 +289,7 @@ if(isset($_SESSION['session_id'])){
             <div class="modal-dialog modal- modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Aggiunga prodotto</h5>
+                        <h5 class="modal-title">Aggiunta prodotto</h5>
                         <button id="closeModalCategories1" type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
@@ -313,7 +313,7 @@ if(isset($_SESSION['session_id'])){
             <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 id="addTitle" class="modal-title">Aggiunga </h5>
+                        <h5 id="addTitle" class="modal-title">Aggiunta </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
@@ -332,7 +332,7 @@ if(isset($_SESSION['session_id'])){
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
-                        <button id="addProductButton" type="button" class="btn btn-warning">Aggiungi</button>
+                        <button id="addProductButton" onclick="addProductToDB(value)" value="" type="button" class="btn btn-warning">Aggiungi</button>
                     </div>
                 </div>
             </div>
@@ -346,6 +346,8 @@ if(isset($_SESSION['session_id'])){
 
         <script type="text/javascript">
             var idAnag = <?php echo $idAnagrafica; ?>;
+
+            //PLANIMETRIA PAGINA PRINCIPALE
             var sfondo = new Image();
             var div = document.getElementById('planimetria');
             var stage = new Konva.Stage({
@@ -353,7 +355,6 @@ if(isset($_SESSION['session_id'])){
                 width: div.clientWidth,
                 height: div.clientHeight
             });
-
             var layerSfondo = new Konva.Layer({
                 scaleX: 1,
                 scaleY: 1,
@@ -366,7 +367,6 @@ if(isset($_SESSION['session_id'])){
                 draggable: false
             });
             stage.add(layer);
-
             var groupSfondo = new Konva.Group({
                 scaleX: 1
             });
@@ -382,7 +382,6 @@ if(isset($_SESSION['session_id'])){
                 draggable: false
             });
             groupSfondo.add(sfondoImg);
-
             var srcSfondo = "";
             $(window).on('load', function(){
                 $.post('../php/viewPlan.php', {idAnag:idAnag}, function(resp){
@@ -422,7 +421,6 @@ if(isset($_SESSION['session_id'])){
                 }, 'json');
 
             });
-
             var scaleBy = 1.05;
             stage.on('wheel', (e) => {
                 e.evt.preventDefault();
@@ -447,7 +445,7 @@ if(isset($_SESSION['session_id'])){
                 stage.position(newPos);
             });
 
-
+            //TABELLA PRODOTTI
             $(window).on('load', function() {
                 $.post('../php/viewCategories.php', {idAnag: idAnag}, function (resp) {
                     const tabella = document.getElementById('tabellaCategorie');
@@ -477,9 +475,6 @@ if(isset($_SESSION['session_id'])){
 
                 }, "json");
             });
-
-
-
             function onDeleteClick(idCategoria, nomeCategoria){
                 document.getElementById('textDeleteModal').innerHTML = 'Sei sicuro di voler cancellare la categoria <b>'+ nomeCategoria +'</b> dalla tua anagrafica, in questo modo rimuoverai tutti i prodotti appartenenti ad essa e ne cancellerai le revisioni fatte.';
                 document.getElementById('cancellazioneLabel').innerHTML = 'Cancellazione '+ nomeCategoria;
@@ -506,6 +501,8 @@ if(isset($_SESSION['session_id'])){
                     prova.visible(true);
                 }
             }
+
+            //AGGIUNTA PRODOTTO
             function onAddClick(){
                 const select = document.getElementById('chooseCategory');
                 $('#modalSelectCategory').modal('show');
@@ -533,7 +530,6 @@ if(isset($_SESSION['session_id'])){
                     document.getElementById('selectCategory').removeAttribute("disabled");
                 }
             }
-
             $("#modalSelectCategory").on('hidden.bs.modal', function () {
                 document.getElementById('selectCategory').setAttribute("disabled", "");
                 document.getElementById('chooseCategory').value = 0;
@@ -541,9 +537,11 @@ if(isset($_SESSION['session_id'])){
             });
 
             function addProduct(){
+                document.getElementById('addProduct').querySelector('form').reset();
                 $('#addProduct').modal('show');
                 $('#modalSelectCategory').modal('hide');
                 let idCategoria = document.getElementById('chooseCategory').value;
+                $('#addProductButton').attr("value",idCategoria);
                 const form = document.getElementById('formAddProduct');
                 $.post('../php/getProductFields.php', {idCategoria: idCategoria}, function (resp) {
                     if(!resp.length==0){
@@ -551,29 +549,39 @@ if(isset($_SESSION['session_id'])){
                         for (let i = 0; i < resp.length; i++) {
                             form.innerHTML += '<div class="form-group">' +
                                 '<label>' + resp[i].field_name + '</label>' +
-                                '<input type="text" class="form-control" id="' + resp[i].field_name + '" placeholder="Inserisci ' + resp[i].field_name + '">' +
+                                '<input type="text" class="form-control" id="' + resp[i].field_id + '" placeholder="Inserisci ' + resp[i].field_name + '">' +
                                 '</div>'
                         }
                         form.innerHTML +=
+                            '<div class="form-group"' +
+                            '<label>Data revisione</label>' +
+                            '   <div class="form-row">' +
+                            '       <div class="row">' +
+                            '           <div class="col">' +
+                            '               <input type="date" id="date" class="form-control" value="">' +
+                            '           </div>' +
+                            '       </div>' +
+                            '   </div>' +
+                            '</div>'+
                             '<div class="form-group"' +
                             '<label>Posizione</label>' +
                             '   <div class="form-row">' +
                             '       <div class="row">' +
                             '           <div class="col">' +
-                            '               <input type="text" id="posX" class="form-control" placeholder="Pos. X">' +
+                            '               <input type="number" id="x" class="form-control" placeholder="Pos. X">' +
                             '           </div>' +
                             '           <div class="col">' +
-                            '               <input type="text" id="posY" class="form-control" placeholder="Pos. Y">' +
+                            '               <input type="number" id="y" class="form-control" placeholder="Pos. Y">' +
                             '           </div>' +
                             '       </div>' +
                             '   </div>' +
                             '</div>';
+                        document.getElementById('date').valueAsDate = new Date();
                     }
                     else {
                         console.log("no resp")
                     }
                 }, "json");
-
                 var risposta;
                 var nomeCategoria;
                 $.post('../php/getProductIcon.php', {idCategoria: idCategoria, idCompagnia: idAnag}, function (resp) {
@@ -581,7 +589,7 @@ if(isset($_SESSION['session_id'])){
                         risposta = resp[0];
                     }
                     nomeCategoria = risposta.categoryName;
-                    document.getElementById('addTitle').innerHTML += nomeCategoria;
+                    document.getElementById('addTitle').innerHTML = nomeCategoria;
                     //fill the layer and the stage with the planimetry
                     let sfondo = new Image();
                     let div = document.getElementById('planimetry-addProduct');
@@ -628,7 +636,6 @@ if(isset($_SESSION['session_id'])){
                     let nome_prod = nomeCategoria;
                     let imageObj = new Image();
                     imageObj.src = "../" + risposta.productIcon;
-                    console.log(sfondoImg.y);
                     nuovoProdotto = new Konva.Image({
                         y: (div.clientHeight-newHeight)/2,
                         image: imageObj,
@@ -664,13 +671,30 @@ if(isset($_SESSION['session_id'])){
                         stage.position(newPos);
                     });
                     stage.addEventListener('dragend', function () {
-                        console.log(sfondoImg.attrs.height, sfondoImg.attrs.width,risposta.h, risposta.w);
-                        document.getElementById("posX").value = parseFloat(((nuovoProdotto.x()*risposta.w)/sfondoImg.attrs.width).toPrecision(10));
-                        document.getElementById("posY").value = parseFloat(((nuovoProdotto.y()*risposta.h)/sfondoImg.attrs.height))-(div.clientHeight-newHeight)/2 + ((25 * sfondoImg.attrs.height) / risposta.h)/2;
+                        document.getElementById("x").value = parseInt(((nuovoProdotto.x()*risposta.w)/sfondoImg.attrs.width).toPrecision(10));
+                        document.getElementById("y").value = parseInt(((nuovoProdotto.y()*risposta.h)/sfondoImg.attrs.height)-((div.clientHeight-newHeight)/2) + (((25 * sfondoImg.attrs.height) / risposta.h)/2));
                     });
                 }, "json");
             }
-
+            function addProductToDB(productType) {
+                const formInputs = document.getElementById('formAddProduct').getElementsByTagName('input');
+                var fields = {
+                };
+                for (let input of formInputs) {
+                    if(input.id == 'date'){
+                        fields[input.id] = $("#" + input.id).val();
+                    }else {
+                        fields[input.id] = $("#" + input.id).val();
+                    }
+                }
+                fields['company_id'] = idAnag;
+                fields['product_category_id'] = productType;
+                console.log(fields);
+                $.post('../php/addProduct.php', fields, function (resp) {
+                    console.log(resp)
+                }, "json");
+            }
+            //VISUALIZZAZIONE CONDIZIONATA DELLA PLANIMETRIA PRINCIPALE
             function vistaCategoria(categoria){
                 for(let i = 0; i < group.children.length; i++){
                     var prova = group.children[i];
@@ -687,7 +711,7 @@ if(isset($_SESSION['session_id'])){
                     prova.visible(true);
                 }
             });
-
+            //STAMPA DELLA PLANIMETRIA
             $('#stampaPDFPlan').click(function(){
                 var nomeAz = '<?php echo $arrayAna['nomeAzienda']; ?>';
                 var dataURL = stage.toDataURL({ pixelRatio: 3 });
@@ -702,14 +726,13 @@ if(isset($_SESSION['session_id'])){
                 document.body.removeChild(link);
                 delete link;
             }
-
         </script>
         </body>
 
         </html>
-        <?php
+<?php
+        }
+    }else {
+        include_once('404.html');
     }
-} else {
-    include_once('404.html');
-}
 ?>
