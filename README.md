@@ -1,5 +1,5 @@
 # Gestionale Alfatecnica
-Sviluppo di un portale per la gestione di prodotti personalizzabili e posizionabili su planimetrie
+Sviluppo di un portale per la gestione di prodotti
 
 ## Framework utilizzati
 [Konvajs](https://konvajs.org/)
