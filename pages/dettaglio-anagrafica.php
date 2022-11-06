@@ -242,6 +242,7 @@ if(isset($_SESSION['session_id'])){
             <div class="row">
                 <div class="col-sm-12">
                     <button class="btn btn btn-outline-warning" onclick="onAddClick()">Aggiungi voce</button>
+                    <button type="button" class="btn btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalSelectCategory" data-bs-whatever="selectCategory">Aggiungi</button>
                 </div>
             </div>
             <div class="row row-tabella">
@@ -502,8 +503,61 @@ if(isset($_SESSION['session_id'])){
                 }
             }
 
-            //AGGIUNTA PRODOTTO
-            function onAddClick(){
+            //SCELTA CATEGORIA PRODOTTO
+            function fillSelectProductModal(categoriesName) {
+                if (categoriesName) {
+                    const select = document.getElementById('chooseCategory');
+                    select.innerHTML =
+                        '<div class="form-group">' +
+                        '<label>Categoria:</label>'+
+                        '<select class="form-select">'+
+                        '<option selected value=0>Seleziona una categoria</option>';
+                    for(var category of categoriesName){
+                        select.innerHTML += '<option value=' + category.idCategory + '>' + category.productCategoryName + '</option>'
+                    }
+                    select.innerHTML +=
+                        '</select>' +
+                        '</div>';
+                } else {
+                    selectCategoryModal.querySelector('form').reset();
+                }
+            }
+            const selectCategoryModal = document.getElementById('modalSelectCategory')
+            selectCategoryModal.addEventListener('show.bs.modal', function(event) {
+                fillCompanyModal();
+                const button = event.relatedTarget;
+                const modalType = button.getAttribute('data-bs-whatever');
+                const modalTitle = companyModal.querySelector('.modal-title');
+                const confirmButton = $('#companyModalConfirmButton');
+
+                if (modalType === "addCompany") {
+                    modalTitle.textContent = 'Aggiungi azienda';
+                    $('#filesInput').show();
+                    confirmButton.text("Aggiungi");
+                    confirmButton.attr("onclick", "insertInDatabase(false)");
+                } else {
+                    editingCompany = modalType;
+                    // modalLoading(true);
+                    confirmButton.attr("onclick", "insertInDatabase(true)");
+                    $.get('../php/companyInformations.php', {
+                        id_ana: modalType
+                    })
+                        .always(function() {
+                            // modalLoading(false);
+                        })
+                        .done(function(response) {
+                            const companyInformations = JSON.parse(response);
+                            modalTitle.textContent = 'Modifica ' + companyInformations["name"];
+                            fillCompanyModal(companyInformations);
+                            $('#filesInput').hide();
+                            $('#companyModalConfirmButton').text("Conferma modifiche");
+                        })
+                        .fail(function() {
+                            modalError(true);
+                        })
+                }
+            })
+            /*function onAddClick(){
                 const select = document.getElementById('chooseCategory');
                 $('#modalSelectCategory').modal('show');
                 $.post('../php/getProductsCategories.php',{}, function (resp) {
@@ -675,7 +729,7 @@ if(isset($_SESSION['session_id'])){
                         document.getElementById("y").value = parseInt(((nuovoProdotto.y()*risposta.h)/sfondoImg.attrs.height)-((div.clientHeight-newHeight)/2) + (((25 * sfondoImg.attrs.height) / risposta.h)/2));
                     });
                 }, "json");
-            }
+            }*/
             function addProductToDB(productType) {
                 const formInputs = document.getElementById('formAddProduct').getElementsByTagName('input');
                 var fields = {

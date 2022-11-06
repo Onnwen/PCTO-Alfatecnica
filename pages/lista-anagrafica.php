@@ -425,6 +425,7 @@ if (isset($_SESSION['session_id'])) {
         var editingCompany = 0;
         const companyModal = document.getElementById('companyModal')
         companyModal.addEventListener('show.bs.modal', function(event) {
+            debugger;
             fillCompanyModal();
             const button = event.relatedTarget;
             const modalType = button.getAttribute('data-bs-whatever');
