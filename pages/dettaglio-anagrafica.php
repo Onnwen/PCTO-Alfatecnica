@@ -63,6 +63,56 @@ if(isset($_SESSION['session_id'])){
         <body>
         <?php require_once("navbar.php"); ?>
 
+        <!-- Confirmation Modal -->
+        <div class="modal fade" id="confirmedModal" tabindex="-1" aria-labelledby="confirmedModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" style="color: darkgreen" id="confirmedModalLabel">Effettuato con successo</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        L'operazione è avvenuta con successo.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" onclick="location.reload()" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Modal -->
+        <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" style="color: darkred" id="errorModalLabel">È stato riscontrato un problema</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        È stato riscontrato un errore durante il caricamento dei dati. Nessuna modifica è stata applicata.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Modal -->
+        <div class="modal fade" id="loadingModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="loadingModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="loadingModalLabel">Attendi</h5>
+                        <div class="spinner-border spinner-border-sm" role="status"></div>
+                    </div>
+                    <div class="modal-body">
+                        Caricamento dei dati in corso.
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Cards -->
         <div class="container">
             <div class="row">
@@ -252,8 +302,8 @@ if(isset($_SESSION['session_id'])){
                             <tr style="text-align: center;">
                                 <th scope="col"><a href="Mdl-Imp-Sprinkler-a-secco.php" style="color: black; text-decoration: none;">Impianti</a></th>
                                 <th scope="col">Quantità</th>
-                                <th scope="col">Aggiungi</th>
                                 <th scope="col">Data ultima manutenzione</th>
+                                <th scope="col"></th>
                             </tr>
                             </thead>
                             <tbody id="tabellaCategorie">
@@ -452,6 +502,15 @@ if(isset($_SESSION['session_id'])){
 
             //TABELLA PRODOTTI
             {
+                function printData(startDate){
+                    var convertedStartDate = new Date(startDate);
+                    var minutes =  convertedStartDate.getMinutes();
+                    var hours =  convertedStartDate.getHours();
+                    var day = convertedStartDate.getDay();
+                    var month = convertedStartDate.getMonth() + 1;
+                    var year = convertedStartDate.getFullYear();
+                    return day + "/" + month + "/" + year + " " + hours + ":" + minutes;
+                }
                 $(window).on('load', function() {
                     $.post('../php/viewCategories.php', {idAnag: idAnag}, function (resp) {
                         const tabella = document.getElementById('tabellaCategorie');
@@ -462,7 +521,7 @@ if(isset($_SESSION['session_id'])){
                                     '<tr style= "text-align: center">' +
                                     '<th scope="row"><button class="btn" onclick="vistaCategoria(value)" value="'+ resp[i].nomeCategoria +'">' + resp[i].nomeCategoria + '</button></th>' +
                                     '<td>' + resp[i].quantita + '</td>' +
-                                    '<td>' + resp[i].dataUltimaManutenzione + '</td>' +
+                                    '<td>' + printData(resp[i].dataUltimaManutenzione) + '</td>' +
                                     '<td style="text-align: center;">' +
                                     '<button style="margin: 2" class="btn btn-outline-success" onclick="window.location.href=\'modifica-categoria.php?product_category_id=' + resp[i].idCategoria + '&company_id=' + idAnag + '\'"><i class="fa-solid fa-pen"></i></button>' +
                                     '<button style="margin: 2" class="btn btn-outline-info" onclick="window.location.href=\'dettaglio-categoria.php?product_category_id=' + resp[i].idCategoria + '&company_id=' + idAnag + '\'"><i class="fa-solid fa-circle-info"></i></button>' +
@@ -603,25 +662,25 @@ if(isset($_SESSION['session_id'])){
                                 '   <div class="form-row">' +
                                 '       <div class="row">' +
                                 '           <div class="col">' +
-                                '               <input type="date" id="date" class="form-control" value="">' +
+                                '               <input type="datetime-local" id="date" class="form-control" value="">' +
                                 '           </div>' +
                                 '       </div>' +
                                 '   </div>' +
                                 '</div>' +
                                 '<div class="form-group"' +
-                                '<label>Posizione</label>' +
+                                '<label>Posizione (clicca l\'icona sulla planimetria per ottenerla)</label>' +
                                 '   <div class="form-row">' +
                                 '       <div class="row">' +
                                 '           <div class="col">' +
-                                '               <input type="number" id="x" class="form-control" placeholder="Pos. X">' +
+                                '               <input type="number" id="x" class="form-control" placeholder="Pos. X" disabled>' +
                                 '           </div>' +
                                 '           <div class="col">' +
-                                '               <input type="number" id="y" class="form-control" placeholder="Pos. Y">' +
+                                '               <input type="number" id="y" class="form-control" placeholder="Pos. Y" disabled>' +
                                 '           </div>' +
                                 '       </div>' +
                                 '   </div>' +
                                 '</div>';
-                            document.getElementById('date').valueAsDate = new Date();
+                            console.log($("#date").val());
                             $('#addProductButton').attr("value", idCategoria);
                             let risposta;
                             let nomeCategoria;
@@ -729,14 +788,14 @@ if(isset($_SESSION['session_id'])){
 
                             $.post('../php/getProductFields.php', {idCategoria: idCategoria})
                                 .always(function () {
-                                    //modalLoading
+                                    modalLoading();
                                 })
                                 .done(function (response) {
                                     const categoryAttributes = JSON.parse(response);
                                     fillAddProductModal(categoryAttributes);
                                 })
                                 .fail(function () {
-                                    //modalError;
+                                    modalError();
                                 })
                         }
                     })
@@ -758,24 +817,25 @@ if(isset($_SESSION['session_id'])){
                         fields['product_category_id'] = productType;
                         console.log(fields);
                         $.post('../php/addProduct.php', fields)
-                            .always(function () {
-                                //modalLoading
+                            .always(function (response) {
+                                modalLoading();
+                                if (response.status === 400){
+                                    modalError(true);
+                                }
                             })
                             .done(function (response) {
-                                console.log();
                                 suspendAddProductButton(false);
                                 if (response === 'invalidInsert') {
-                                    //modalError(true);
+                                    modalError(true);
                                 } else {
-                                    //modalConfirmation(true);
+                                    modalConfirmation(true);
                                     console.log("ciao");
                                     console.log(response);
-                                    location.reload();
                                 }
                             })
                             .fail(function () {
                                 suspendAddProductButton(false);
-                                //modalError(true);
+                                modalError(true);
                             })
                     }
 
@@ -793,7 +853,7 @@ if(isset($_SESSION['session_id'])){
                         }
                     }
 
-                    /*function modalError(error) {
+                    function modalError(error) {
                         $("#addProduct").modal(error ? 'hide' : 'show');
                         $("#errorModal").modal(!error ? 'hide' : 'show');
                     }
@@ -806,7 +866,7 @@ if(isset($_SESSION['session_id'])){
                     function modalConfirmation(confirmed) {
                         $("#addProduct").modal(confirmed ? 'hide' : 'show');
                         $("#confirmedModal").modal(!confirmed ? 'hide' : 'show');
-                    }*/
+                    }
                 }
             }
 
