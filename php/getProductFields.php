@@ -1,16 +1,17 @@
 <?php
 require_once('connessione.php');
 
-$productFieldsSql = "SELECT Product_Fields.field_id, Product_Fields.name FROM Product_Fields WHERE Product_Fields.product_category_id = :id;";
-$pre = $pdo->prepare($productFieldsSql);
-$pre->bindParam(':id', $_GET["id"], PDO::PARAM_INT);
-$pre->execute();
+$idCategoria= isset($_POST['idCategoria']) ? $_POST['idCategoria'] : 0;
 
-$productFields = array();
-while($row = $pre->fetch(PDO::FETCH_ASSOC)){
-    $productFields[] = array(
-        "field_id" => $row["field_id"],
-        "field_name" => $row["name"]
-    );
+if($idCategoria != 0){
+    $selectFieldsNamesSql = "SELECT name AS field_name, field_id FROM Product_Fields WHERE Product_Fields.product_category_id = $idCategoria;";
+    $fieldsNames = array();
+    $res = $pdo->prepare($selectFieldsNamesSql);
+    $res->execute();
+    while ($field = $res->fetch(PDO::FETCH_ASSOC)) {
+        array_push($fieldsNames, $field);
+    }
+    $json = json_encode($fieldsNames);
+    echo $json;
 }
-echo json_encode($productFields);
+?>

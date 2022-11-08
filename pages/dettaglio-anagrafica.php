@@ -63,6 +63,56 @@ if(isset($_SESSION['session_id'])){
         <body>
         <?php require_once("navbar.php"); ?>
 
+        <!-- Confirmation Modal -->
+        <div class="modal fade" id="confirmedModal" tabindex="-1" aria-labelledby="confirmedModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" style="color: darkgreen" id="confirmedModalLabel">Effettuato con successo</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        L'operazione è avvenuta con successo.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" onclick="location.reload()" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Modal -->
+        <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" style="color: darkred" id="errorModalLabel">È stato riscontrato un problema</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        È stato riscontrato un errore durante il caricamento dei dati. Nessuna modifica è stata applicata.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Modal -->
+        <div class="modal fade" id="loadingModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="loadingModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="loadingModalLabel">Attendi</h5>
+                        <div class="spinner-border spinner-border-sm" role="status"></div>
+                    </div>
+                    <div class="modal-body">
+                        Caricamento dei dati in corso.
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Cards -->
         <div class="container">
             <div class="row">
@@ -241,7 +291,7 @@ if(isset($_SESSION['session_id'])){
         <div class="container">
             <div class="row">
                 <div class="col-sm-12">
-                    <button class="btn btn-outline-info">Aggiungi</button>
+                    <button type="button" class="btn btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalSelectCategory" data-bs-whatever="selectCategory">Aggiungi</button>
                 </div>
             </div>
             <div class="row row-tabella">
@@ -253,6 +303,7 @@ if(isset($_SESSION['session_id'])){
                                 <th scope="col"><a href="Mdl-Imp-Sprinkler-a-secco.php" style="color: black; text-decoration: none;">Impianti</a></th>
                                 <th scope="col">Quantità</th>
                                 <th scope="col">Data ultima manutenzione</th>
+                                <th scope="col"></th>
                             </tr>
                             </thead>
                             <tbody id="tabellaCategorie">
@@ -264,12 +315,12 @@ if(isset($_SESSION['session_id'])){
             </div>
         </div>
 
-        <!-- Modal -->
-        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <!-- Modal cancellazione-->
+        <div class="modal fade" id="deleteModal" tabindex="-1"  aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Cancellazione </h1>
+                        <h1 class="modal-title fs-5" id="cancellazioneLabel">Cancellazione </h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div id="textDeleteModal" class="modal-body">
@@ -282,7 +333,63 @@ if(isset($_SESSION['session_id'])){
                 </div>
             </div>
         </div>
-        <!-- Fine -->
+
+        <!-- Modal scelta categoria prodotto-->
+        <div class="modal fade bd-example-modal" id="modalSelectCategory" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal- modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Aggiunta prodotto</h5>
+                        <button id="closeModalCategories1" type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body" >
+                        <div class="container-fluid">
+                            <div class="row">
+                                <form>
+                                    <select style="width: 100%" onchange="onSelectCategoriesChange()" id="chooseCategory"></select>
+                                </form>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button id="closeModalCategories1" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                        <button id="selectCategory" type="button" class=" btn btn-warning" data-bs-toggle="modal" data-bs-target="#addProduct" data-bs-whatever="addProduct">Seleziona</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal aggiunta prodotto-->
+        <div class="modal fade" id="addProduct" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 id="addTitle" class="modal-title">Aggiunta </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-5">
+                                    <form id="formAddProduct">
+                                    </form>
+                                </div>
+                                <div class="col-7">
+                                    <h4>Planimetra: </h4>
+                                    <div class="div-immagine prova" id="planimetry-addProduct"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="closeAddProductModal" onclick="clearInterval(myInterval)" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                        <button id="addProductButton" onclick="addProductToDB(value)" value="" type="button" class="btn btn-warning" disabled>Aggiungi</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Footer -->
         <footer class="py-3 my-4 border-top ">
@@ -292,206 +399,519 @@ if(isset($_SESSION['session_id'])){
 
         <script type="text/javascript">
             var idAnag = <?php echo $idAnagrafica; ?>;
-            var sfondo = new Image();
-            var div = document.getElementById('planimetria');
-            var stage = new Konva.Stage({
-                container: 'planimetria',
-                width: div.clientWidth,
-                height: div.clientHeight
-            });
 
-            var layerSfondo = new Konva.Layer({
-                scaleX: 1,
-                scaleY: 1,
-                draggable: false
-            });
-            stage.add(layerSfondo);
-            var layer = new Konva.Layer({
-                scaleX: 1,
-                scaleY: 1,
-                draggable: false
-            });
-            stage.add(layer);
-
-            var groupSfondo = new Konva.Group({
-                scaleX: 1
-            });
-            layer.add(groupSfondo);
-            var group = new Konva.Group({
-                scaleX: 1
-            });
-            layer.add(group);
-            var sfondoImg = new Konva.Image({
-                image: sfondo,
-                width: div.clientWidth,
-                height: div.clientHeight,
-                draggable: false
-            });
-            groupSfondo.add(sfondoImg);
-
-            var srcSfondo = "";
-            $(window).on('load', function(){
-                $.post('../php/viewPlan.php', {idAnag:idAnag}, function(resp){
-                    if(resp != ''){
-                        srcSfondo = resp[0].pathSfondo;
-                        for(let i = 0; i < resp.length; i++){
-                            console.log(((resp[i].posX * sfondoImg.attrs.width) / resp[i].w).toPrecision(10));
-                            var nome_prod = resp[i].nome_prod;
-                            var posX = parseFloat(((resp[i].posX * sfondoImg.attrs.width) / resp[i].w).toPrecision(10));
-                            var posY = parseFloat(((resp[i].posY * sfondoImg.attrs.height) / resp[i].h).toPrecision(10));
-                            var src = "";
-                            var imageObj = new Image();
-                            imageObj.src = "../" + resp[i].pathProd;
-                            var image = new Konva.Image({
-                                x: posX,
-                                y: posY,
-                                image: imageObj,
-                                width: (20 * sfondoImg.attrs.width) / resp[i].w,
-                                height: (25 * sfondoImg.attrs.height) / resp[i].h,
-                                draggable: false,
-                                id: resp[i].id_prod,
-                                name: nome_prod
+            //PLANIMETRIA PAGINA PRINCIPALE
+            {
+                var sfondo = new Image();
+                var div = document.getElementById('planimetria');
+                var stage = new Konva.Stage({
+                    container: 'planimetria',
+                    width: div.clientWidth,
+                    height: div.clientHeight
+                });
+                var layerSfondo = new Konva.Layer({
+                    scaleX: 1,
+                    scaleY: 1,
+                    draggable: false
+                });
+                stage.add(layerSfondo);
+                var layer = new Konva.Layer({
+                    scaleX: 1,
+                    scaleY: 1,
+                    draggable: false
+                });
+                stage.add(layer);
+                var groupSfondo = new Konva.Group({
+                    scaleX: 1
+                });
+                layer.add(groupSfondo);
+                var group = new Konva.Group({
+                    scaleX: 1
+                });
+                layer.add(group);
+                var sfondoImg = new Konva.Image({
+                    image: sfondo,
+                    width: div.clientWidth,
+                    height: div.clientHeight,
+                    draggable: false
+                });
+                groupSfondo.add(sfondoImg);
+                var srcSfondo = "";
+                $(window).on('load', function () {
+                    $.post('../php/viewPlan.php', {idAnag: idAnag}, function (resp) {
+                        if (resp != '') {
+                            srcSfondo = resp[0].pathSfondo;
+                            for (let i = 0; i < resp.length; i++) {
+                                var nome_prod = resp[i].nome_prod;
+                                var posX = parseFloat(((resp[i].posX * sfondoImg.attrs.width) / resp[i].w).toPrecision(10));
+                                var posY = parseFloat(((resp[i].posY * sfondoImg.attrs.height) / resp[i].h).toPrecision(10));
+                                var src = "";
+                                var imageObj = new Image();
+                                imageObj.src = "../" + resp[i].pathProd;
+                                var image = new Konva.Image({
+                                    x: posX,
+                                    y: posY,
+                                    image: imageObj,
+                                    width: (20 * sfondoImg.attrs.width) / resp[i].w,
+                                    height: (25 * sfondoImg.attrs.height) / resp[i].h,
+                                    draggable: false,
+                                    id: resp[i].id_prod,
+                                    name: nome_prod
+                                });
+                                group.add(image);
+                            }
+                            sfondo.src = "../" + srcSfondo;
+                        } else {
+                            var text = new Konva.Text({
+                                align: 'center',
+                                verticalAlign: 'middle',
+                                fontSize: 40,
+                                text: 'Nessun dato trovato',
+                                width: div.clientWidth,
+                                height: div.clientHeight
                             });
-                            group.add(image);
+                            layer.add(text);
                         }
-                        sfondo.src = "../" + srcSfondo;
-                    } else {
-                        var text = new Konva.Text({
-                            align: 'center',
-                            verticalAlign: 'middle',
-                            fontSize: 40,
-                            text: 'Nessun dato trovato',
-                            width: div.clientWidth,
-                            height: div.clientHeight
-                        });
-                        layer.add(text);
+                    }, 'json');
+
+                });
+                var scaleBy = 1.05;
+                stage.on('wheel', (e) => {
+                    e.evt.preventDefault();
+
+                    var oldScale = stage.scaleX();
+                    var pointer = stage.getPointerPosition();
+
+                    var mousePointTo = {
+                        x: (pointer.x - stage.x()) / oldScale,
+                        y: (pointer.y - stage.y()) / oldScale,
+                    };
+                    let direction = e.evt.deltaY > 0 ? 1 : -1;
+                    if (e.evt.ctrlKey) {
+                        direction = -direction;
                     }
-                }, 'json');
+                    var newScale = direction > 0 ? oldScale * scaleBy : oldScale / scaleBy;
+                    stage.scale({x: newScale, y: newScale});
+                    var newPos = {
+                        x: pointer.x - mousePointTo.x * newScale,
+                        y: pointer.y - mousePointTo.y * newScale,
+                    };
+                    stage.position(newPos);
+                });
+            }
 
-            });
-
-            var scaleBy = 1.05;
-            stage.on('wheel', (e) => {
-                e.evt.preventDefault();
-
-                var oldScale = stage.scaleX();
-                var pointer = stage.getPointerPosition();
-
-                var mousePointTo = {
-                    x: (pointer.x - stage.x()) / oldScale,
-                    y: (pointer.y - stage.y()) / oldScale,
-                };
-                let direction = e.evt.deltaY > 0 ? 1 : -1;
-                if (e.evt.ctrlKey) {
-                    direction = -direction;
+            //TABELLA PRODOTTI
+            {
+                function printData(startDate){
+                    var convertedStartDate = new Date(startDate);
+                    var minutes =  convertedStartDate.getMinutes();
+                    var hours =  convertedStartDate.getHours();
+                    var day = convertedStartDate.getDay();
+                    var month = convertedStartDate.getMonth() + 1;
+                    var year = convertedStartDate.getFullYear();
+                    return day + "/" + month + "/" + year + " " + hours + ":" + minutes;
                 }
-                var newScale = direction > 0 ? oldScale * scaleBy : oldScale / scaleBy;
-                stage.scale({ x: newScale, y: newScale });
-                var newPos = {
-                    x: pointer.x - mousePointTo.x * newScale,
-                    y: pointer.y - mousePointTo.y * newScale,
-                };
-                stage.position(newPos);
-            });
-
-            $(window).on('load', function() {
-                $.post('../php/viewCategories.php', {idAnag: idAnag}, function (resp) {
-                    const tabella = document.getElementById('tabellaCategorie');
-                    if(!resp.length==0){
-                        for (let i = 0; i < resp.length; i++) {
-                            console.log(resp);
+                $(window).on('load', function() {
+                    $.post('../php/viewCategories.php', {idAnag: idAnag}, function (resp) {
+                        const tabella = document.getElementById('tabellaCategorie');
+                        if(!resp.length==0){
+                            for (let i = 0; i < resp.length; i++) {
+                                console.log(resp);
+                                tabella.innerHTML +=
+                                    '<tr style= "text-align: center">' +
+                                    '<th scope="row"><button class="btn" onclick="vistaCategoria(value)" value="'+ resp[i].nomeCategoria +'">' + resp[i].nomeCategoria + '</button></th>' +
+                                    '<td>' + resp[i].quantita + '</td>' +
+                                    '<td>' + printData(resp[i].dataUltimaManutenzione) + '</td>' +
+                                    '<td style="text-align: center;">' +
+                                    '<button style="margin: 2" class="btn btn-outline-success" onclick="window.location.href=\'modifica-categoria.php?product_category_id=' + resp[i].idCategoria + '&company_id=' + idAnag + '\'"><i class="fa-solid fa-pen"></i></button>' +
+                                    '<button style="margin: 2" class="btn btn-outline-info" onclick="window.location.href=\'dettaglio-categoria.php?product_category_id=' + resp[i].idCategoria + '&company_id=' + idAnag + '\'"><i class="fa-solid fa-circle-info"></i></button>' +
+                                    '<button style="margin: 2" class="btn btn-outline-danger" onclick="onDeleteClick('+ resp[i].idCategoria+',value)" value="'+ resp[i].nomeCategoria +'"><i class="fa-solid fa-trash-can"></i></button>' +
+                                    '<button style="margin: 2" class="btn btn-outline-success" onclick="onPrintClick(value)" value="'+ resp[i].nomeCategoria +'"><i class="fa-solid fa-print"></i></button>' +
+                                    '</td>' +
+                                    '</tr>';
+                            }
+                        }
+                        else {
                             tabella.innerHTML +=
-                                '<tr style= "text-align: center">' +
-                                '<th scope="row"><button class="btn" onclick="vistaCategoria(value)" value="'+ resp[i].nomeCategoria +'">' + resp[i].nomeCategoria + '</button></th>' +
-                                '<td>' + resp[i].quantita + '</td>' +
-                                '<td>' + resp[i].dataUltimaManutenzione + '</td>' +
-                                '<td style="text-align: center;">' +
-                                '<button style="margin: 2" class="btn btn-outline-success" onclick="window.location.href=\'modifica-categoria.php?product_category_id=' + resp[i].idCategoria + '&company_id=' + idAnag + '\'"><i class="fa-solid fa-pen"></i></button>' +
-                                '<button style="margin: 2" class="btn btn-outline-info" onclick="window.location.href=\'dettaglio-categoria.php?product_category_id=' + resp[i].idCategoria + '&company_id=' + idAnag + '\'"><i class="fa-solid fa-circle-info"></i></button>' +
-                                '<button style="margin: 2" class="btn btn-outline-danger" onclick="onDeleteClick('+ resp[i].idCategoria+',value)" value="'+ resp[i].nomeCategoria +'"><i class="fa-solid fa-trash-can"></i></button>' +
-                                '<button style="margin: 2" class="btn btn-outline-success" onclick="onPrintClick(value)" value="'+ resp[i].nomeCategoria +'"><i class="fa-solid fa-print"></i></button>' +
-                                '</td>' +
-                                '</tr>';
+                                '<tr style="height: 40px;text-align: center">' +
+                                '<td colspan="3"><b>Nessun dato trovato</b></td>' +
+                                '</tr>'
+                        }
+
+                    }, "json");
+                });
+                function onDeleteClick(idCategoria, nomeCategoria){
+                    document.getElementById('textDeleteModal').innerHTML = 'Sei sicuro di voler cancellare la categoria <b>'+ nomeCategoria +'</b> dalla tua anagrafica, in questo modo rimuoverai tutti i prodotti appartenenti ad essa e ne cancellerai le revisioni fatte.';
+                    document.getElementById('cancellazioneLabel').innerHTML = 'Cancellazione '+ nomeCategoria;
+                    $('#deleteModal').modal('show');
+                    $('#deleteButton').click(function(){
+                        $.post('../php/deleteCategory.php', {idCategory:idCategoria,idCompany: idAnag}, function (resp) {});
+                        location.reload()
+                    })
+                }
+                function onPrintClick(categoria){
+                    for(let i = 0; i < group.children.length; i++){
+                        let prova = group.children[i];
+                        if(group.children[i].attrs.name !== categoria){
+                            prova.visible(false);
+                        } else {
+                            prova.visible(true);
                         }
                     }
-                    else {
-                        tabella.innerHTML +=
-                            '<tr style="height: 40px;text-align: center">' +
-                            '<td colspan="3"><b>Nessun dato trovato</b></td>' +
-                            '</tr>'
-                    }
-
-                }, "json");
-            });
-
-
-
-            function onDeleteClick(idCategoria, nomeCategoria){
-                document.getElementById('textDeleteModal').innerHTML = 'Sei sicuro di voler cancellare la categoria <b>'+ nomeCategoria +'</b> dalla tua anagrafica, in questo modo rimuoverai tutti i prodotti appartenenti ad essa e ne cancellerai le revisioni fatte.';
-                document.getElementById('exampleModalLabel').innerHTML += nomeCategoria;
-                $('#deleteModal').modal('show');
-                $('#deleteButton').click(function(){
-                    $.post('../php/deleteCategory.php', {idCategory:idCategoria,idCompany: idAnag}, function (resp) {});
-                    location.reload()
-                })
-            }
-            function onPrintClick(categoria){
-                for(let i = 0; i < group.children.length; i++){
-                    var prova = group.children[i];
-                    if(group.children[i].attrs.name != categoria){
-                        prova.visible(false);
-                    } else {
-                        prova.visible(true);
-                    }
-                }
-                var nomeAz = '<?php echo $arrayAna['nomeAzienda']; ?>';
-                var dataURL = stage.toDataURL({ pixelRatio: 3 });
-                downloadURI(dataURL, 'planimetria' + nomeAz + categoria +'.png');
-                for(let i = 0; i < group.children.length; i++){
-                    var prova = group.children[i];
-                    prova.visible(true);
-                }
-
-            }
-            function vistaCategoria(categoria){
-                for(let i = 0; i < group.children.length; i++){
-                    var prova = group.children[i];
-                    if(group.children[i].attrs.name != categoria){
-                        prova.visible(false);
-                    } else {
+                    var nomeAz = '<?php echo $arrayAna['nomeAzienda']; ?>';
+                    var dataURL = stage.toDataURL({ pixelRatio: 3 });
+                    downloadURI(dataURL, 'planimetria' + nomeAz + categoria +'.png');
+                    for(let i = 0; i < group.children.length; i++){
+                        let prova = group.children[i];
                         prova.visible(true);
                     }
                 }
             }
-            $('#viewAll').click(function(){
-                for(let i = 0; i < group.children.length; i++){
-                    var prova = group.children[i];
-                    prova.visible(true);
-                }
-            });
 
-            $('#stampaPDFPlan').click(function(){
-                var nomeAz = '<?php echo $arrayAna['nomeAzienda']; ?>';
-                var dataURL = stage.toDataURL({ pixelRatio: 3 });
-                downloadURI(dataURL, 'planimetria' + nomeAz + '.png');
-            });
-            function downloadURI(uri, name) {
-                var link = document.createElement('a');
-                link.download = name;
-                link.href = uri;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                delete link;
+            //AGGIUNTA PRODOTTI
+            {
+                //SCELTA CATEGORIA PRODOTTO
+                {
+                    const selectCategoryModal = document.getElementById('modalSelectCategory');
+                    var idCategoria = null;
+
+                    function fillSelectProductModal(categoriesName) {
+                        if (categoriesName) {
+                            const select = document.getElementById('chooseCategory');
+                            select.innerHTML =
+                                '<div class="form-group">' +
+                                '<label>Categoria:</label>' +
+                                '<select class="form-select">' +
+                                '<option selected value=0>Seleziona una categoria</option>';
+                            for (var category of categoriesName) {
+                                select.innerHTML += '<option value=' + category.idCategory + '>' + category.productCategoryName + '</option>'
+                            }
+                            select.innerHTML +=
+                                '</select>' +
+                                '</div>';
+                        } else {
+                            selectCategoryModal.querySelector('form').reset();
+                            document.getElementById('selectCategory').setAttribute("disabled", ""); //reset buttton seleziona
+                        }
+                    }
+
+                    selectCategoryModal.addEventListener('show.bs.modal', function (event) {
+                        fillSelectProductModal();
+
+                        $.get('../php/getProductsCategories.php')
+                            .always(function () {
+                                //modalLoading
+                            })
+                            .done(function (response) {
+                                const companyInformations = JSON.parse(response);
+                                fillSelectProductModal(companyInformations);
+                            })
+                            .fail(function () {
+                                //modalError;
+                            })
+                    })
+
+                    function onSelectCategoriesChange() {
+                        const select = document.getElementById('chooseCategory');
+                        if (select.value == 0) {
+                            document.getElementById('selectCategory').setAttribute("disabled", "");
+                        } else {
+                            document.getElementById('selectCategory').removeAttribute("disabled");
+                        }
+                    }
+
+                    $('#chooseCategory').on('click' , function (){
+                        idCategoria = document.getElementById('chooseCategory').value;
+                        console.log(idCategoria);
+                    })
+                }
+
+                //Aggiunta del prodotto
+                {
+                    const addPrdocuctModal = document.getElementById("addProduct");
+                    var myInterval;
+
+                    function fillAddProductModal(attributesNames) {
+                        if (attributesNames) {
+                            const form = document.getElementById('formAddProduct');
+                            myInterval = setInterval(function (){
+                                const formInputs = form.getElementsByTagName('input');
+                                let flagger = true;
+                                for (let input of formInputs) {
+                                    let inputContent = $("#" + input.id).val();
+                                    if (inputContent === "") {
+                                        flagger = false;
+                                    }
+                                }
+                                if (flagger) {
+                                    document.getElementById('addProductButton').removeAttribute("disabled");
+                                } else {
+                                    document.getElementById('addProductButton').setAttribute("disabled", "");
+                                }
+                            }, 500);
+                            form.innerHTML = '';
+                            for (let i = 0; i < attributesNames.length; i++) {
+                                form.innerHTML += '<div class="form-group">' +
+                                    '<label>' + attributesNames[i].field_name + '</label>' +
+                                    '<input type="text" class="form-control" id="' + attributesNames[i].field_id + '" placeholder="Inserisci ' + attributesNames[i].field_name + '">' +
+                                    '</div>'
+                            }
+                            form.innerHTML +=
+                                '<div class="form-group"' +
+                                '<label>Data revisione</label>' +
+                                '   <div class="form-row">' +
+                                '       <div class="row">' +
+                                '           <div class="col">' +
+                                '               <input type="datetime-local" id="date" class="form-control" value="">' +
+                                '           </div>' +
+                                '       </div>' +
+                                '   </div>' +
+                                '</div>' +
+                                '<div class="form-group"' +
+                                '<label>Posizione (clicca l\'icona sulla planimetria per ottenerla)</label>' +
+                                '   <div class="form-row">' +
+                                '       <div class="row">' +
+                                '           <div class="col">' +
+                                '               <input type="number" id="x" class="form-control" placeholder="Pos. X" disabled>' +
+                                '           </div>' +
+                                '           <div class="col">' +
+                                '               <input type="number" id="y" class="form-control" placeholder="Pos. Y" disabled>' +
+                                '           </div>' +
+                                '       </div>' +
+                                '   </div>' +
+                                '</div>';
+                            console.log($("#date").val());
+                            $('#addProductButton').attr("value", idCategoria);
+                            let risposta;
+                            let nomeCategoria;
+                            $.post('../php/getProductIcon.php', {idCategoria: idCategoria, idCompagnia: idAnag}, function (resp) {
+                                if (resp.length === 1) {
+                                    risposta = resp[0];
+                                }
+                                nomeCategoria = risposta.categoryName;
+                                document.getElementById('addTitle').innerHTML = nomeCategoria;
+                                //fill the layer and the stage with the planimetry
+                                let sfondo = new Image();
+                                let div = document.getElementById('planimetry-addProduct');
+                                let stage = new Konva.Stage({
+                                    container: 'planimetry-addProduct',
+                                    width: div.clientWidth,
+                                    height: div.clientHeight
+                                });
+                                let layerSfondo = new Konva.Layer({
+                                    scaleX: 1,
+                                    scaleY: 1,
+                                    draggable: true
+                                });
+                                stage.add(layerSfondo);
+                                let layer = new Konva.Layer({
+                                    scaleX: 1,
+                                    scaleY: 1,
+                                    draggable: false
+                                });
+                                stage.add(layer);
+                                let groupSfondo = new Konva.Group({
+                                    scaleX: 1
+                                });
+                                layer.add(groupSfondo);
+                                let group = new Konva.Group({
+                                    scaleX: 1
+                                });
+                                layer.add(group);
+                                let widthRatio = (div.clientWidth) / risposta.w;
+                                let heightRatio = (div.clientHeight) / risposta.h;
+                                let bestRatio = Math.min(widthRatio, heightRatio);
+                                let newWidth = risposta.w * bestRatio;
+                                let newHeight = risposta.h * bestRatio;
+                                let sfondoImg = new Konva.Image({
+                                    image: sfondo,
+                                    width: newWidth,
+                                    height: newHeight,
+                                    y: (div.clientHeight-newHeight)/2,
+                                    draggable: false
+                                });
+                                groupSfondo.add(sfondoImg);
+
+                                //canvas to move on the stage
+                                let nome_prod = nomeCategoria;
+                                let imageObj = new Image();
+                                imageObj.src = "../" + risposta.productIcon;
+                                nuovoProdotto = new Konva.Image({
+                                    y: (div.clientHeight-newHeight)/2,
+                                    image: imageObj,
+                                    width: (20 * sfondoImg.attrs.width) / risposta.w,
+                                    height: (25 * sfondoImg.attrs.height) / risposta.h,
+                                    draggable: true,
+                                    name: nome_prod
+                                });
+                                group.add(nuovoProdotto);
+
+                                //responsive map
+                                sfondo.src = "../" + srcSfondo;
+                                let scaleBy = 1.05;
+                                stage.on('wheel', (e) => {
+                                    e.evt.preventDefault();
+                                    let oldScale = stage.scaleX();
+                                    let pointer = stage.getPointerPosition();
+
+                                    let mousePointTo = {
+                                        x: (pointer.x - stage.x()) / oldScale,
+                                        y: (pointer.y - stage.y()) / oldScale,
+                                    };
+                                    let direction = e.evt.deltaY > 0 ? 1 : -1;
+                                    if (e.evt.ctrlKey) {
+                                        direction = -direction;
+                                    }
+                                    let newScale = direction > 0 ? oldScale * scaleBy : oldScale / scaleBy;
+                                    stage.scale({ x: newScale, y: newScale });
+                                    let newPos = {
+                                        x: pointer.x - mousePointTo.x * newScale,
+                                        y: pointer.y - mousePointTo.y * newScale,
+                                    };
+                                    stage.position(newPos);
+                                });
+                                stage.addEventListener('dragend', function () {
+                                    document.getElementById("x").value = parseInt(((nuovoProdotto.x()*risposta.w)/sfondoImg.attrs.width).toPrecision(10));
+                                    document.getElementById("y").value = parseInt(((nuovoProdotto.y()*risposta.h)/sfondoImg.attrs.height)-((div.clientHeight-newHeight)/2) + (((25 * sfondoImg.attrs.height) / risposta.h)/2));
+                                });
+                            }, "json");
+                        } else {
+                            clearInterval(myInterval);
+                            addPrdocuctModal.querySelector('form').reset();
+                            document.getElementById('addProductButton').setAttribute("disabled", ""); //reset buttton aggiungi
+                        }
+                    }
+
+                    addPrdocuctModal.addEventListener('show.bs.modal', function (event) {
+                        if (idCategoria != null && idCategoria !== 0) {
+                            fillAddProductModal();
+
+                            $.post('../php/getProductFields.php', {idCategoria: idCategoria})
+                                .always(function () {
+                                    modalLoading();
+                                })
+                                .done(function (response) {
+                                    const categoryAttributes = JSON.parse(response);
+                                    fillAddProductModal(categoryAttributes);
+                                })
+                                .fail(function () {
+                                    modalError();
+                                })
+                        }
+                    })
+
+
+                    function addProductToDB(productType) {
+                        clearInterval(myInterval);
+                        suspendAddProductButton(true);
+                        const formInputs = document.getElementById('formAddProduct').getElementsByTagName('input');
+                        var fields = {};
+                        for (let input of formInputs) {
+                            if (input.id === 'date') {
+                                fields[input.id] = $("#" + input.id).val();
+                            } else {
+                                fields[input.id] = $("#" + input.id).val();
+                            }
+                        }
+                        fields['company_id'] = idAnag;
+                        fields['product_category_id'] = productType;
+                        console.log(fields);
+                        $.post('../php/addProduct.php', fields)
+                            .always(function (response) {
+                                modalLoading();
+                                if (response.status === 400){
+                                    modalError(true);
+                                }
+                            })
+                            .done(function (response) {
+                                suspendAddProductButton(false);
+                                if (response === 'invalidInsert') {
+                                    modalError(true);
+                                } else {
+                                    modalConfirmation(true);
+                                    console.log("ciao");
+                                    console.log(response);
+                                }
+                            })
+                            .fail(function () {
+                                suspendAddProductButton(false);
+                                modalError(true);
+                            })
+                    }
+
+                    function suspendAddProductButton(suspended) {
+                        if (suspended) {
+                            $('#closeAddProductModal').prop('disabled', true);
+                            const confirmButton = $('#addProductButton');
+                            confirmButton.prop('disabled', true);
+                            confirmButton.html('<div class="spinner-border spinner-border-sm" role="status"/>');
+                        } else {
+                            $('#closeAddProductModal').removeAttr('disabled');
+                            const confirmButton = $('#addProductButton');
+                            confirmButton.removeAttr('disabled');
+                            confirmButton.html("Aggiungi");
+                        }
+                    }
+
+                    function modalError(error) {
+                        $("#addProduct").modal(error ? 'hide' : 'show');
+                        $("#errorModal").modal(!error ? 'hide' : 'show');
+                    }
+
+                    function modalLoading(loading) {
+                        $("#addProduct").modal(loading ? 'hide' : 'show');
+                        $("#loadingModal").modal(!loading ? 'hide' : 'show');
+                    }
+
+                    function modalConfirmation(confirmed) {
+                        $("#addProduct").modal(confirmed ? 'hide' : 'show');
+                        $("#confirmedModal").modal(!confirmed ? 'hide' : 'show');
+                    }
+                }
+            }
+
+            //VISUALIZZAZIONE CONDIZIONATA DELLA PLANIMETRIA PRINCIPALE E STAMPA
+            {
+                function vistaCategoria(categoria){
+                    for(let i = 0; i < group.children.length; i++){
+                        var prova = group.children[i];
+                        if(group.children[i].attrs.name != categoria){
+                            prova.visible(false);
+                        } else {
+                            prova.visible(true);
+                        }
+                    }
+                }
+                $('#viewAll').click(function(){
+                    for(let i = 0; i < group.children.length; i++){
+                        var prova = group.children[i];
+                        prova.visible(true);
+                    }
+                });
+                //STAMPA DELLA PLANIMETRIA
+                $('#stampaPDFPlan').click(function(){
+                    var nomeAz = '<?php echo $arrayAna['nomeAzienda']; ?>';
+                    var dataURL = stage.toDataURL({ pixelRatio: 3 });
+                    downloadURI(dataURL, 'planimetria' + nomeAz + '.png');
+                });
+                function downloadURI(uri, name) {
+                    var link = document.createElement('a');
+                    link.download = name;
+                    link.href = uri;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    delete link;
+                }
             }
 
         </script>
         </body>
 
         </html>
-        <?php
+<?php
+        }
+    }else {
+        include_once('404.html');
     }
-} else {
-    echo "<script>window.location.replace('../index.php');</script>";
-}
 ?>
