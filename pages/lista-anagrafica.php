@@ -446,7 +446,7 @@ if (isset($_SESSION['session_id'])) {
                         id_ana: modalType
                     })
                     .always(function() {
-                        // modalLoading(false);
+                        //modalLoading(false);
                     })
                     .done(function(response) {
                         const companyInformations = JSON.parse(response);
