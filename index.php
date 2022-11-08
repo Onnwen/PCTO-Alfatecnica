@@ -1,117 +1,125 @@
 <?php
 session_start();
 require_once('php/connessione.php');
-if(isset($_SESSION['session_id'])){
-  header('location: pages/lista-anagrafica.php');
+if (isset($_SESSION['session_id'])) {
+    header('location: pages/lista-anagrafica.php');
 } else {
- ?>
-<!DOCTYPE html>
-<html lang="en">
+    ?>
+    <!DOCTYPE html>
+    <html lang="it">
+    <head>
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+                integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+              integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+        <script src="./js/login.js"></script>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/style.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/c0c3eed4d9.js" crossorigin="anonymous"></script>
+        <script src="https://www.myersdaily.org/joseph/javascript/md5.js"></script>
+        <link rel="stylesheet" href="./css/login.css">
+        <title>Alfatecnica - Accedi</title>
+    </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
-    <script src="https://kit.fontawesome.com/c0c3eed4d9.js" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.js"
-        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
-        crossorigin="anonymous"></script>
-    <script src="https://www.myersdaily.org/joseph/javascript/md5.js"></script>
-    <title>Alfatecnica - Login</title>
-    <link rel="icon" href="img/logo.png">
-    <style>
-        html,
-        body {
-            height: 100%;
-            background-image: linear-gradient(azure, moccasin);
-        }
+    <body>
+    <div class="body">
+        <div class="veen">
+            <div class="login-btn splits">
+                <button class="active">Accedi</button>
+            </div>
+            <div class="rgstr-btn splits">
+                <button>Contatti</button>
+            </div>
 
-        body {
-            display: flex;
-            align-items: center;
-            padding-top: 40px;
-            padding-bottom: 40px;
-            background-color: #f5f5f5;
-        }
-    </style>
-</head>
-
-<body class="text-center login">
-
-    <main class="form-signin">
-        <div class="d-flex justify-content-center">
-            <img class="mb-4" src="img/Immagine 2022-05-07 154137.png" alt="" width="auto" height="200" style="margin-right: 20px;">
+            <div class="wrapper">
+                <img style="width: auto; height:150px; margin-bottom: 30px; margin-top: 30px;" src="./img/logo.png" alt="logo">
+                <form id="login" tabindex="500">
+                    <div class="form-floating">
+                        <input type="email" class="form-control" id="emailInput" placeholder="Email" autocomplete="email">
+                        <label for="emailInput" id="label-email">Indirizzo Email</label>
+                    </div>
+                    <div class="form-floating">
+                        <input type="password" class="form-control" id="passwordInput" placeholder="Password" autocomplete="current-password">
+                        <label for="passwordInput" id="label-pw">Password</label>
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                    <button class="dark" type="button" id="signIn">Accedi</button>
+                    <p id="msgErr" style="margin-top: 20px; color: red;"></p>
+                </form>
+                <form id="register" tabindex="502">
+                    <div class="name">
+                        <input type="text" name=""/>
+                        <label>Nome e cognome</label>
+                    </div>
+                    <div class="mail">
+                        <input type="email" name=""/>
+                        <label>Mail</label>
+                    </div>
+                    <div class="uid">
+                        <input type="text" name=""/>
+                        <label>Messaggio</label>
+                    </div>
+                    <br>
+                    <button class="dark" style="opacity: 0.25" disabled>Invia</button>
+                </form>
+            </div>
         </div>
-        <form id="form-login">
-            <h1 class="h3 mb-3 fw-normal">Log In</h1>
-            <div class="form-floating">
-                <input type="email" class="form-control" id="floatingInput" placeholder="Email" autocomplete="email">
-                <label for="floatingInput" id="label-email">Indirizzo Email</label>
-            </div>
-            <div class="form-floating">
-                <input type="password" class="form-control" id="floatingPassword" placeholder="Password" autocomplete="current-password">
-                <label for="floatingPassword" id="label-pw">Password</label>
-            </div>
-
-            <div class="checkbox mb-3">
-                <label>
-                        <input type="checkbox" value="remember-me"> Ricorda
-                        questo dispositivo
-                    </label>
-            </div>
-            <button class="w-100 btn btn-lg btn-dark" type="button" id="signin">Accedi</button>
-            <p id="msgErr" style="margin-top: 7px; color: red;"></p>
-            <p class="mt-5 mb-3 text-muted">&copy; 2022 - Alfatecnica</p>
-        </form>
-    </main>
+    </div>
     <script type="text/javascript">
-    $('#show').click(function(){
-      var pass = document.getElementById('floatingPassword');
-      if(pass.type == 'password')
-        pass.type = 'text';
-      else
-        pass.type = 'password';
-    });
-
-    $('#signin').click(function(){
-      var email = $('#floatingInput').val();
-      var pw = $('#floatingPassword').val();
-
-      if(email == ''){
-        $('#msgErr').html('Email non inserita');
-        $('#floatingInput').addClass('is-invalid');
-        $('#label-email').attr('for', 'floatingInputInvalid');
-        $('#label-email').html('Invalid Email');
-      } else if(pw == ''){
-        $('#msgErr').html('Password non inserita');
-        $('#floatingPassword').addClass('is-invalid');
-        $('#label-pw').attr('for', 'floatingInputInvalid');
-        $('#label-pw').html('Invalid Password');
-      } else {
-        var pwMd5 = md5(md5(pw));
-        console.log(pwMd5);
-        $.post('php/login/login.php', {email:email, pw:pwMd5}, function(resp){
-          if(resp == 'userWrong'){
-            $('#msgErr').html('Credenziali errate');
-            $('#floatingPassword, #floatingInput').addClass('is-invalid');
-            $('#label-pw').attr('for', 'floatingInputInvalid');
-            $('#label-pw').html('Invalid Password');
-            $('#label-email').attr('for', 'floatingInputInvalid');
-            $('#label-email').html('Invalid Email');
-          } else {
-            window.location.href="pages/lista-anagrafica.php";
-          }
+        $('#show').click(function () {
+            let pass = $('#passwordInput');
+            if (pass.type === 'password')
+                pass.type = 'text';
+            else
+                pass.type = 'password';
         });
-      }
-    });
-    </script>
-</body>
 
-</html>
-<?php
+        $('#signIn').click(function () {
+            let email = $('#emailInput');
+            let password = $('#passwordInput');
+            let errorMessage = $('#msgErr');
+            let emailLabel = $('#label-email');
+            let passwordLabel = $('#label-pw');
+
+            if (email.val() === '') {
+                errorMessage.text('Email non inserita');
+                email.addClass('is-invalid');
+                emailLabel.attr('for', 'floatingInputInvalid');
+                emailLabel.html('Invalid Email');
+            } else if (password.val() === '') {
+                errorMessage.text('Password non inserita');
+                password.addClass('is-invalid');
+                passwordLabel.attr('for', 'floatingInputInvalid');
+                passwordLabel.html('Invalid Password');
+            } else {
+                let pwMd5 = md5(md5(password.val()));
+                console.log(pwMd5);
+                $.post('php/login/login.php', {email: email.val(), pw: pwMd5}, function (resp) {
+                    if (resp === 'userWrong') {
+                        errorMessage.html('Credenziali errate');
+                        $('#passwordInput, #emailInput').addClass('is-invalid');
+                        passwordLabel.attr('for', 'floatingInputInvalid');
+                        passwordLabel.html('Invalid Password');
+                        emailLabel.attr('for', 'floatingInputInvalid');
+                        emailLabel.html('Invalid Email');
+                    } else {
+                        window.location.href = "pages/lista-anagrafica.php";
+                    }
+                });
+            }
+        });
+    </script>
+    </body>
+
+    </html>
+    <?php
 }
- ?>
+?>
