@@ -5,6 +5,7 @@ $companyId = $_POST["company_id"];
 $productCategoryId = $_POST["product_category_id"];
 $x = $_POST["x"];
 $y = $_POST["y"];
+
 $date = $_POST["date"];
 
 $productFieldsSql = "SELECT Product_Fields.field_id, Product_Fields.name FROM Product_Fields WHERE Product_Fields.product_category_id = :id;";
