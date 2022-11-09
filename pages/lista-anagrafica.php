@@ -311,7 +311,26 @@ if (isset($_SESSION['session_id'])) {
                 $(".table_anagrafiche").css("display", "none");
             });
 
-            $.post("../php/viewAnagr.php", {}, function(resp) {
+            let requestDestination = "";
+            let searchedQuery = {
+                nome_azienda: "",
+                sede: ""
+            };
+
+            let requestedCompany = "<?php echo (isset($_GET['nome_azienda']) ? $_GET['nome_azienda'] : '') ?>";
+            let requestedSite = "<?php echo (isset($_GET['sede']) ? $_GET['sede'] : '') ?>";
+
+            if (requestedCompany === "" && requestedSite === "") { //TODO: Controllare se la query string è vuota
+                console.log("No query string: renderizzo tutto");
+                requestDestination = "../php/viewAnagr.php";
+            } else { // Renderizza i risultati del motore di ricerca
+                console.log("Rilevata query string: avviando il motore di ricerca");
+                requestDestination = "../php/searchEngine.php";
+                searchedQuery.nome_azienda = requestedCompany;
+                searchedQuery.sede = requestedSite;
+            }
+
+            $.post(requestDestination, searchedQuery, function(resp) {
                 const cards = document.getElementById("cardContainer"); //prendere l'elemento con quel determinato id
                 const tabella = document.getElementById('tabella-ajax');
                 for (let i = 0; i < resp.length; i++) {
@@ -338,6 +357,7 @@ if (isset($_SESSION['session_id'])) {
                         '</tr>';
                 }
             }, "json");
+
 
             $("#table").click(function() {
                 $("#cards").removeClass("selected");
