@@ -3,13 +3,19 @@ require_once('connessione.php');
 
 $nomeAzienda = $_POST['nome_azienda'];
 $sede = $_POST['sede'];
+$data = $_POST['data'];
 
-$query = "SELECT id, name, site, path_logo FROM Companies WHERE name LIKE CONCAT('%', :name, '%') AND site LIKE CONCAT('%', :site, '%')";
+$query = "SELECT tabella.id, tabella.name, tabella.site, tabella.path_logo FROM (select Companies.id, Companies.name, Companies.site, Companies.path_logo, max(date(Revisions.data)) as 'lastRevisionDate' from Revisions, Companies where Companies.id = Revisions.company_id group by Companies.id) as tabella WHERE name LIKE CONCAT('%', :name, '%') AND site LIKE CONCAT('%', :site, '%') AND (:data = '' or :data2 = tabella.lastRevisionDate)";
+
+# select Companies.name, max(date(Revisions.data)) as 'lastRevisionDate' from Revisions, Companies where Companies.id = Revisions.company_id group by Companies.id;
 
 $pre = $pdo->prepare($query);
 
 $pre->bindParam(":name", $nomeAzienda, PDO::PARAM_STR);
 $pre->bindParam(":site", $sede, PDO::PARAM_STR);
+$pre->bindParam(":data", $data, PDO::PARAM_STR);
+$pre->bindParam(":data2", $data, PDO::PARAM_STR);
+
 $risultato = $pre->execute();
 $array = array();
 $i = 0;

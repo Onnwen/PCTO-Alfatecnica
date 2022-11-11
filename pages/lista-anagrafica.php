@@ -314,13 +314,15 @@ if (isset($_SESSION['session_id'])) {
             let requestDestination = "";
             let searchedQuery = {
                 nome_azienda: "",
-                sede: ""
+                sede: "",
+                data: ""
             };
 
             let requestedCompany = "<?php echo (isset($_GET['nome_azienda']) ? $_GET['nome_azienda'] : '') ?>";
             let requestedSite = "<?php echo (isset($_GET['sede']) ? $_GET['sede'] : '') ?>";
+            let requestedDate = "<?php echo (isset($_GET['data']) ? $_GET['data'] : '') ?>";
 
-            if (requestedCompany === "" && requestedSite === "") { //TODO: Controllare se la query string è vuota
+            if (requestedCompany === "" && requestedSite === "" && requestedDate === "") { //TODO: Controllare se la query string è vuota
                 console.log("No query string: renderizzo tutto");
                 requestDestination = "../php/viewAnagr.php";
             } else { // Renderizza i risultati del motore di ricerca
@@ -328,6 +330,7 @@ if (isset($_SESSION['session_id'])) {
                 requestDestination = "../php/searchEngine.php";
                 searchedQuery.nome_azienda = requestedCompany;
                 searchedQuery.sede = requestedSite;
+                searchedQuery.data = requestedDate;
             }
 
             $.post(requestDestination, searchedQuery, function(resp) {
@@ -497,7 +500,7 @@ if (isset($_SESSION['session_id'])) {
         }
 
         function search() {
-            window.location.href = 'lista-anagrafica.php?nome_azienda=' + document.getElementById("companyName").value + '&sede=' + document.getElementById("companySite").value;
+            window.location.href = 'lista-anagrafica.php?nome_azienda=' + document.getElementById("companyName").value + '&sede=' + document.getElementById("companySite").value + '&data=' + document.getElementById("companyLastDate").value; // TODO: Controllo lato frontend che la data sia in un formato accettabile dal database
         }
         var paginaCurr = 1;
 
