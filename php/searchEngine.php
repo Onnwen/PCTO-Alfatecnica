@@ -7,8 +7,6 @@ $data = $_POST['data'];
 
 $query = "SELECT tabella.id, tabella.name, tabella.site, tabella.path_logo FROM (select Companies.id, Companies.name, Companies.site, Companies.path_logo, max(date(Revisions.data)) as 'lastRevisionDate' from Revisions right join Companies on Companies.id = Revisions.company_id group by Companies.id) as tabella WHERE name LIKE CONCAT('%', :name, '%') AND site LIKE CONCAT('%', :site, '%') AND (:data = '' or :data2 = tabella.lastRevisionDate)";
 
-# select Companies.name, max(date(Revisions.data)) as 'lastRevisionDate' from Revisions, Companies where Companies.id = Revisions.company_id group by Companies.id;
-
 $pre = $pdo->prepare($query);
 
 $pre->bindParam(":name", $nomeAzienda, PDO::PARAM_STR);
