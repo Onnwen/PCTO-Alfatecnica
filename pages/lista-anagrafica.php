@@ -273,16 +273,13 @@ if (isset($_SESSION['session_id'])) {
         <nav aria-label="Page navigation example ">
             <ul class="pagination justify-content-center ">
                 <li class="page-item ">
-                    <a class="page-link " href="# " aria-label="Previous ">
+                    <a class="page-link " href="# " aria-label="Previous " onClick="previousPage();">
                         <span aria-hidden="true">&laquo;</span>
 
                     </a>
                 </li>
-                <li class="page-item "><a href="javascript:void(0);" onClick="javascript:paginatore(1);">1</a>
-                <li class="page-item "><a href="javascript:void(0);" onClick="javascript:paginatore(2);">2</a>
-                <li class="page-item "><a href="javascript:void(0);" onClick="javascript:paginatore(3);">3</a>
                 <li class="page-item ">
-                    <a class="page-link " href="# " aria-label="Next ">
+                    <a class="page-link " href="# " aria-label="Next " onClick="nextPage();">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>
@@ -298,6 +295,13 @@ if (isset($_SESSION['session_id'])) {
         </footer>
     </body>
     <script>
+        let currentPage = <?php echo (!(filter_var($_GET['pagina'], FILTER_VALIDATE_INT) === false) ? $_GET['pagina'] : 0) ?>;
+
+        let requestedCompany = "<?php echo (isset($_GET['nome_azienda']) ? $_GET['nome_azienda'] : '') ?>";
+        let requestedSite = "<?php echo (isset($_GET['sede']) ? $_GET['sede'] : '') ?>";
+        let requestedDate = "<?php echo (isset($_GET['data']) ? $_GET['data'] : '') ?>";
+        let maxCardsPerPage = 5;
+
         $(document).ready(function() {
             $(".change_cards").click(function() {
                 $(".anagrafiche").css("display", "none");
@@ -318,10 +322,6 @@ if (isset($_SESSION['session_id'])) {
                 data: ""
             };
 
-            let requestedCompany = "<?php echo (isset($_GET['nome_azienda']) ? $_GET['nome_azienda'] : '') ?>";
-            let requestedSite = "<?php echo (isset($_GET['sede']) ? $_GET['sede'] : '') ?>";
-            let requestedDate = "<?php echo (isset($_GET['data']) ? $_GET['data'] : '') ?>";
-
             if (requestedCompany === "" && requestedSite === "" && requestedDate === "") { //TODO: Controllare se la query string è vuota
                 console.log("No query string: renderizzo tutto");
                 requestDestination = "../php/viewAnagr.php";
@@ -336,7 +336,8 @@ if (isset($_SESSION['session_id'])) {
             $.post(requestDestination, searchedQuery, function(resp) {
                 const cards = document.getElementById("cardContainer"); //prendere l'elemento con quel determinato id
                 const tabella = document.getElementById('tabella-ajax');
-                for (let i = 0; i < resp.length; i++) {
+                for (let i = (maxCardsPerPage * currentPage <= resp.length ? maxCardsPerPage * currentPage : maxCardsPerPage * Math.floor(resp.length / maxCardsPerPage)); i < resp.length && i < maxCardsPerPage * (currentPage + 1); i++) {
+                    console.log("Pagina = " + currentPage + " ; " + i);
                     cards.innerHTML += '<div class="col">' +
                         '<div class="card text-center">' +
                         '<img src="../' + resp[i].path_logo + '" class="card-img-top">' +
@@ -448,7 +449,6 @@ if (isset($_SESSION['session_id'])) {
         var editingCompany = 0;
         const companyModal = document.getElementById('companyModal')
         companyModal.addEventListener('show.bs.modal', function(event) {
-            debugger;
             fillCompanyModal();
             const button = event.relatedTarget;
             const modalType = button.getAttribute('data-bs-whatever');
@@ -502,10 +502,17 @@ if (isset($_SESSION['session_id'])) {
         function search() {
             window.location.href = 'lista-anagrafica.php?nome_azienda=' + document.getElementById("companyName").value + '&sede=' + document.getElementById("companySite").value + '&data=' + document.getElementById("companyLastDate").value; // TODO: Controllo lato frontend che la data sia in un formato accettabile dal database
         }
-        var paginaCurr = 1;
+
+        function nextPage() {
+            paginatore(currentPage + 1);
+        }
+
+        function previousPage() {
+            paginatore(currentPage - 1 >= 0 ? currentPage - 1 : 0);
+        }
 
         function paginatore(pagina) {
-            paginaCurr = pagina;
+            window.location.href = 'lista-anagrafica.php?nome_azienda=' + requestedCompany + "&sede=" + requestedSite + "&data=" + requestedDate + "&pagina=" + pagina;
         }
     </script>
 
