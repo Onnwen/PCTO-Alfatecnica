@@ -18,6 +18,11 @@ if (isset($_SESSION['session_id'])) {
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <title>Alfatecnica - Lista Anagrafica</title>
         <link rel="icon" href="../img/logo.png">
+        <script>
+            function search() {
+                window.location.href = 'lista-anagrafica.php?nome_azienda=' + document.getElementById("companyName").value + '&sede=' + document.getElementById("companySite").value + '&data=' + document.getElementById("companyLastDate").value; // TODO: Controllo lato frontend che la data sia in un formato accettabile dal database
+            }
+        </script>
     </head>
 
     <body>
@@ -499,9 +504,6 @@ if (isset($_SESSION['session_id'])) {
             $("#confirmedModal").modal(!confirmed ? 'hide' : 'show');
         }
 
-        function search() {
-            window.location.href = 'lista-anagrafica.php?nome_azienda=' + document.getElementById("companyName").value + '&sede=' + document.getElementById("companySite").value + '&data=' + document.getElementById("companyLastDate").value; // TODO: Controllo lato frontend che la data sia in un formato accettabile dal database
-        }
         var paginaCurr = 1;
 
         function paginatore(pagina) {
