@@ -212,7 +212,7 @@ if (isset($_SESSION['session_id'])) {
                     <input type="text" id="companySite" class="form-control" placeholder="Sede" aria-label="Sede">
                 </div>
                 <div class="col">
-                    <input style="height: 38px;" type="date" id="companyLastDate" class="form-control" aria-label="Data ultima prestazione" max>
+                    <input style="height: 38px;" type="date" id="companyLastDate" class="form-control" aria-label="Data ultima prestazione">
                     <script>
                         document.getElementById('companyLastDate').max = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().split("T")[0];
                     </script>
