@@ -500,7 +500,15 @@ if (isset($_SESSION['session_id'])) {
         }
 
         function search() {
-            window.location.href = 'lista-anagrafica.php?nome_azienda=' + document.getElementById("companyName").value + '&sede=' + document.getElementById("companySite").value + '&data=' + document.getElementById("companyLastDate").value; // TODO: Controllo lato frontend che la data sia in un formato accettabile dal database
+            let inputCompany = document.getElementById("companyName").value;
+            let inputSite = document.getElementById("companySite").value;
+            let inputDate = document.getElementById("companyLastDate").value;
+
+            let companyQueryString = inputCompany !== "" ? "nome_azienda=" + inputCompany + "&": "";
+            let siteQueryString = inputSite !== "" ? "sede=" + inputSite + "&" : "";
+            let dateQueryString = inputDate !== "" ? "data=" + inputDate + "&" : "";
+
+            window.location.href = 'lista-anagrafica.php?' + companyQueryString + siteQueryString +  dateQueryString + "pagina=0";
         }
 
         function nextPage() {
@@ -512,7 +520,11 @@ if (isset($_SESSION['session_id'])) {
         }
 
         function paginatore(pagina) {
-            window.location.href = 'lista-anagrafica.php?nome_azienda=' + requestedCompany + "&sede=" + requestedSite + "&data=" + requestedDate + "&pagina=" + pagina;
+            let companyQueryString = requestedCompany !== "" ? "nome_azienda=" + requestedCompany + "&" : "";
+            let siteQueryString = requestedSite !== "" ? "sede=" + requestedSite + "&" : "";
+            let dateQueryString = requestedDate !== "" ? "data=" + requestedDate + "&" : "";
+
+            window.location.href = 'lista-anagrafica.php?' + companyQueryString + siteQueryString + dateQueryString  + "pagina=" + pagina;
         }
     </script>
 
