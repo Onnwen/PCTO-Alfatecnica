@@ -273,16 +273,13 @@ if (isset($_SESSION['session_id'])) {
         <nav aria-label="Page navigation example ">
             <ul class="pagination justify-content-center ">
                 <li class="page-item ">
-                    <a class="page-link " href="# " aria-label="Previous ">
+                    <a class="page-link " href="# " aria-label="Previous " onClick="previousPage();">
                         <span aria-hidden="true">&laquo;</span>
 
                     </a>
                 </li>
-                <li class="page-item "><a href="javascript:void(0);" onClick="javascript:paginatore(1);">1</a>
-                <li class="page-item "><a href="javascript:void(0);" onClick="javascript:paginatore(2);">2</a>
-                <li class="page-item "><a href="javascript:void(0);" onClick="javascript:paginatore(3);">3</a>
                 <li class="page-item ">
-                    <a class="page-link " href="# " aria-label="Next ">
+                    <a class="page-link " href="# " aria-label="Next " onClick="nextPage();">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>
@@ -298,6 +295,13 @@ if (isset($_SESSION['session_id'])) {
         </footer>
     </body>
     <script>
+        let currentPage = <?php echo (!(filter_var($_GET['pagina'], FILTER_VALIDATE_INT) === false) ? $_GET['pagina'] : 0) ?>;
+
+        let requestedCompany = "<?php echo (isset($_GET['nome_azienda']) ? $_GET['nome_azienda'] : '') ?>";
+        let requestedSite = "<?php echo (isset($_GET['sede']) ? $_GET['sede'] : '') ?>";
+        let requestedDate = "<?php echo (isset($_GET['data']) ? $_GET['data'] : '') ?>";
+        let maxCardsPerPage = 5;
+
         $(document).ready(function() {
             $(".change_cards").click(function() {
                 $(".anagrafiche").css("display", "none");
@@ -311,10 +315,29 @@ if (isset($_SESSION['session_id'])) {
                 $(".table_anagrafiche").css("display", "none");
             });
 
-            $.post("../php/viewAnagr.php", {}, function(resp) {
+            let requestDestination = "";
+            let searchedQuery = {
+                nome_azienda: "",
+                sede: "",
+                data: ""
+            };
+
+            if (requestedCompany === "" && requestedSite === "" && requestedDate === "") { //TODO: Controllare se la query string è vuota
+                console.log("No query string: renderizzo tutto");
+                requestDestination = "../php/viewAnagr.php";
+            } else { // Renderizza i risultati del motore di ricerca
+                console.log("Rilevata query string: avviando il motore di ricerca");
+                requestDestination = "../php/searchEngine.php";
+                searchedQuery.nome_azienda = requestedCompany;
+                searchedQuery.sede = requestedSite;
+                searchedQuery.data = requestedDate;
+            }
+
+            $.post(requestDestination, searchedQuery, function(resp) {
                 const cards = document.getElementById("cardContainer"); //prendere l'elemento con quel determinato id
                 const tabella = document.getElementById('tabella-ajax');
-                for (let i = 0; i < resp.length; i++) {
+                for (let i = (maxCardsPerPage * currentPage <= resp.length ? maxCardsPerPage * currentPage : maxCardsPerPage * Math.floor(resp.length / maxCardsPerPage)); i < resp.length && i < maxCardsPerPage * (currentPage + 1); i++) {
+                    console.log("Pagina = " + currentPage + " ; " + i);
                     cards.innerHTML += '<div class="col">' +
                         '<div class="card text-center">' +
                         '<img src="../' + resp[i].path_logo + '" class="card-img-top">' +
@@ -338,6 +361,7 @@ if (isset($_SESSION['session_id'])) {
                         '</tr>';
                 }
             }, "json");
+
 
             $("#table").click(function() {
                 $("#cards").removeClass("selected");
@@ -425,7 +449,6 @@ if (isset($_SESSION['session_id'])) {
         var editingCompany = 0;
         const companyModal = document.getElementById('companyModal')
         companyModal.addEventListener('show.bs.modal', function(event) {
-            debugger;
             fillCompanyModal();
             const button = event.relatedTarget;
             const modalType = button.getAttribute('data-bs-whatever');
@@ -477,12 +500,31 @@ if (isset($_SESSION['session_id'])) {
         }
 
         function search() {
-            window.location.href = 'lista-anagrafica.php?nome_azienda=' + document.getElementById("companyName").value + '&sede=' + document.getElementById("companySite").value;
+            let inputCompany = document.getElementById("companyName").value;
+            let inputSite = document.getElementById("companySite").value;
+            let inputDate = document.getElementById("companyLastDate").value;
+
+            let companyQueryString = inputCompany !== "" ? "nome_azienda=" + inputCompany + "&": "";
+            let siteQueryString = inputSite !== "" ? "sede=" + inputSite + "&" : "";
+            let dateQueryString = inputDate !== "" ? "data=" + inputDate + "&" : "";
+
+            window.location.href = 'lista-anagrafica.php?' + companyQueryString + siteQueryString +  dateQueryString + "pagina=0";
         }
-        var paginaCurr = 1;
+
+        function nextPage() {
+            paginatore(currentPage + 1);
+        }
+
+        function previousPage() {
+            paginatore(currentPage - 1 >= 0 ? currentPage - 1 : 0);
+        }
 
         function paginatore(pagina) {
-            paginaCurr = pagina;
+            let companyQueryString = requestedCompany !== "" ? "nome_azienda=" + requestedCompany + "&" : "";
+            let siteQueryString = requestedSite !== "" ? "sede=" + requestedSite + "&" : "";
+            let dateQueryString = requestedDate !== "" ? "data=" + requestedDate + "&" : "";
+
+            window.location.href = 'lista-anagrafica.php?' + companyQueryString + siteQueryString + dateQueryString  + "pagina=" + pagina;
         }
     </script>
 
