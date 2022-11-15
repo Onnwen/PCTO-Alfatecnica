@@ -17,7 +17,7 @@ if(isset($_SESSION['session_id'])) {
     $pre->bindParam(':productId', $productCategoryID, PDO::PARAM_INT);
     $pre->execute();
     while ($field = $pre->fetch(PDO::FETCH_ASSOC)) {
-        array_push($fieldsNames, $field);
+        $fieldsNames[] = $field;
     }
 
     $selectDataSql = "SELECT Product_Data.field_id, Product_Data.value, Sold_Products.sold_product_id FROM Sold_Products INNER JOIN Product_Data ON Product_Data.sold_product_id = Sold_Products.sold_product_id WHERE Sold_Products.product_category_id = :productId AND Sold_Products.company_id = :companyId ORDER BY `Sold_Products`.`sold_product_id` ASC, Product_Data.field_id;;";
@@ -27,25 +27,23 @@ if(isset($_SESSION['session_id'])) {
     $pre->bindParam(':companyId', $companyID, PDO::PARAM_INT);
     $pre->execute();
     while ($dataResponseRow = $pre->fetch(PDO::FETCH_ASSOC)) {
-        array_push($data, $dataResponseRow);
+        $data[] = $dataResponseRow;
     }
     $soldProducts = array();
     $soldProduct = array();
     for ($i = 0; $i < count($data); $i++) {
-        if ($i < 1 || $data[$i]['sold_product_id'] == $data[$i - 1]['sold_product_id']) {
-            array_push($soldProduct, $data[$i]);
-        } else {
-            array_push($soldProducts, $soldProduct);
+        if ($i >= 1 && $data[$i]['sold_product_id'] != $data[$i - 1]['sold_product_id']) {
+            $soldProducts[] = $soldProduct;
             $soldProduct = [];
-            array_push($soldProduct, $data[$i]);
         }
+        $soldProduct[] = $data[$i];
         if ($i == count($data) - 1) {
-            array_push($soldProducts, $soldProduct);
+            $soldProducts[] = $soldProduct;
         }
     }
 ?>
 
-<html>
+<html lang="it">
 <head>
     <meta charset="UTF-8">
     <link rel="icon" href="../img/logo.png">
@@ -92,7 +90,7 @@ if(isset($_SESSION['session_id'])) {
                     <thead>
                         <tr style="text-align: center;">
                             <?php
-                            echo "<th scope='col'>N°</th>";
+                            echo "<th scope='col'>ID</th>";
                             foreach ($fieldsNames as $fieldName) {
                                 echo "<th scope='col'>{$fieldName['field_name']}</th>";
                             }
@@ -101,10 +99,10 @@ if(isset($_SESSION['session_id'])) {
                     </thead>
                     <tbody>
                         <?php
-                        for($soldProductIndex = 0; $soldProductIndex < count($soldProducts); $soldProductIndex++) {
+                        foreach ($soldProducts as $soldProduct) {
                             echo "<tr>";
-                            echo "<th>$soldProductIndex</th>";
-                            foreach ($soldProducts[$soldProductIndex] as $field) {
+                            echo "<th scope='col'>{$soldProduct[0]['sold_product_id']}</th>";
+                            foreach ($soldProduct as $field) {
                                 echo "<th scope='col'>{$field['value']}</th>";
                             }
                             echo "</tr>";
