@@ -101,9 +101,9 @@ if(isset($_SESSION['session_id'])) {
                         <?php
                         foreach ($soldProducts as $soldProduct) {
                             echo "<tr>";
-                            echo "<th scope='col'>{$soldProduct[0]['sold_product_id']}</th>";
+                            echo "<th scope='col' style='font-weight: normal'>{$soldProduct[0]['sold_product_id']}</th>";
                             foreach ($soldProduct as $field) {
-                                echo "<th scope='col'>{$field['value']}</th>";
+                                echo "<th scope='col' style='font-weight: normal'>{$field['value']}</th>";
                             }
                             echo "</tr>";
                         }
