@@ -21,10 +21,12 @@ if (isset($_SESSION['session_id'])) {
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="../css/style.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
         <script src="https://kit.fontawesome.com/c0c3eed4d9.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <title>Alfatecnica - Lista Prodotti</title>
         <link rel="icon" href="img/logo.png">
     </head>
@@ -87,113 +89,41 @@ if (isset($_SESSION['session_id'])) {
     </div>
 
     <!-- Add/Edit Company Modal -->
-    <div class="modal fade" id="companyModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="companyModalLabel" aria-hidden="true">
+    <div class="modal fade" id="companyModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="companyModalLabel">Aggiungi prodotto</h5>
+                    <h5 class="modal-title" id="productModalLabel">Aggiungi prodotto</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form>
-                        <label for="basic-url" class="form-label">Informazioni generali</label>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="addNameLabel">Nome</span>
-                            <input class="form-control" type="text" id="name" aria-describedby="addNameLabel">
-                        </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="addCiteLabel">Sede</span>
-                            <input class="form-control" type="text" id="site" aria-describedby="addCiteLabel">
-                        </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="addAddressLabel">Indirizzo</span>
-                            <input class="form-control" type="text" id="address" aria-describedby="addAddressLabel">
-                        </div>
-                        <div class="row">
-                            <div class="col-8">
+                        <label for="basic-url" class="form-label">Dati generali</label>
+                        <div class="row gx-2">
+                            <div class="col me-4">
                                 <div class="input-group mb-3">
-                                    <span class="input-group-text" id="addCityLabel">Città</span>
-                                    <input class="form-control" type="text" id="city" aria-describedby="addCityLabel">
-                                    <span class="input-group-text" id="addCapLabel">CAP</span>
-                                    <input class="form-control" type="text" id="CAP" aria-describedby="addCapLabel">
+                                    <span class="input-group-text" id="addNameLabel">Nome</span>
+                                    <input class="form-control" type="text" id="name" aria-describedby="addNameLabel">
                                 </div>
                             </div>
-                            <div class="col">
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text" id="addProvinceLabel">Provincia</span>
-                                    <input class="form-control" type="text" id="province" aria-describedby="addProvinceLabel">
-                                </div>
+                            <div class="col-2">
+                                <input type="radio" class="btn-check" name="form" id="isProduct" autocomplete="off" checked>
+                                <label class="btn btn-outline-secondary w-100"  for="isProduct">Prodotto</label>
+                            </div>
+                            <div class="col-2">
+                                <input type="radio" class="btn-check" name="form" id="isForm" autocomplete="off">
+                                <label class="btn btn-outline-secondary w-100" for="isForm">Formulario</label>
                             </div>
                         </div>
-                        <br/>
-                        <label for="basic-url" class="form-label">Recapiti</label>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="addPersonalReferenceLabel">Riferimento personale</span>
-                            <input class="form-control" type="text" id="personalReference" aria-describedby="addPersonalReferenceLabel">
-                        </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="addCellPhoneNumberLabel">Numero di cellulare</span>
-                            <input class="form-control" type="text" id="cellPhoneNumber" aria-describedby="addCellPhoneNumberLabel">
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text" id="addPhoneNumberLabel">Numero di telefono</span>
-                                    <input class="form-control" type="text" id="phoneNumber" aria-describedby="addPhoneNumberLabel">
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text" id="addEmailAddressLabel">Indirizzo email</span>
-                                    <input class="form-control" type="text" id="emailAddress" aria-describedby="addEmailAddressLabel">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text" id="addPhoneNumber2Label">Numero di telefono 2</span>
-                                    <input class="form-control" type="text" id="phoneNumber2" aria-describedby="addPhoneNumber2Label">
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text" id="addEmailAddress2Label">Indirizzo email 2</span>
-                                    <input class="form-control" type="text" id="emailAddress2" aria-describedby="addEmailAddress2Label">
-                                </div>
-                            </div>
-                        </div>
-                        <br/>
-                        <label for="basic-url" class="form-label">Note</label>
-                        <div class="row">
-                            <div class="col">
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text" id="addCompanyNotesLabel">Note aziendali</span>
-                                    <textarea class="form-control" type="text" id="companyNotes" aria-describedby="addCompanyNotesLabel"></textarea>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text" id="addClientNotesLabel">Note per cliente</span>
-                                    <textarea class="form-control" type="text" id="clientNotes" aria-describedby="addClientNotesLabel"></textarea>
-                                </div>
-                            </div>
+                        <label for="basic-url" class="form-label">Campi</label>
+                        <div id="modalFields">
                         </div>
                         <div id="filesInput">
-                            <br/>
                             <label for="basic-url" class="form-label">File</label>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text" id="addPlanimetryLabel">Planimetria</span>
-                                        <input class="form-control" type="file" id="planimetry_image" aria-describedby="addPlanimetryLabel">
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text" id="addLogoLabel">Logo</span>
-                                        <input class="form-control" type="file" id="logo" aria-describedby="addLogoLabel">
-                                    </div>
+                            <div class="col">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="addIconLabel">Icona</span>
+                                    <input class="form-control" type="file" id="icon" aria-describedby="addIconLabel">
                                 </div>
                             </div>
                         </div>
@@ -211,7 +141,7 @@ if (isset($_SESSION['session_id'])) {
     <div class="container">
         <div class="row w-100">
             <div class="col">
-                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#companyModal" data-bs-whatever="addCompany">
+                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#companyModal" data-bs-whatever="addCompany" id="openProductModal">
                     <i class="bi bi-box-fill"></i> Aggiungi prodotto
                 </button>
             </div>
@@ -259,6 +189,53 @@ if (isset($_SESSION['session_id'])) {
         <p class="text-center text-muted ">© 2022 Alfatecnica, Inc</p>
     </footer>
     </body>
+
+    <script>
+        let newProductFieldNames = ["Peso", "Marchio", "Colore", "Scadenza"];
+
+        $("#isProduct").on('click', function () {
+            $("#productModalLabel").text("Aggiungi prodotto")
+        });
+
+        $("#isForm").on('click', function () {
+            $("#productModalLabel").text("Aggiungi formulario")
+        });
+
+        $("#openProductModal").on('click', function () {
+            loadNewProductFields();
+        });
+
+        function loadNewProductFields() {
+            let fieldsHtml = "";
+            newProductFieldNames.forEach((field, index) => {
+                fieldsHtml += '<div class="input-group mb-3"> ' +
+                    `<span class="input-group-text" id="addNameLabel" style="min-width: 100px;">Campo ${index+1}</span> ` +
+                    `<input class="form-control" type="text" id="name" aria-describedby="addNameLabel" value="${field}">`;
+                if (newProductFieldNames.length > 1) {
+                    fieldsHtml += `<button class="btn btn-outline-danger removeField" type="button" onclick="removeField(${index})"><i class="bi bi-trash3"></i></button> `;
+                }
+                if (index === newProductFieldNames.length - 1) {
+                    fieldsHtml += `<button class="btn btn-outline-primary" type="button" onclick="addField()"><i class="bi bi-plus-circle"></i></button> `;
+                }
+                fieldsHtml += `</div>`;
+            })
+            $("#modalFields").html(fieldsHtml);
+        }
+
+        function addField() {
+            newProductFieldNames.push("");
+            console.log("CIAO");
+            loadNewProductFields();
+        }
+
+        function removeField(id) {
+            console.log("CIAO");
+            newProductFieldNames.splice(id, 1);
+            loadNewProductFields();
+        }
+
+    </script>
+
     </html>
 
     <?php
