@@ -340,7 +340,7 @@ if(isset($_SESSION['session_id'])){
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="updateLabel">Aggiornamento posizione </h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button id="x" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div id="textUpdateModal" class="modal-body">
 
@@ -508,6 +508,7 @@ if(isset($_SESSION['session_id'])){
                         srcSfondo = resp[0].pathSfondo;
                         for (let i = 0; i < resp.length; i++) {
                             let nome_prod = resp[i].nome_prod;
+                            let nome_cat = resp[i].id_Categoria;
                             let posX = parseFloat(((resp[i].posX * sfondoImg.attrs.width) / resp[i].w).toPrecision(10));
                             let posY = parseFloat(((resp[i].posY * sfondoImg.attrs.height) / resp[i].h).toPrecision(10));
                             let src = "";
@@ -521,61 +522,62 @@ if(isset($_SESSION['session_id'])){
                                 height: (25 * sfondoImg.attrs.height) / resp[i].h,
                                 draggable: true,
                                 id: resp[i].id_prod,
-                                name: nome_prod
+                                category: nome_prod,
+                                idCategory: nome_cat
+
                             });
                             image.on('mouseover tap', function (evt) {
-                                $.post("../php/getProductForPlanimetry.php", {idProduct : image.getId()},function (resp){
-                                    console.log(resp);
-                                    var node = evt.target;
-                                    document.body.style.cursor = 'pointer';
-                                    tooltip.position({
-                                        x: image.attrs.x + (image.attrs.width/2),
-                                        y: image.attrs.y - 5
-                                    });
-                                    tooltip
-                                        .getText()
-                                        .text('Categoria: ' + resp[0].category + '\nIdentificativo: ' + resp[0].idProduct);
-                                    tooltip.show();
-                                    tooltipLayer.batchDraw();
-                                    stage.add(tooltipLayer);
-                                }, ' json');
+                                var node = evt.target;
+                                document.body.style.cursor = 'pointer';
+                                tooltip.position({
+                                    x: image.attrs.x + (image.attrs.width/2),
+                                    y: image.attrs.y - 5
+                                });
+                                tooltip
+                                    .getText()
+                                    .text('Categoria: ' + image.attrs.category + '\nIdentificativo: ' + image.attrs.id);
+                                tooltip.show();
+                                tooltipLayer.batchDraw();
+                                stage.add(tooltipLayer);
                             });
                             image.on('mouseout', function () {
                                 document.body.style.cursor = 'default';
                                 tooltip.hide();
                                 tooltipLayer.draw();
                             });
-
+                            let isFailed = false;
                             image.on('dragend', function(){
-                                $.post("../php/getProductForPlanimetry.php", {idProduct : image.getId()},function (r) {
-                                    $('#textUpdateModal').html('Sei sicuro di voler modificare la posizione di <b>'+ r[0].category +'</b> con identificativo ' + r[0].idProduct + '?');
-                                    $('#updateModal').modal('show');
-                                    $('#updateButton').click(function(){
-                                        $.post('../php/updateProduct.php',  {id : image.getId(),newPosX: parseFloat(((image.x() * resp[i].w) / sfondoImg.attrs.width).toPrecision(10)), newPosY:parseFloat(((image.y() * resp[i].h) / sfondoImg.attrs.height).toPrecision(10))})
-                                            .done( function (response){
-                                                $('#updateModal').modal('hide');
-                                                if(response==='1'){
-                                                    modalConfirmation(true);
-                                                }else {
-                                                    modalError(true);
-                                                    image.x(posX);
-                                                    image.y(posY);
-                                                }
-                                            })
-                                            .fail(function () {
-                                                $('#updateModal').modal('hide');
+                                $('#textUpdateModal').html('Sei sicuro di voler modificare la posizione di <b>'+ image.attrs.category +'</b> con identificativo ' + image.attrs.id + '?');
+                                $('#updateModal').modal('show');
+                                $('#updateButton').click(function(){
+                                    $.post('../php/updateProduct.php',  {id : image.getId(),newPosX: parseFloat(((image.x() * resp[i].w) / sfondoImg.attrs.width).toPrecision(10)), newPosY:parseFloat(((image.y() * resp[i].h) / sfondoImg.attrs.height).toPrecision(10))})
+                                        .done( function (response){
+                                            $('#updateModal').modal('hide');
+                                            if(response==='1'){
+                                                modalConfirmation(true);
+                                            }else {
                                                 modalError(true);
                                                 image.x(posX);
                                                 image.y(posY);
-                                            })
-                                    })
-                                }, ' json')
+                                            }
+                                        })
+                                        .fail(function () {
+                                            isFailed = true;
+                                            $('#updateModal').modal('hide');
+                                            modalError(true);
+                                            image.x(posX);
+                                            image.y(posY);
+                                        })
+                                })
+                                $("#updateModal").on('hide.bs.modal', function(){
+                                    if (isFailed !== true ){
+                                        image.x(posX);
+                                        image.y(posY);
+                                    }
+                                });
                             });
                             image.on('click dbltap', function(){
-                                $.post("../php/getProductForPlanimetry.php", {idProduct : image.getId()},function (response){
-                                    window.location.assign('dettaglio-categoria.php?product_category_id=' + response[0].category + '&company_id=' + idAnag + '&productId=' + image.getId());
-                                }, ' json');
-
+                                window.location.assign('dettaglio-categoria.php?product_category_id=' + image.attrs.idCategory + '&company_id=' + idAnag + '&productId=' + image.getId());
                             });
                             group.add(image);
                         }
