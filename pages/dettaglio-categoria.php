@@ -100,10 +100,10 @@ if(isset($_SESSION['session_id'])) {
                     <tbody>
                         <?php
                         foreach ($soldProducts as $soldProduct) {
-                            echo "<tr>";
-                            echo "<th scope='col' style='font-weight: normal'>{$soldProduct[0]['sold_product_id']}</th>";
+                            echo "<tr" . ((isset($_GET['product_id']) && $soldProduct[0]['sold_product_id'] == $_GET['product_id']) ? " class='highlighted'>" : ">");
+                            echo "<th>{$soldProduct[0]['sold_product_id']}</th>";
                             foreach ($soldProduct as $field) {
-                                echo "<th scope='col' style='font-weight: normal'>{$field['value']}</th>";
+                                echo "<th scope='col' style='font-weight: normal;'>{$field['value']}</th>";
                             }
                             echo "</tr>";
                         }
