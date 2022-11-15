@@ -1,8 +1,8 @@
--- MariaDB dump 10.19  Distrib 10.9.3-MariaDB, for Linux (x86_64)
+-- MariaDB dump 10.19  Distrib 10.9.4-MariaDB, for Linux (x86_64)
 --
 -- Host: localhost    Database: alfatecnica2
 -- ------------------------------------------------------
--- Server version	10.9.3-MariaDB
+-- Server version	10.9.4-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -43,7 +43,7 @@ CREATE TABLE `Companies` (
   `planimetry_image_width` int(11) DEFAULT NULL,
   `planimetry_image_height` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -53,10 +53,18 @@ CREATE TABLE `Companies` (
 LOCK TABLES `Companies` WRITE;
 /*!40000 ALTER TABLE `Companies` DISABLE KEYS */;
 INSERT INTO `Companies` VALUES
-(1,'Dallara','Varano de Melegari','img/loghi/azienda1.png','Via Provinciale, 33',43040,'Varano de Melegari','PR','3408871542','dallarastradale@dallara.auto',NULL,'0521887265','6528716254',NULL,NULL,NULL,'img/planimetrie/download.png',532,392),
-(2,'Bercella','Varano de Melegari','img/loghi/azienda2.png','Via Enzo Ferrari, 10',43040,'Varano de Melegari','PR','3338765298','bercella@bercella.it',NULL,'0521829983','9992837625',NULL,NULL,NULL,'img/planimetrie/checojon-scaled.png',532,392),
+(1,'Dallara','Varano de Melegari','img/loghi/azienda1.png','Via Provinciale, 33',43040,'Varano de Melegari','PR','3408871542','dallarastradale@dallara.auto','','0521887265','6528716254','','','','img/planimetrie/download.png',532,392),
+(2,'Bercella','Varano de Melegari','img/loghi/azienda2.png','Via Enzo Ferrari, 10',43040,'Varano de Melegari','PR','3338765298','bercella@bercella.it','','0521829983','9992837625','','','','img/planimetrie/checojon-scaled.png',532,392),
 (3,'NonSoloTabacchi','Ozzano Taro','img/loghi/azienda3.png','Via Nazionale, 64',43044,'Ozzano Taro','PR','3762983625','nonsolotabacchi@gmail.com',NULL,'0521765287','7725276534','tabaccheriaozzano_64@nonsolotabacchi.it',NULL,NULL,'img/planimetrie/planimetrie-case.png',532,392),
-(6,'Pluto','Pluto','img/loghi/azienda1.png','Pluto',1337,'Pluto','Pluto','Pluto','Pluto','Pluto','Pluto','Pluto','Pluto','Pluto','Pluto',NULL,NULL,NULL);
+(6,'Pluto','Pluto','img/loghi/azienda1.png','Pluto',1337,'Pluto','Pluto','Pluto','Pluto','Pluto','Pluto','Pluto','Pluto','Cassitto non è capace','Scartazza è un apple fan',NULL,NULL,NULL),
+(21,'Test','tbest','img/loghi/azienda1.png','ste',65465,'sads','asdf','asdf','asd','asdf','asdf','asdf','asdf','dsaf','sadf',NULL,NULL,NULL),
+(22,'ABC','asd','img/loghi/azienda1.png','asd',654654,'asd','asdfasdf','fasdfas','fa','adsfsd','sadfsad','asdfsad','sda','asdfa','sadfasd',NULL,NULL,NULL),
+(23,'Per testare immagini','awdfds','img/loghi/azienda1.png','fasdfasda',698,'sdfasd','aa','asdkjfhlaks','adlkfsjaskdjf','asdfjasdjfl','aldskjflkasdf','dfjhasdkjfsa','sldkjflkasdjf','asdlkfjlkasdjf','sdlfkjalskdjf',NULL,NULL,NULL),
+(24,'Per testare le immagini parte 2','dafljsdklf','img/loghi/azienda1.png','alskflksdajf',465,'dslkfjasdl','alksdflka','asldfkjlask','asdlfkjaskldf','dfakljsdlkf','asdlkfjlask','asdlkfjlkasd','dslakfjsdlkf','asdlkfalskdf','afsdkljflajsd',NULL,NULL,NULL),
+(25,'Ultima Prova','Afghanistan','img/loghi/azienda1.png','Via dei Talebani, 2',1234,'Kabul','Kabul','NO','osama@binladen.com','Osama Bin Laden','NO','NO','osamabinladen@gmail.com','Terroristi','Attento alla dinamite',NULL,NULL,NULL),
+(26,'LLLL','asdfas','img/loghi/LLLL-MicrosoftTeams-image4.jpg','asdfasd',64,'asdfas','asdf','asdfa','asdf','adfa','asdf','sdf','asdf','asdf','asdf',NULL,NULL,NULL),
+(27,'PLZ','aflksd','img/loghi/PLZ-MicrosoftTeams-image4.jpg','asdlkfj',6546,'asldkfj','alskdjflksadjf','asdlkfjlaskd','asdlkjlksadjf','sdalkfjalkd','alkwdjflaksd','asdkfjlksdaf','asdlkfjlaskdf','asdlkfjskldaf','falksdlkfjad',NULL,NULL,NULL),
+(28,'BNBBN','adfjlaskdfj','img/loghi/BNBBN-MicrosoftTeams-image.jpg','oqiurwohf',54,'asdkfja','asdkjfh','kjadfkjsd','adsfasdkjf','KLHFkjdshfk','lksadjflskdj','sdkjfhajkdf','dsalfsdlkfjsadlkjflasdkfjl','lkasdjfklasdf','lkasdfjlkasdjfl',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `Companies` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -75,7 +83,7 @@ CREATE TABLE `Form_Data` (
   PRIMARY KEY (`sold_product_id`),
   KEY `Form_Data_Form_Fields_field_id_fk` (`field_id`),
   CONSTRAINT `Form_Data_Form_Fields_field_id_fk` FOREIGN KEY (`field_id`) REFERENCES `Form_Fields` (`field_id`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -104,7 +112,7 @@ CREATE TABLE `Form_Fields` (
   KEY `Form_Fields_Product_Category_product_category_id_fk` (`product_category_id`),
   CONSTRAINT `Form_Fields_Form_Sections_section_id_fk` FOREIGN KEY (`section_id`) REFERENCES `Form_Sections` (`section_id`) ON UPDATE CASCADE,
   CONSTRAINT `Form_Fields_Product_Category_product_category_id_fk` FOREIGN KEY (`product_category_id`) REFERENCES `Product_Category` (`product_category_id`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -127,7 +135,7 @@ CREATE TABLE `Form_Sections` (
   `section_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`section_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -152,7 +160,7 @@ CREATE TABLE `Product_Category` (
   `visualization_type` int(11) DEFAULT NULL,
   `icon_image_path` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`product_category_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -163,7 +171,8 @@ LOCK TABLES `Product_Category` WRITE;
 /*!40000 ALTER TABLE `Product_Category` DISABLE KEYS */;
 INSERT INTO `Product_Category` VALUES
 (1,'Estintore',NULL,'img/prodotti/estintore.png'),
-(2,'Idrante',NULL,'img/prodotti/idrante.png');
+(2,'Idrante',NULL,'img/prodotti/idrante.png'),
+(3,'Testing',NULL,NULL);
 /*!40000 ALTER TABLE `Product_Category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -182,7 +191,7 @@ CREATE TABLE `Product_Data` (
   KEY `Product_Data_Sold_Products_sold_product_id_fk` (`sold_product_id`),
   CONSTRAINT `Product_Data_Product_Fields_field_id_fk` FOREIGN KEY (`field_id`) REFERENCES `Product_Fields` (`field_id`) ON UPDATE CASCADE,
   CONSTRAINT `Product_Data_Sold_Products_sold_product_id_fk` FOREIGN KEY (`sold_product_id`) REFERENCES `Sold_Products` (`sold_product_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -200,7 +209,42 @@ INSERT INTO `Product_Data` VALUES
 (9,17,'6'),
 (9,18,'7'),
 (9,19,'HELLO'),
-(9,20,'9');
+(54,12,'yuiyui'),
+(54,13,'yuiyuiyu'),
+(54,14,'iyuiyu'),
+(54,15,'iyuiyu'),
+(54,16,'iyuiyu'),
+(54,17,'iyuiuy'),
+(54,18,'iyuiuy'),
+(54,19,'iyui'),
+(84,1,'uiyui'),
+(84,2,'uyiyui'),
+(84,3,'uyiyui'),
+(84,4,'uyiyu'),
+(84,5,'iuyiy'),
+(84,6,'iyuiy'),
+(84,7,'iyui'),
+(84,8,'uiyuiuy'),
+(84,9,'iyuiui'),
+(84,10,'uyiyuiuy'),
+(86,1,'fhgfh'),
+(86,2,'fghgfh'),
+(86,3,'gfhfgh'),
+(86,4,'fghgfh'),
+(86,5,'gfhghgf'),
+(86,6,'hfghfg'),
+(86,7,'hfghgf'),
+(86,8,'hfhgfhfg'),
+(86,9,'hgfhfg'),
+(86,10,'hgfhfghfg'),
+(87,12,'dfgh'),
+(87,13,'dfgh'),
+(87,14,'fghfg'),
+(87,15,'hfg'),
+(87,16,'hh'),
+(87,17,'dfh'),
+(87,18,'dfhh'),
+(87,19,'dfh');
 /*!40000 ALTER TABLE `Product_Data` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -216,7 +260,7 @@ CREATE TABLE `Product_Fields` (
   `product_category_id` int(11) DEFAULT NULL,
   `name` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`field_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -236,7 +280,6 @@ INSERT INTO `Product_Fields` VALUES
 (8,1,'Revisione'),
 (9,1,'Ricollaudo'),
 (10,1,'Tipo manutenzione'),
-(11,1,'Data'),
 (12,2,'Numero aziendale'),
 (13,2,'Diam. Ug. Lancia (mm)'),
 (14,2,'Pressione statica (bar)'),
@@ -245,7 +288,8 @@ INSERT INTO `Product_Fields` VALUES
 (17,2,'Esercizio'),
 (18,2,'Dislocazione'),
 (19,2,'Tipo manutenzione'),
-(20,2,'Data');
+(21,3,'TestingField1'),
+(22,3,'TestingField2');
 /*!40000 ALTER TABLE `Product_Fields` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -259,12 +303,12 @@ DROP TABLE IF EXISTS `Revisions`;
 CREATE TABLE `Revisions` (
   `product_category_id` int(11) NOT NULL,
   `company_id` int(11) NOT NULL,
-  `data` date NOT NULL,
+  `data` datetime NOT NULL,
   PRIMARY KEY (`product_category_id`,`company_id`,`data`),
   KEY `Revisions_Companies` (`company_id`),
   CONSTRAINT `Revisions_Companies` FOREIGN KEY (`company_id`) REFERENCES `Companies` (`id`),
   CONSTRAINT `Revisions_ProductCategory` FOREIGN KEY (`product_category_id`) REFERENCES `Product_Category` (`product_category_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -274,9 +318,13 @@ CREATE TABLE `Revisions` (
 LOCK TABLES `Revisions` WRITE;
 /*!40000 ALTER TABLE `Revisions` DISABLE KEYS */;
 INSERT INTO `Revisions` VALUES
-(1,1,'2022-10-07'),
-(1,2,'2022-10-08'),
-(2,2,'2022-10-07');
+(1,1,'2022-11-08 00:00:00'),
+(1,1,'2022-11-17 18:48:00'),
+(1,2,'2022-10-08 00:00:00'),
+(2,1,'2022-11-24 11:11:00'),
+(2,2,'2022-10-07 00:00:00'),
+(2,2,'2022-10-26 00:00:00'),
+(3,2,'2022-10-15 00:00:00');
 /*!40000 ALTER TABLE `Revisions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -298,7 +346,7 @@ CREATE TABLE `Sold_Products` (
   KEY `Sold_Products_Companies_id_fk` (`company_id`),
   CONSTRAINT `Sold_Products_Companies_id_fk` FOREIGN KEY (`company_id`) REFERENCES `Companies` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `Sold_Products_Product_Category_product_category_id_fk` FOREIGN KEY (`product_category_id`) REFERENCES `Product_Category` (`product_category_id`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -308,8 +356,12 @@ CREATE TABLE `Sold_Products` (
 LOCK TABLES `Sold_Products` WRITE;
 /*!40000 ALTER TABLE `Sold_Products` DISABLE KEYS */;
 INSERT INTO `Sold_Products` VALUES
-(9,2,2,20,20),
-(23,1,1,100,100);
+(9,2,2,180,300),
+(33,2,3,324,234),
+(54,2,2,202,202),
+(84,1,1,351,108),
+(86,1,1,184,253),
+(87,1,2,285,199);
 /*!40000 ALTER TABLE `Sold_Products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -327,7 +379,7 @@ CREATE TABLE `User_Company` (
   KEY `User_Company_Companies_id_fk` (`company_id`),
   CONSTRAINT `User_Company_Companies_id_fk` FOREIGN KEY (`company_id`) REFERENCES `Companies` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `User_Company_Users_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -348,13 +400,13 @@ DROP TABLE IF EXISTS `Users`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Users` (
   `user_id` int(11) NOT NULL AUTO_INCREMENT,
-  `email` varchar(50) CHARACTER SET utf8mb3 DEFAULT NULL,
+  `email` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `hashed_password` varchar(128) DEFAULT NULL,
   `first_name` varchar(50) DEFAULT NULL,
   `last_name` varchar(50) DEFAULT NULL,
   `role` int(11) DEFAULT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -378,4 +430,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-10-22  8:45:55
+-- Dump completed on 2022-11-15 18:34:33
