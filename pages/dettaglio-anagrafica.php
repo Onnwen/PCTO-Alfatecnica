@@ -634,7 +634,7 @@ if(isset($_SESSION['session_id'])){
                     var convertedStartDate = new Date(startDate);
                     var minutes =  convertedStartDate.getMinutes();
                     var hours =  convertedStartDate.getHours();
-                    var day = convertedStartDate.getDay();
+                    var day = convertedStartDate.getDate();
                     var month = convertedStartDate.getMonth() + 1;
                     var year = convertedStartDate.getFullYear();
                     return day + "/" + month + "/" + year + " " + hours + ":" + minutes;
