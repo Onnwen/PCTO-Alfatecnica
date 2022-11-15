@@ -60,7 +60,7 @@ if(isset($_SESSION['session_id'])){
             <title>Alfatecnica - Dettaglio Anagrafica</title>
         </head>
 
-        <body>
+        <body onresize="onResize()">
         <?php require_once("navbar.php"); ?>
 
         <!-- Confirmation Modal -->
@@ -253,8 +253,8 @@ if(isset($_SESSION['session_id'])){
                 </div>
             </div>
         </div>
-        <div class="container">
-            <div class="row row-immagine">
+        <div class="container" >
+            <div class="row row-immagine" onresize="loadPlanimetry()">
                 <div class="div-immagine prova" id="planimetria">
 
                 </div>
@@ -334,6 +334,25 @@ if(isset($_SESSION['session_id'])){
             </div>
         </div>
 
+        <!-- Modal update-->
+        <div class="modal fade" id="updateModal" tabindex="-1"  aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="updateLabel">Aggiornamento posizione </h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div id="textUpdateModal" class="modal-body">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                        <button id="updateButton" type="button" class="btn btn-primary">Modifica</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Modal scelta categoria prodotto-->
         <div class="modal fade bd-example-modal" id="modalSelectCategory" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal- modal-dialog-centered" role="document">
@@ -362,7 +381,7 @@ if(isset($_SESSION['session_id'])){
         </div>
 
         <!-- Modal aggiunta prodotto-->
-        <div class="modal fade" id="addProduct" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal fade" id="addProduct" tabindex="-1" role="dialog" aria-hidden="true" onresize="console.log("ciao")">
             <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -402,67 +421,167 @@ if(isset($_SESSION['session_id'])){
 
             //PLANIMETRIA PAGINA PRINCIPALE
             {
-                var sfondo = new Image();
-                var div = document.getElementById('planimetria');
-                var stage = new Konva.Stage({
-                    container: 'planimetria',
-                    width: div.clientWidth,
-                    height: div.clientHeight
-                });
-                var layerSfondo = new Konva.Layer({
-                    scaleX: 1,
-                    scaleY: 1,
-                    draggable: false
-                });
-                stage.add(layerSfondo);
-                var layer = new Konva.Layer({
-                    scaleX: 1,
-                    scaleY: 1,
-                    draggable: false
-                });
-                stage.add(layer);
-                var groupSfondo = new Konva.Group({
-                    scaleX: 1
-                });
-                layer.add(groupSfondo);
-                var group = new Konva.Group({
-                    scaleX: 1
-                });
-                layer.add(group);
-                var sfondoImg = new Konva.Image({
-                    image: sfondo,
-                    width: div.clientWidth,
-                    height: div.clientHeight,
-                    draggable: false
-                });
-                groupSfondo.add(sfondoImg);
-                var srcSfondo = "";
-                $(window).on('load', function () {
-                    $.post('../php/viewPlan.php', {idAnag: idAnag}, function (resp) {
-                        if (resp != '') {
-                            srcSfondo = resp[0].pathSfondo;
-                            for (let i = 0; i < resp.length; i++) {
-                                var nome_prod = resp[i].nome_prod;
-                                var posX = parseFloat(((resp[i].posX * sfondoImg.attrs.width) / resp[i].w).toPrecision(10));
-                                var posY = parseFloat(((resp[i].posY * sfondoImg.attrs.height) / resp[i].h).toPrecision(10));
-                                var src = "";
-                                var imageObj = new Image();
-                                imageObj.src = "../" + resp[i].pathProd;
-                                var image = new Konva.Image({
-                                    x: posX,
-                                    y: posY,
-                                    image: imageObj,
-                                    width: (20 * sfondoImg.attrs.width) / resp[i].w,
-                                    height: (25 * sfondoImg.attrs.height) / resp[i].h,
-                                    draggable: false,
-                                    id: resp[i].id_prod,
-                                    name: nome_prod
-                                });
-                                group.add(image);
-                            }
-                            sfondo.src = "../" + srcSfondo;
-                        } else {
-                            var text = new Konva.Text({
+                var productsToShow;
+                var sfondo;
+                var div;
+                var stage;
+                var layerSfondo;
+                var layer;
+                var groupSfondo;
+                var group;
+                var sfondoImg;
+                var srcSfondo;
+                var tooltipLayer;
+                function loadPlanimetry(resp) {
+                    sfondo = new Image();
+                    div = document.getElementById('planimetria');
+                    stage = new Konva.Stage({
+                        container: 'planimetria',
+                        width: div.clientWidth,
+                        height: div.clientHeight
+                    });
+                    layerSfondo = new Konva.Layer({
+                        scaleX: 1,
+                        scaleY: 1,
+                        draggable: false
+                    });
+                    stage.add(layerSfondo);
+                    layer = new Konva.Layer({
+                        scaleX: 1,
+                        scaleY: 1,
+                        draggable: false
+                    });
+                    stage.add(layer);
+                    groupSfondo = new Konva.Group({
+                        scaleX: 1
+                    });
+                    layer.add(groupSfondo);
+                    group = new Konva.Group({
+                        scaleX: 1
+                    });
+                    layer.add(group);
+                    sfondoImg = new Konva.Image({
+                        image: sfondo,
+                        width: div.clientWidth,
+                        height: div.clientHeight,
+                        draggable: false
+                    });
+                    groupSfondo.add(sfondoImg);
+                    srcSfondo = "";
+                    tooltipLayer = new Konva.Layer()
+                    tooltipLayer = new Konva.Layer();
+
+                    var tooltip = new Konva.Label({
+                        opacity: 0.75,
+                        visible: false,
+                        listening: false,
+                    });
+
+                    tooltip.add(
+                        new Konva.Tag({
+                            fill: 'black',
+                            pointerDirection: 'down',
+                            pointerWidth: 10,
+                            pointerHeight: 10,
+                            lineJoin: 'round',
+                            shadowColor: 'black',
+                            shadowBlur: 10,
+                            shadowOffsetX: 10,
+                            shadowOffsetY: 10,
+                            shadowOpacity: 0.2,
+                        })
+                    );
+
+                    tooltip.add(
+                        new Konva.Text({
+                            text: '',
+                            fontFamily: 'Calibri',
+                            fontSize: 18,
+                            padding: 5,
+                            fill: 'white',
+                        })
+                    );
+
+                    tooltipLayer.add(tooltip);
+                    stage.add(tooltipLayer);
+                    if (resp !== '') {
+                        srcSfondo = resp[0].pathSfondo;
+                        for (let i = 0; i < resp.length; i++) {
+                            let nome_prod = resp[i].nome_prod;
+                            let posX = parseFloat(((resp[i].posX * sfondoImg.attrs.width) / resp[i].w).toPrecision(10));
+                            let posY = parseFloat(((resp[i].posY * sfondoImg.attrs.height) / resp[i].h).toPrecision(10));
+                            let src = "";
+                            let imageObj = new Image();
+                            imageObj.src = "../" + resp[i].pathProd;
+                            let image = new Konva.Image({
+                                x: posX,
+                                y: posY,
+                                image: imageObj,
+                                width: (20 * sfondoImg.attrs.width) / resp[i].w,
+                                height: (25 * sfondoImg.attrs.height) / resp[i].h,
+                                draggable: true,
+                                id: resp[i].id_prod,
+                                name: nome_prod
+                            });
+                            image.on('mouseover tap', function (evt) {
+                                $.post("../php/getProductForPlanimetry.php", {idProduct : image.getId()},function (resp){
+                                    console.log(resp);
+                                    var node = evt.target;
+                                    document.body.style.cursor = 'pointer';
+                                    tooltip.position({
+                                        x: image.attrs.x + (image.attrs.width/2),
+                                        y: image.attrs.y - 5
+                                    });
+                                    tooltip
+                                        .getText()
+                                        .text('Categoria: ' + resp[0].category + '\nIdentificativo: ' + resp[0].idProduct);
+                                    tooltip.show();
+                                    tooltipLayer.batchDraw();
+                                    stage.add(tooltipLayer);
+                                }, ' json');
+                            });
+                            image.on('mouseout', function () {
+                                document.body.style.cursor = 'default';
+                                tooltip.hide();
+                                tooltipLayer.draw();
+                            });
+
+                            image.on('dragend', function(){
+                                $.post("../php/getProductForPlanimetry.php", {idProduct : image.getId()},function (r) {
+                                    $('#textUpdateModal').html('Sei sicuro di voler modificare la posizione di <b>'+ r[0].category +'</b> con identificativo ' + r[0].idProduct + '?');
+                                    $('#updateModal').modal('show');
+                                    $('#updateButton').click(function(){
+                                        $.post('../php/updateProduct.php',  {id : image.getId(),newPosX: parseFloat(((image.x() * resp[i].w) / sfondoImg.attrs.width).toPrecision(10)), newPosY:parseFloat(((image.y() * resp[i].h) / sfondoImg.attrs.height).toPrecision(10))})
+                                            .done( function (response){
+                                                $('#updateModal').modal('hide');
+                                                if(response==='1'){
+                                                    modalConfirmation(true);
+                                                }else {
+                                                    modalError(true);
+                                                    image.x(posX);
+                                                    image.y(posY);
+                                                }
+                                            })
+                                            .fail(function () {
+                                                $('#updateModal').modal('hide');
+                                                modalError(true);
+                                                image.x(posX);
+                                                image.y(posY);
+                                            })
+                                    })
+                                }, ' json')
+                            });
+                            image.on('click dbltap', function(){
+                                $.post("../php/getProductForPlanimetry.php", {idProduct : image.getId()},function (response){
+                                    window.location.assign('dettaglio-categoria.php?product_category_id=' + response[0].category + '&company_id=' + idAnag + '&productId=' + image.getId());
+                                }, ' json');
+
+                            });
+                            group.add(image);
+                        }
+                        sfondo.src = "../" + srcSfondo;
+                    } else {
+                            let text = new Konva.Text({
                                 align: 'center',
                                 verticalAlign: 'middle',
                                 fontSize: 40,
@@ -471,33 +590,42 @@ if(isset($_SESSION['session_id'])){
                                 height: div.clientHeight
                             });
                             layer.add(text);
-                        }
-                    }, 'json');
-
-                });
-                var scaleBy = 1.05;
-                stage.on('wheel', (e) => {
-                    e.evt.preventDefault();
-
-                    var oldScale = stage.scaleX();
-                    var pointer = stage.getPointerPosition();
-
-                    var mousePointTo = {
-                        x: (pointer.x - stage.x()) / oldScale,
-                        y: (pointer.y - stage.y()) / oldScale,
-                    };
-                    let direction = e.evt.deltaY > 0 ? 1 : -1;
-                    if (e.evt.ctrlKey) {
-                        direction = -direction;
                     }
-                    var newScale = direction > 0 ? oldScale * scaleBy : oldScale / scaleBy;
-                    stage.scale({x: newScale, y: newScale});
-                    var newPos = {
-                        x: pointer.x - mousePointTo.x * newScale,
-                        y: pointer.y - mousePointTo.y * newScale,
-                    };
-                    stage.position(newPos);
+                    let scaleBy = 1.05;
+                    stage.on('wheel', (e) => {
+                        e.evt.preventDefault();
+                        let oldScale = stage.scaleX();
+                        let center = {
+                            x: stage.width() / 2,
+                            y: stage.height() / 2,
+                        };
+                        let relatedTo = {
+                            x: (center.x - stage.x()) / oldScale,
+                            y: (center.y - stage.y()) / oldScale,
+                        };
+                        let newScale =
+                            e.evt.deltaY > 0 ? oldScale * scaleBy : oldScale / scaleBy;
+                        stage.scale({
+                            x: newScale,
+                            y: newScale
+                        });
+                        let newPos = {
+                            x: center.x - relatedTo.x * newScale,
+                            y: center.y - relatedTo.y * newScale,
+                        };
+                        stage.position(newPos);
+                        stage.batchDraw();
+                    });
+                }
+                $(window).on('load', function (){
+                    $.post('../php/viewPlan.php', {idAnag: idAnag}, function (resp) {
+                        productsToShow = resp;
+                        loadPlanimetry(resp);
+                    }, 'json');
                 });
+                function onResize() {
+                    loadPlanimetry(productsToShow);
+                }
             }
 
             //TABELLA PRODOTTI
@@ -514,7 +642,7 @@ if(isset($_SESSION['session_id'])){
                 $(window).on('load', function() {
                     $.post('../php/viewCategories.php', {idAnag: idAnag}, function (resp) {
                         const tabella = document.getElementById('tabellaCategorie');
-                        if(!resp.length==0){
+                        if(resp.length!==0){
                             for (let i = 0; i < resp.length; i++) {
                                 console.log(resp);
                                 tabella.innerHTML +=
@@ -613,7 +741,7 @@ if(isset($_SESSION['session_id'])){
 
                     function onSelectCategoriesChange() {
                         const select = document.getElementById('chooseCategory');
-                        if (select.value == 0) {
+                        if (select.value === 0) {
                             document.getElementById('selectCategory').setAttribute("disabled", "");
                         } else {
                             document.getElementById('selectCategory').removeAttribute("disabled");
@@ -685,96 +813,100 @@ if(isset($_SESSION['session_id'])){
                             let risposta;
                             let nomeCategoria;
                             $.post('../php/getProductIcon.php', {idCategoria: idCategoria, idCompagnia: idAnag}, function (resp) {
-                                if (resp.length === 1) {
-                                    risposta = resp[0];
-                                }
-                                nomeCategoria = risposta.categoryName;
-                                document.getElementById('addTitle').innerHTML = nomeCategoria;
-                                //fill the layer and the stage with the planimetry
-                                let sfondo = new Image();
-                                let div = document.getElementById('planimetry-addProduct');
-                                let stage = new Konva.Stage({
-                                    container: 'planimetry-addProduct',
-                                    width: div.clientWidth,
-                                    height: div.clientHeight
-                                });
-                                let layerSfondo = new Konva.Layer({
-                                    scaleX: 1,
-                                    scaleY: 1,
-                                    draggable: true
-                                });
-                                stage.add(layerSfondo);
-                                let layer = new Konva.Layer({
-                                    scaleX: 1,
-                                    scaleY: 1,
-                                    draggable: false
-                                });
-                                stage.add(layer);
-                                let groupSfondo = new Konva.Group({
-                                    scaleX: 1
-                                });
-                                layer.add(groupSfondo);
-                                let group = new Konva.Group({
-                                    scaleX: 1
-                                });
-                                layer.add(group);
-                                let widthRatio = (div.clientWidth) / risposta.w;
-                                let heightRatio = (div.clientHeight) / risposta.h;
-                                let bestRatio = Math.min(widthRatio, heightRatio);
-                                let newWidth = risposta.w * bestRatio;
-                                let newHeight = risposta.h * bestRatio;
-                                let sfondoImg = new Konva.Image({
-                                    image: sfondo,
-                                    width: newWidth,
-                                    height: newHeight,
-                                    y: (div.clientHeight-newHeight)/2,
-                                    draggable: false
-                                });
-                                groupSfondo.add(sfondoImg);
-
-                                //canvas to move on the stage
-                                let nome_prod = nomeCategoria;
-                                let imageObj = new Image();
-                                imageObj.src = "../" + risposta.productIcon;
-                                nuovoProdotto = new Konva.Image({
-                                    y: (div.clientHeight-newHeight)/2,
-                                    image: imageObj,
-                                    width: (20 * sfondoImg.attrs.width) / risposta.w,
-                                    height: (25 * sfondoImg.attrs.height) / risposta.h,
-                                    draggable: true,
-                                    name: nome_prod
-                                });
-                                group.add(nuovoProdotto);
-
-                                //responsive map
-                                sfondo.src = "../" + srcSfondo;
-                                let scaleBy = 1.05;
-                                stage.on('wheel', (e) => {
-                                    e.evt.preventDefault();
-                                    let oldScale = stage.scaleX();
-                                    let pointer = stage.getPointerPosition();
-
-                                    let mousePointTo = {
-                                        x: (pointer.x - stage.x()) / oldScale,
-                                        y: (pointer.y - stage.y()) / oldScale,
-                                    };
-                                    let direction = e.evt.deltaY > 0 ? 1 : -1;
-                                    if (e.evt.ctrlKey) {
-                                        direction = -direction;
+                                    if (resp.length === 1) {
+                                        risposta = resp[0];
                                     }
-                                    let newScale = direction > 0 ? oldScale * scaleBy : oldScale / scaleBy;
-                                    stage.scale({ x: newScale, y: newScale });
-                                    let newPos = {
-                                        x: pointer.x - mousePointTo.x * newScale,
-                                        y: pointer.y - mousePointTo.y * newScale,
-                                    };
-                                    stage.position(newPos);
-                                });
-                                stage.addEventListener('dragend', function () {
-                                    document.getElementById("x").value = parseInt(((nuovoProdotto.x()*risposta.w)/sfondoImg.attrs.width).toPrecision(10));
-                                    document.getElementById("y").value = parseInt(((nuovoProdotto.y()*risposta.h)/sfondoImg.attrs.height)-((div.clientHeight-newHeight)/2) + (((25 * sfondoImg.attrs.height) / risposta.h)/2));
-                                });
-                            }, "json");
+                                    nomeCategoria = risposta.categoryName;
+                                    document.getElementById('addTitle').innerHTML = nomeCategoria;
+                                    //fill the layer and the stage with the planimetry
+                                    let sfondo = new Image();
+                                    let div = document.getElementById('planimetry-addProduct');
+                                    let stage = new Konva.Stage({
+                                        container: 'planimetry-addProduct',
+                                        width: div.clientWidth,
+                                        height: div.clientHeight
+                                    });
+                                    let layerSfondo = new Konva.Layer({
+                                        scaleX: 1,
+                                        scaleY: 1,
+                                        draggable: true
+                                    });
+                                    stage.add(layerSfondo);
+                                    let layer = new Konva.Layer({
+                                        scaleX: 1,
+                                        scaleY: 1,
+                                        draggable: false
+                                    });
+                                    stage.add(layer);
+                                    let groupSfondo = new Konva.Group({
+                                        scaleX: 1
+                                    });
+                                    layer.add(groupSfondo);
+                                    let group = new Konva.Group({
+                                        scaleX: 1
+                                    });
+                                    layer.add(group);
+                                    let widthRatio = (div.clientWidth) / risposta.w;
+                                    let heightRatio = (div.clientHeight) / risposta.h;
+                                    let bestRatio = Math.min(widthRatio, heightRatio);
+                                    let newWidth = risposta.w * bestRatio;
+                                    let newHeight = risposta.h * bestRatio;
+                                    let sfondoImg = new Konva.Image({
+                                        image: sfondo,
+                                        width: newWidth,
+                                        height: newHeight,
+                                        y: (div.clientHeight-newHeight)/2,
+                                        draggable: false
+                                    });
+                                    groupSfondo.add(sfondoImg);
+
+                                    //canvas to move on the stage
+                                    let nome_prod = nomeCategoria;
+                                    let imageObj = new Image();
+                                    imageObj.src = "../" + risposta.productIcon;
+                                    nuovoProdotto = new Konva.Image({
+                                        y: (div.clientHeight-newHeight)/2,
+                                        image: imageObj,
+                                        width: (20 * sfondoImg.attrs.width) / risposta.w,
+                                        height: (25 * sfondoImg.attrs.height) / risposta.h,
+                                        draggable: true,
+                                        name: nome_prod
+                                    });
+                                    group.add(nuovoProdotto);
+
+                                    //responsive map
+                                    sfondo.src = "../" + srcSfondo;
+                                    let scaleBy = 1.05;
+                                    stage.on('wheel', (e) => {
+                                        e.evt.preventDefault();
+                                        let oldScale = stage.scaleX();
+                                        let center = {
+                                            x: stage.width() / 2,
+                                            y: stage.height() / 2,
+                                        };
+                                        let relatedTo = {
+                                            x: (center.x - stage.x()) / oldScale,
+                                            y: (center.y - stage.y()) / oldScale,
+                                        };
+                                        let newScale =
+                                            e.evt.deltaY > 0 ? oldScale * scaleBy : oldScale / scaleBy;
+                                        stage.scale({
+                                            x: newScale,
+                                            y: newScale
+                                        });
+                                        let newPos = {
+                                            x: center.x - relatedTo.x * newScale,
+                                            y: center.y - relatedTo.y * newScale,
+                                        };
+                                        stage.position(newPos);
+                                        stage.batchDraw();
+                                    });
+                                    stage.addEventListener('dragend', function () {
+                                        document.getElementById("x").value = parseInt(((nuovoProdotto.x()*risposta.w)/sfondoImg.attrs.width).toPrecision(10));
+                                        document.getElementById("y").value = parseInt(((nuovoProdotto.y()*risposta.h)/sfondoImg.attrs.height)-((div.clientHeight-newHeight)/2) + (((25 * sfondoImg.attrs.height) / risposta.h)/2));
+                                    });
+                                }, "json");
+
                         } else {
                             clearInterval(myInterval);
                             addPrdocuctModal.querySelector('form').reset();
@@ -875,7 +1007,7 @@ if(isset($_SESSION['session_id'])){
                 function vistaCategoria(categoria){
                     for(let i = 0; i < group.children.length; i++){
                         var prova = group.children[i];
-                        if(group.children[i].attrs.name != categoria){
+                        if(group.children[i].attrs.name !== categoria){
                             prova.visible(false);
                         } else {
                             prova.visible(true);
