@@ -88,8 +88,8 @@ if (isset($_SESSION['session_id'])) {
         </div>
     </div>
 
-    <!-- Add/Edit Company Modal -->
-    <div class="modal fade" id="companyModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+    <!-- Add/Edit Product Modal -->
+    <div class="modal fade" id="productModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
@@ -129,8 +129,8 @@ if (isset($_SESSION['session_id'])) {
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button id="companyModalCloseButton" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-                    <button id="companyModalConfirmButton" type="button" class="btn btn-success" onclick="insertInDatabase();">Aggiungi</button>
+                    <button id="productModalCloseButton" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                    <button id="productModalConfirmButton" type="button" class="btn btn-success" onclick="insertInDatabase();">Aggiungi</button>
                 </div>
             </div>
         </div>
@@ -140,7 +140,7 @@ if (isset($_SESSION['session_id'])) {
     <div class="container">
         <div class="row w-100">
             <div class="col">
-                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#companyModal" data-bs-whatever="addCompany" id="openProductModal">
+                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#productModal" data-bs-whatever="addproduct" id="openProductModal">
                     <i class="bi bi-box-fill"></i>&nbsp;&nbsp;Aggiungi prodotto
                 </button>
             </div>
