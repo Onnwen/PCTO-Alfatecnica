@@ -103,7 +103,7 @@ if (isset($_SESSION['session_id'])) {
                             <div class="col me-4">
                                 <div class="input-group mb-3">
                                     <span class="input-group-text" id="addNameLabel">Nome</span>
-                                    <input class="form-control" type="text" id="name" aria-describedby="addNameLabel">
+                                    <input class="form-control field-input" type="text" id="name" aria-describedby="addNameLabel" placeholder="Nome">
                                 </div>
                             </div>
                             <div class="col-2">
@@ -122,7 +122,7 @@ if (isset($_SESSION['session_id'])) {
                             <label for="basic-url" class="form-label">Icona</label>
                             <div class="col">
                                 <div class="input-group mb-3">
-                                    <input class="form-control" type="file" id="icon" aria-describedby="addIconLabel">
+                                    <input class="form-control" type="file" id="icon_path" aria-describedby="addIconLabel">
                                 </div>
                             </div>
                         </div>
@@ -130,7 +130,7 @@ if (isset($_SESSION['session_id'])) {
                 </div>
                 <div class="modal-footer">
                     <button id="productModalCloseButton" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-                    <button id="productModalConfirmButton" type="button" class="btn btn-success" onclick="insertInDatabase();">Aggiungi</button>
+                    <button id="productModalConfirmButton" type="button" class="btn btn-success" onclick="addProductCategoryToDatabase();">Aggiungi</button>
                 </div>
             </div>
         </div>
@@ -190,7 +190,7 @@ if (isset($_SESSION['session_id'])) {
     </body>
 
     <script>
-        let newProductFieldNames = ["Peso", "Marchio", "Colore", "Scadenza"];
+        let newProductFieldNames = [""];
 
         $("#isProduct").on('click', function () {
             $("#productModalLabel").text("Aggiungi prodotto")
@@ -209,12 +209,12 @@ if (isset($_SESSION['session_id'])) {
             newProductFieldNames.forEach((field, index) => {
                 fieldsHtml += '<div class="input-group mb-2"> ' +
                     `<span class="input-group-text" id="addNameLabel" style="min-width: 100px;">Campo ${index+1}</span> ` +
-                    `<input class="form-control" type="text" id="name" aria-describedby="addNameLabel" value="${field}" placeholder="Nome campo">`;
+                    `<input class="form-control field-input" type="text" id="${index}input" aria-describedby="addNameLabel" value="${field}" placeholder="Nome campo" onchange="updateField(${index})">`;
                 if (index === newProductFieldNames.length - 1) {
                     fieldsHtml += `<button class="btn btn-outline-primary" type="button" onclick="addField()"><i class="bi bi-plus-circle"></i></button> `;
                 }
                 if (newProductFieldNames.length > 1) {
-                    fieldsHtml += `<button class="btn btn-outline-danger removeField" type="button" onclick="removeField(${index})"><i class="bi bi-trash3"></i></button> `;
+                    fieldsHtml += `<button class="btn btn-outline-secondary removeField" type="button" onclick="removeField(${index})"><i class="bi bi-trash3"></i></button> `;
                 }
                 fieldsHtml += `</div>`;
             })
@@ -230,6 +230,81 @@ if (isset($_SESSION['session_id'])) {
         function removeField(id) {
             newProductFieldNames.splice(id, 1);
             loadNewProductFields();
+        }
+
+        function updateField(id) {
+            newProductFieldNames[id] = $("#" + id + "input").val();
+        }
+
+        function checkFields() {
+            let canProceed = true;
+            $(this).removeClass('is-invalid');
+            $(".field-input").each(function () {
+                $(this).removeClass('is-invalid');
+                if ($(this).val() === "") {
+                    $(this).addClass('is-invalid');
+                    canProceed = false;
+                }
+            });
+            return canProceed;
+        }
+
+        function addProductCategoryToDatabase() {
+            if (checkFields()) {
+                suspendProductModal(true);
+                let parameters = {};
+                $(".field-input").each(function () {
+                    parameters[$(this).attr('id')] = $(this).val();
+                });
+
+                $.post('../php/addProductCategory.php', parameters)
+                    .done(function() {
+                        suspendProductModal(false);
+                        modalConfirmation(true);
+                    })
+                    .fail(function( jqXHR, textStatus, errorThrown ) {
+                        console.log(jqXHR)
+                        console.log(textStatus)
+                        console.log(errorThrown)
+                        suspendProductModal(false);
+                        modalError(true);
+                    })
+                    .always(function(response) {
+                        console.log(response.responseText)
+                    })
+            }
+            else {
+                alert("Per procedere è necessario compilare tutti i campi.");
+            }
+        }
+
+        function suspendProductModal(suspended) {
+            if (suspended) {
+                $('#productModalCloseButton').prop('disabled', true);
+                const confirmButton = $('#productModalConfirmButton');
+                confirmButton.prop('disabled', true);
+                confirmButton.html('<div class="spinner-border spinner-border-sm" role="status"/>');
+            } else {
+                $('#productModalCloseButton').removeAttr('disabled');
+                const confirmButton = $('#productModalConfirmButton');
+                confirmButton.removeAttr('disabled');
+                confirmButton.html("Aggiungi");
+            }
+        }
+
+        function modalError(error) {
+            $("#productModal").modal(error ? 'hide' : 'show');
+            $("#errorModal").modal(!error ? 'hide' : 'show');
+        }
+
+        function modalLoading(loading) {
+            $("#productModal").modal(loading ? 'hide' : 'show');
+            $("#loadingModal").modal(!loading ? 'hide' : 'show');
+        }
+
+        function modalConfirmation(confirmed) {
+            $("#productModal").modal(confirmed ? 'hide' : 'show');
+            $("#confirmedModal").modal(!confirmed ? 'hide' : 'show');
         }
 
     </script>
