@@ -1,16 +1,18 @@
 <?php
 require_once('connessione.php');
 
-$productCategoryName = $_POST["productCategory_name"];
-$iconPath = $_POST["icon_path"];
+$productCategoryName = $_POST["name"];
+$iconPath = (isset($_POST["icon_path"]) ? $_POST('icon_path') : "");
 
 try {
     $pdo->beginTransaction();
     $pdo->query("INSERT INTO Product_Category (name, visualization_type, icon_image_path) VALUES ('" . $productCategoryName . "', 0, '" . $iconPath . "')");
 
     $fieldId = 0;
-    while ($_GET($fieldId) !== null) {
-        $pdo->query("INSERT INTO Product_Fields (product_category_id, name) VALUES (LAST_INSERT_ID(), '" . $_GET($fieldId) . "')");
+    $newProductCategoryId = $pdo->lastInsertId();
+    while ($_POST[$fieldId . "input"] !== null) {
+        $pdo->query("INSERT INTO Product_Fields (product_category_id, value) VALUES ('" . $newProductCategoryId. "', '" . $_POST[$fieldId . "input"] . "')");
+        $fieldId++;
     }
     $pdo->commit();
 } catch (Exception $e) {
