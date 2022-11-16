@@ -1,5 +1,5 @@
 <?php
-require_once('connessione.php');
+require_once('../connessione.php');
 
 $productCategoryName = $_POST["name"];
 $iconPath = (isset($_POST["icon_path"]) ? $_POST('icon_path') : "");

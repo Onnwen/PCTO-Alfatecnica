@@ -1,5 +1,5 @@
 <?php
-require_once('connessione.php');
+require_once('../connessione.php');
 $query = "SELECT Product_Category.name as product_category_name, Fields_Names.field_id, Fields_Names.name as field_name 
 FROM Product_Category
          INNER JOIN (SELECT field_id, name, product_category_id FROM Product_Fields) AS Fields_Names
