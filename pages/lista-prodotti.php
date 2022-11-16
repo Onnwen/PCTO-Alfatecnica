@@ -299,8 +299,8 @@ if (isset($_SESSION['session_id'])) {
         }
 
         function removeField(index) {
-            modalFieldsNames.splice(index, 1);
             modalDeletedFieldsIds.push(modalFieldsNames[index]);
+            modalFieldsNames.splice(index, 1);
             loadNewProductFields();
         }
 
@@ -356,6 +356,7 @@ if (isset($_SESSION['session_id'])) {
         function updateProductCategoryInDataBase() {
             if (modalDeletedFieldsIds.length > 0 || modalNewFieldsIds > 0) {
                 // To-Do: chiamata update
+                // To-Do: accertarsi che i campi presenti in modalNewFieldsIds non siano presenti anche in modalDeletedFieldsIds
                 console.log(modalDeletedFieldsIds);
                 console.log(modalNewFieldsIds);
             }
