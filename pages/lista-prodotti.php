@@ -46,10 +46,10 @@ if (isset($_SESSION['session_id'])) {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    L'operazione è avvenuta con successo.
+                    L'operazione è avvenuta con successo. La pagina sarà ricaricata per applicare le modifiche.
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="reload()">Ok</button>
                 </div>
             </div>
         </div>
@@ -170,7 +170,7 @@ if (isset($_SESSION['session_id'])) {
                                 echo "<tr>";
                                 echo "<th class='text-center align-middle'>{$productCategory['name']}</th>";
                                 echo "<th class='text-center align-middle'>" . ($productCategory['visualization_type'] == 0 ? "Prodotto" : "Questionario") . "</th>";
-                                echo '<td class="text-center align-middle"><button class="btn btn-outline-success"><i class="fa-solid fa-pen"></i></button><button class="btn btn-outline-info"><i class="fa-solid fa-circle-info"></i></button><button class="btn btn-outline-danger"><i class="fa-solid fa-trash-can"></i></button></td>';
+                                echo '<td class="text-center align-middle"><button class="btn btn-outline-success"><i class="fa-solid fa-pen"></i></button><button class="btn btn-outline-info"><i class="fa-solid fa-circle-info"></i></button><button class="btn btn-outline-danger" onclick="deleteProductCategoryFromDatabase(' . $productCategory['product_category_id'] . ')"><i class="fa-solid fa-trash-can"></i></button></td>';
                                 echo "</tr>";
                             }
                             ?>
@@ -279,7 +279,7 @@ if (isset($_SESSION['session_id'])) {
         }
 
         function deleteProductCategoryFromDatabase(productCategoryId) {
-            $.post('../php/deleteProductCategory.php', productCategoryId)
+            $.post('../php/deleteProductCategory.php', {id: productCategoryId})
                 .done(function() {
                     modalConfirmation(true);
                 })
@@ -315,6 +315,10 @@ if (isset($_SESSION['session_id'])) {
         function modalConfirmation(confirmed) {
             $("#productModal").modal(confirmed ? 'hide' : 'show');
             $("#confirmedModal").modal(!confirmed ? 'hide' : 'show');
+        }
+
+        function reload() {
+            window.location.reload();
         }
 
     </script>
