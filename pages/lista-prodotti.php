@@ -119,10 +119,9 @@ if (isset($_SESSION['session_id'])) {
                         <div id="modalFields">
                         </div>
                         <div id="filesInput">
-                            <label for="basic-url" class="form-label">File</label>
+                            <label for="basic-url" class="form-label">Icona</label>
                             <div class="col">
                                 <div class="input-group mb-3">
-                                    <span class="input-group-text" id="addIconLabel">Icona</span>
                                     <input class="form-control" type="file" id="icon" aria-describedby="addIconLabel">
                                 </div>
                             </div>
