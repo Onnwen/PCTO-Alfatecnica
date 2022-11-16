@@ -11,7 +11,7 @@ try {
     $fieldId = 0;
     $newProductCategoryId = $pdo->lastInsertId();
     while ($_POST[$fieldId . "input"] !== null) {
-        $pdo->query("INSERT INTO Product_Fields (product_category_id, value) VALUES ('" . $newProductCategoryId. "', '" . $_POST[$fieldId . "input"] . "')");
+        $pdo->query("INSERT INTO Product_Fields (product_category_id, name) VALUES ('" . $newProductCategoryId. "', '" . $_POST[$fieldId . "input"] . "')");
         $fieldId++;
     }
     $pdo->commit();
