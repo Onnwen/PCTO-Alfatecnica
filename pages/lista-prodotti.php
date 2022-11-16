@@ -142,7 +142,7 @@ if (isset($_SESSION['session_id'])) {
         <div class="row w-100">
             <div class="col">
                 <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#companyModal" data-bs-whatever="addCompany" id="openProductModal">
-                    <i class="bi bi-box-fill"></i> Aggiungi prodotto
+                    <i class="bi bi-box-fill"></i>&nbsp;&nbsp;Aggiungi prodotto
                 </button>
             </div>
         </div>
@@ -208,9 +208,9 @@ if (isset($_SESSION['session_id'])) {
         function loadNewProductFields() {
             let fieldsHtml = "";
             newProductFieldNames.forEach((field, index) => {
-                fieldsHtml += '<div class="input-group mb-3"> ' +
+                fieldsHtml += '<div class="input-group mb-2"> ' +
                     `<span class="input-group-text" id="addNameLabel" style="min-width: 100px;">Campo ${index+1}</span> ` +
-                    `<input class="form-control" type="text" id="name" aria-describedby="addNameLabel" value="${field}">`;
+                    `<input class="form-control" type="text" id="name" aria-describedby="addNameLabel" value="${field}" placeholder="Nome campo">`;
                 if (newProductFieldNames.length > 1) {
                     fieldsHtml += `<button class="btn btn-outline-danger removeField" type="button" onclick="removeField(${index})"><i class="bi bi-trash3"></i></button> `;
                 }
@@ -219,17 +219,16 @@ if (isset($_SESSION['session_id'])) {
                 }
                 fieldsHtml += `</div>`;
             })
+            fieldsHtml += `<div class="mb-3"></div>`;
             $("#modalFields").html(fieldsHtml);
         }
 
         function addField() {
             newProductFieldNames.push("");
-            console.log("CIAO");
             loadNewProductFields();
         }
 
         function removeField(id) {
-            console.log("CIAO");
             newProductFieldNames.splice(id, 1);
             loadNewProductFields();
         }
