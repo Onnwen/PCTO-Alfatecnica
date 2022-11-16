@@ -3,7 +3,7 @@ session_start();
 require_once('../php/connessione.php');
 
 if (isset($_SESSION['session_id'])) {
-    $productsCategorySql = "select product_category_id, name from Product_Category;";
+    $productsCategorySql = "select product_category_id, name, visualization_type from Product_Category;";
     $productsCategory = array();
     $pre = $pdo->prepare($productsCategorySql);
     $pre->execute();
@@ -111,7 +111,7 @@ if (isset($_SESSION['session_id'])) {
                                 <label class="btn btn-outline-secondary w-100"  for="isProduct">Prodotto</label>
                             </div>
                             <div class="col-2">
-                                <input type="radio" class="btn-check" name="form" id="isForm" autocomplete="off">
+                                <input type="radio" class="btn-check" name="form" id="isForm" autocomplete="off" disabled>
                                 <label class="btn btn-outline-secondary w-100" for="isForm">Formulario</label>
                             </div>
                         </div>
@@ -158,6 +158,7 @@ if (isset($_SESSION['session_id'])) {
                         <thead>
                         <tr style="text-align: center;">
                             <th scope="col">Nome</th>
+                            <th scope="col">Tipologia</th>
                             <th scope="col" style="width: 200px">Gestione</th>
                         </tr>
                         </thead>
@@ -166,8 +167,9 @@ if (isset($_SESSION['session_id'])) {
                             <?php
                             foreach ($productsCategory as $productCategory) {
                                 echo "<tr>";
-                                echo "<th>{$productCategory['name']}</th>";
-                                echo '<td style="text-align: center"><button class="btn btn-outline-success"><i class="fa-solid fa-pen"></i></button><button class="btn btn-outline-info"><i class="fa-solid fa-circle-info"></i></button><button class="btn btn-outline-danger"><i class="fa-solid fa-trash-can"></i></button></td>';
+                                echo "<th class='text-center align-middle'>{$productCategory['name']}</th>";
+                                echo "<th class='text-center align-middle'>" . ($productCategory['visualization_type'] == 0 ? "Prodotto" : "Questionario") . "</th>";
+                                echo '<td class="text-center align-middle"><button class="btn btn-outline-success"><i class="fa-solid fa-pen"></i></button><button class="btn btn-outline-info"><i class="fa-solid fa-circle-info"></i></button><button class="btn btn-outline-danger"><i class="fa-solid fa-trash-can"></i></button></td>';
                                 echo "</tr>";
                             }
                             ?>
