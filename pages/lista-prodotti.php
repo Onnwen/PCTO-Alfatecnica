@@ -210,11 +210,11 @@ if (isset($_SESSION['session_id'])) {
                 fieldsHtml += '<div class="input-group mb-2"> ' +
                     `<span class="input-group-text" id="addNameLabel" style="min-width: 100px;">Campo ${index+1}</span> ` +
                     `<input class="form-control" type="text" id="name" aria-describedby="addNameLabel" value="${field}" placeholder="Nome campo">`;
-                if (newProductFieldNames.length > 1) {
-                    fieldsHtml += `<button class="btn btn-outline-danger removeField" type="button" onclick="removeField(${index})"><i class="bi bi-trash3"></i></button> `;
-                }
                 if (index === newProductFieldNames.length - 1) {
                     fieldsHtml += `<button class="btn btn-outline-primary" type="button" onclick="addField()"><i class="bi bi-plus-circle"></i></button> `;
+                }
+                if (newProductFieldNames.length > 1) {
+                    fieldsHtml += `<button class="btn btn-outline-danger removeField" type="button" onclick="removeField(${index})"><i class="bi bi-trash3"></i></button> `;
                 }
                 fieldsHtml += `</div>`;
             })
