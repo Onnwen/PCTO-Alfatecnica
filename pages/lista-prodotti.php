@@ -148,6 +148,7 @@ if (isset($_SESSION['session_id'])) {
     </div>
 
     <br>
+    <hr>
 
     <!-- Lista prodotti -->
     <div class="container">
@@ -271,13 +272,20 @@ if (isset($_SESSION['session_id'])) {
                         suspendProductModal(false);
                         modalError(true);
                     })
-                    .always(function(response) {
-                        console.log(response.responseText)
-                    })
             }
             else {
                 alert("Per procedere è necessario compilare tutti i campi.");
             }
+        }
+
+        function deleteProductCategoryFromDatabase(productCategoryId) {
+            $.post('../php/deleteProductCategory.php', productCategoryId)
+                .done(function() {
+                    modalConfirmation(true);
+                })
+                .fail(function() {
+                    modalError(true);
+                })
         }
 
         function suspendProductModal(suspended) {
