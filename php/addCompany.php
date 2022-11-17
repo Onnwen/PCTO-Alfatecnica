@@ -21,16 +21,20 @@ $planimetry_image = $_FILES["planimetry_image"];
 $logo = $_FILES["logo"];
 
 $target_dir_logo = "img/loghi/";
+$target_dir_planimetry = "img/planimetrie/";
 
 $target_file_logo = $target_dir_logo . $nome; # FIXME: Controlla che il file non esista di già!
+$target_file_planimetry = $target_dir_planimetry . $nome; #FIXME: Controlla che il file non esista di già!
 
-$isWritable = is_writable($target_file_logo);
-$isDir = is_dir($target_dir_logo);
+# TODO: Calcola le dimensioni dell'immagine uploaddata
+$planimetry_image_width = 0;
+$planimetry_image_height = 0;
 
 move_uploaded_file($logo["tmp_name"], "/srv/www/PCTO-Alfatecnica-Private/" . $target_file_logo);
+move_uploaded_file($planimetry_image["tmp_name"], "/srv/www/PCTO-Alfatecnica-Private/" . $target_file_planimetry);
 
-$Query = "INSERT INTO Companies(name, site, path_logo, address, CAP, city, province, phoneNumber1, emailAddress1, personalReference, phoneNumber2, cellPhoneNumber, emailAddress2, companyNotes, clientNotes) 
-    VALUES (:name, :site, :path_logo, :address, :CAP, :city, :province, :phoneNumber, :emailAddress, :personalReference, :phoneNumber2, :cellPhoneNumber, :emailAddress2, :companyNotes, :clientNotes)";
+$Query = "INSERT INTO Companies(name, site, path_logo, address, CAP, city, province, phoneNumber1, emailAddress1, personalReference, phoneNumber2, cellPhoneNumber, emailAddress2, companyNotes, clientNotes, planimetry_image_url, planimetry_image_width, planimetry_image_height) 
+    VALUES (:name, :site, :path_logo, :address, :CAP, :city, :province, :phoneNumber, :emailAddress, :personalReference, :phoneNumber2, :cellPhoneNumber, :emailAddress2, :companyNotes, :clientNotes, :planimetry_image_url, :planimetry_image_width, :planimetry_image_height)";
 try {
     $pre = $pdo->prepare($Query);
 } catch (Exception $e) {
@@ -53,6 +57,9 @@ $pre->bindParam(':cellPhoneNumber', $cellPhoneNumber, PDO::PARAM_STR);
 $pre->bindParam(':emailAddress2', $emailAddress2, PDO::PARAM_STR);
 $pre->bindParam(':companyNotes', $companyNotes, PDO::PARAM_STR);
 $pre->bindParam(':clientNotes', $clientNotes, PDO::PARAM_STR);
+$pre->bindParam(':planimetry_image_url', $target_file_planimetry, PDO::PARAM_STR);
+$pre->bindParam(':planimetry_image_width', $planimetry_image_width, PDO::PARAM_INT);
+$pre->bindParam(':planimetry_image_height', $planimetry_image_height, PDO::PARAM_INT);
 
 $pre->execute();
 
