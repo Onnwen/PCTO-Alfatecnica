@@ -26,7 +26,6 @@ $target_dir_planimetry = "img/planimetrie/";
 $target_file_logo = $target_dir_logo . $name; # FIXME: Controlla che il file non esista di già!
 $target_file_planimetry = $target_dir_planimetry . $name; #FIXME: Controlla che il file non esista di già!
 
-# TODO: Calcola le dimensioni dell'immagine uploaddata
 $image_data = getimagesize($planimetry_image["tmp_name"]);
 
 $planimetry_image_width = $image_data[0];
