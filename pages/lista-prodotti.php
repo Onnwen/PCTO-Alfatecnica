@@ -354,11 +354,48 @@ if (isset($_SESSION['session_id'])) {
         }
 
         function updateProductCategoryInDataBase() {
-            if (modalDeletedFieldsIds.length > 0 || modalNewFieldsIds > 0) {
-                // To-Do: chiamata update
-                // To-Do: accertarsi che i campi presenti in modalNewFieldsIds non siano presenti anche in modalDeletedFieldsIds
-                console.log(modalDeletedFieldsIds);
-                console.log(modalNewFieldsIds);
+            if (modalDeletedFieldsIds.length > 0 || modalNewFieldsIds.length > 0) {
+                modalNewFieldsIds.forEach((newField, index) => {
+                    if (modalDeletedFieldsIds.indexOf(newField) !== -1) {
+                        modalNewFieldsIds.splice(index, 1);
+                    }
+                });
+
+                let parameters = {"product_category_id": isEditingProduct};
+                let newFields = 0;
+                let updatedFields = 0;
+                let deletedFields = 0;
+                modalNewFieldsIds.forEach(newField => {
+                    if (newField['id'] < 0) {
+                        parameters[newFields + "newFieldName"] = newField['name'];
+                        newFields++;
+                    }
+                    else {
+                        parameters[updatedFields + "updateFieldId"] = newField['id'];
+                        parameters[updatedFields + "updateFieldName"] = newField['name'];
+                        updatedFields++;
+                    }
+                });
+                modalDeletedFieldsIds.forEach(deletedField => {
+                    parameters[deletedFields + "deleteFieldId"] = deletedField['id'];
+                    deletedFields++;
+                });
+
+                console.log(parameters)
+
+                suspendProductModal(true);
+                $.post('../php/productCategory/updateProductCategory.php', parameters)
+                    .done(function () {
+                        suspendProductModal(false);
+                        modalConfirmation(true);
+                    })
+                    .fail(function () {
+                        suspendProductModal(false);
+                        modalError(true);
+                    })
+                    .always(function (response) {
+                        console.log(response.responseText)
+                    })
             }
         }
 
