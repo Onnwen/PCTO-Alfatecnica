@@ -6,17 +6,24 @@ $productCategoryId = $_POST["product_category_id"];
 try {
     $pdo->beginTransaction();
 
-    $fieldIndex = 0;
-    while ($_POST[$fieldIndex . "fieldId"] !== null) {
-        $pdo->query("UPDATE Product_Fields SET name = '" . $_POST[$fieldIndex . "fieldName"] . "' WHERE field_id = '" . $_POST[$fieldIndex . "fieldId"] . "')");
-        $fieldIndex++;
+    $updateFieldIndex = 0;
+    while ($_POST[$updateFieldIndex . "updateFieldId"] !== null) {
+        $pdo->query("UPDATE Product_Fields SET name = '" . $_POST[$updateFieldIndex . "updateFieldName"] . "' WHERE field_id = '" . $_POST[$updateFieldIndex . "updateFieldId"] . "')");
+        $updateFieldIndex++;
     }
 
     $newFieldIndex = 0;
     while ($_POST[$newFieldIndex . "newFieldId"] !== null) {
-        $pdo->query("INSERT INTO Product_Fields (product_category_id, name) VALUES ('" . $productCategoryId. "', '" . $_POST[$newFieldIndex . "input"] . "')");
+        $pdo->query("INSERT INTO Product_Fields (product_category_id, name) VALUES ('" . $productCategoryId. "', '" . $_POST[$newFieldIndex . "newFieldName"] . "')");
         $newFieldIndex++;
     }
+
+    $deleteFieldIndex = 0;
+    while ($_POST[$deleteFieldIndex . "deleteFieldId"] !== null) {
+        $pdo->query("DELETE FROM Product_Fields WHERE field_id = '" . $_POST[$deleteFieldIndex . "deleteFieldId"] . "')");
+        $deleteFieldIndex++;
+    }
+
     $pdo->commit();
 } catch (Exception $e) {
     echo $e;
