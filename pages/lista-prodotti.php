@@ -115,7 +115,7 @@ if (isset($_SESSION['session_id'])) {
                                 <label class="btn btn-outline-secondary w-100" for="isForm">Formulario</label>
                             </div>
                         </div>
-                        <label for="basic-url" class="form-label">Campi</label>
+                        <label for="basic-url" class="form-label">Attributi</label>
                         <div id="modalFields">
                         </div>
                         <div id="filesInput hide-with-editing">
