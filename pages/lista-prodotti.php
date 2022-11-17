@@ -218,7 +218,7 @@ if (isset($_SESSION['session_id'])) {
                 isEditingProduct = 0;
                 modalLabelMode = "Aggiungi";
                 modalTitle.textContent = modalLabelMode + " " + modalLabelType;
-                $('#productModalConfirmButton').text("Aggiunti");
+                $('#productModalConfirmButton').text(modalLabelMode);
 
                 loadNewProductFields();
 
@@ -233,6 +233,7 @@ if (isset($_SESSION['session_id'])) {
             } else {
                 isEditingProduct = modalType;
                 modalLabelMode = "Modifica";
+                $('#productModalConfirmButton').text(modalLabelMode);
 
                 $(".hide-with-editing").each(function () {
                     $(this).hide();
