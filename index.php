@@ -104,21 +104,6 @@ if (isset($_SESSION['session_id'])) {
                 background-color: #1fa67b;
                 border-color: #1fa67b;
             }
-
-            /*    --------------------------------------------------
-                :: Footer
-                -------------------------------------------------- */
-            #footer {
-                color: #6d6d6d;
-                font-size: 12px;
-                text-align: center;
-            }
-            #footer p {
-                margin-bottom: 0;
-            }
-            #footer a {
-                color: inherit;
-            }
         </style>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -130,10 +115,10 @@ if (isset($_SESSION['session_id'])) {
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-sm-12 col-md-10 col-lg-8 col-xl-8" >
-                        <div class="form-wrap w-100 p-md-5 p-sm-1" style="background: rgba(109,109,109,0.09);width: 500px;border-radius: 20px";>
-                            <img src="img/logo.png" style="width: 100%;height: auto">
+                        <div class="form-wrap w-100 p-md-5 p-sm-1" style="background: rgba(109,109,109,0.09);width: 500px;border-radius: 20px">
+                            <img src="img/logo.png" style="width: 100%;height: auto" alt="logo">
                             <label id="errorLabel">dsadasd</label>
-                            <form role="form" action="javascript:;" method="post" id="login-form" autocomplete="off" >
+                            <form role="form" action="javascript:0;" method="post" id="login-form" autocomplete="off" >
                                 <div class="form-group">
                                     <label for="emailInput" class="sr-only">Email</label>
                                     <input type="email" name="email" id="emailInput" class="form-control" placeholder="Inserire mail">
@@ -166,12 +151,12 @@ if (isset($_SESSION['session_id'])) {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Inserisci il tuo account</p>
+                    <label id="emailRetrievePassword" for="recovery-email" class="sr-only">Inserisci il tuo account</label>
                     <input type="email" name="recovery-email" id="recovery-email" class="form-control" autocomplete="off">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Annulla</button>
-                    <button type="button" class="btn btn-success">Recupera</button>
+                    <button id="recoveryButton" type="button" class="btn btn-success">Recupera</button>
                 </div>
             </div>
         </div>
@@ -186,44 +171,79 @@ if (isset($_SESSION['session_id'])) {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form role="form" action="javascript:;" method="post" id="registration-form" autocomplete="off">
+                    <form role="form" action="javascript:0;" method="post" id="registration-form" autocomplete="off">
                         <div class="form-group">
-                            <label class="sr-only">Nome</label>
+                            <label id="nameLabel" for="name" class="sr-only">Nome</label>
                             <input type="text" name="name" id="name" class="form-control" placeholder="Inserire il nome">
                         </div>
                         <div class="form-group">
-                            <label class="sr-only">Cognome</label>
+                            <label id="surnameLabel" for="surname" class="sr-only">Cognome</label>
                             <input type="text" name="surname" id="surname" class="form-control" placeholder="Inserire il cognome">
                         </div>
                         <div class="form-group">
-                            <label for="email" class="sr-only">Email</label>
+                            <label id="emailLabel" for="emailRegistration" class="sr-only">Email</label>
                             <input type="email" name="email" id="emailRegistration" class="form-control" placeholder="Inserire la mail">
                         </div>
                         <div class="form-group">
-                            <label for="key" class="sr-only">Password</label>
+                            <label id="keyRegistrationLabel" for="keyRegistration" class="sr-only">Password</label>
                             <input type="password" name="key" id="keyRegistration" class="form-control" placeholder="Inserire la password">
                         </div>
                         <div class="form-group">
-                            <label class="sr-only">Codice azienda</label>
+                            <label id="companyCodeLabel" for="companyCode" class="sr-only">Codice azienda</label>
                             <input type="number" name="code" id="companyCode" class="form-control" placeholder="Inserire il codice dell'azienda">
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
-                    <button type="button" class="btn btn-success">Registrati</button>
+                    <button id="registrationButton" type="button" class="btn btn-success">Registrati</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal dopo registrazione -->
+    <div class="modal fade" id="justRegistered" tabindex="-1" aria-labelledby="registeredLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" style="color: darkgreen" id="registeredLabel">Sei già registrato</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="afterRegistrationLabel">
+                    Le credenziali che hai inserito sono già presenti nel nostro database, esegui il login per poter accedere ai nostri servizi.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal errore registrazione -->
+    <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" style="color: darkred" id="errorModalLabel">È stato riscontrato un problema</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    La tua registrazione non è andata come ci aspetavamo. Qualcosa è andato storto, contattaci per risolvere il problema.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
                 </div>
             </div>
         </div>
     </div>
     <script>
-        const retrievePasswordModal = document.getElementById('retrievePassword');
-        const regisrtatioModal = document.getElementById('registration');
-        function retrievePassword(){
-            //send mail
-        }
+        const validateEmail = (email) => {
+            return email.match(
+                /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            );
+        };
         $('#signIn').on('click',function () {
-            console.log("ciao");
             let email = $('#emailInput');
             let password = $('#passwordInput');
             let errorMessage = $('#errorLabel');
@@ -234,7 +254,6 @@ if (isset($_SESSION['session_id'])) {
                 errorMessage.html('Password non inserita');
             } else {
                 let pwMd5 = md5(md5(password.val()));
-                console.log(pwMd5);
                 $.post('php/login/login.php', {email: email.val(), pw: pwMd5}, function (resp) {
                     if (resp === 'userWrong') {
                         errorMessage.html('Credenziali errate');
@@ -246,6 +265,105 @@ if (isset($_SESSION['session_id'])) {
                     }
                 });
             }
+        });
+
+        $('#registrationModal').on('shown.bs.modal', function (e) {
+            $('#registrationButton').on('click',function () {
+                let name = $('#name');
+                let surname = $('#surname');
+                let email = $('#emailRegistration');
+                let password = $('#keyRegistration');
+                let companyCode = $('#companyCode');
+                let allFilled = true;
+
+                if (name.val() === '') {
+                    name.addClass('is-invalid');
+                    name.attr('for', 'floatingInputInvalid');
+                    allFilled = false;
+                } else {
+                    name.removeClass('is-invalid');
+                }
+                if (surname.val() === '') {
+                    surname.addClass('is-invalid');
+                    surname.attr('for', 'floatingInputInvalid');
+                    allFilled = false;
+                } else {
+                    surname.removeClass('is-invalid');
+                }
+                if (email.val() === '' || !validateEmail(email.val())) {
+                    email.addClass('is-invalid');
+                    email.attr('for', 'floatingInputInvalid');
+                    password.addClass('is-invalid');
+                    allFilled = false;
+                } else {
+                    email.removeClass('is-invalid');
+                }
+                if (password.val() === '') {
+                    password.addClass('is-invalid');
+                    password.attr('for', 'floatingInputInvalid');
+                    allFilled = false;
+                } else {
+                    password.removeClass('is-invalid');
+                }
+                if (companyCode.val() === '') {
+                    companyCode.addClass('is-invalid');
+                    companyCode.attr('for', 'floatingInputInvalid');
+                    allFilled = false;
+                } else {
+                    companyCode.removeClass('is-invalid');
+                }
+                if (allFilled){
+                    let pwMd5 = md5(md5(password.val()));
+                    $.post('php/login/registration.php', {name: name.val(), surname: surname.val(),email: email.val(), password: pwMd5, companyCode: companyCode.val()})
+                        .done(function (resp){
+                            if (resp === 'userWrong') { //significherà che l'utente è gia presente quindi fara tornare alla pagina login con un modal
+                                $('#afterRegistrationLabel').html("Le credenziali che hai inserito sono già presenti nel nostro database, esegui il login per poter accedere ai nostri servizi.");
+                                $('#registrationModal').modal('hide');
+                                $('#justRegistered').modal('show');
+                            } else {
+                                $('#afterRegistrationLabel').html("La registrazione è avvenuta con successo. Riceverai una mail in cui dovrai confermare la tua registrazione.");
+                                $('#registrationModal').modal('hide');
+                                $('#justRegistered').modal('show');
+                            }
+                        })
+                        .fail(function (){
+                            $('#registrationModal').modal('hide');
+                            $("#errorModal").modal('show');
+                        })
+                }
+            });
+        });
+        $('#registrationModal').on('hide.bs.modal', function (e) {
+            document.getElementById("registrationModal").querySelector('form').reset();
+            $('#name').removeClass('is-invalid');
+            $('#surname').removeClass('is-invalid');
+            $('#emailRegistration').removeClass('is-invalid');
+            $('#passwordRegistration').removeClass('is-invalid');
+            $('#companyCode').removeClass('is-invalid');
+        });
+
+
+        $('#retrievePassword').on('shown.bs.modal', function (e) {
+            $('#recoveryButton').on('click',function () {
+                let email = $('#recovery-email');
+                let filled = true;
+
+                if (email.val() === '' || !validateEmail(email.val())) {
+                    email.addClass('is-invalid');
+                    email.attr('for', 'floatingInputInvalid');
+                    password.addClass('is-invalid');
+                    filled = false;
+                } else {
+                    email.removeClass('is-invalid');
+                }
+                if (filled){
+                    //backend
+                }
+            });
+        }
+        $('#retrievePassword').on('hide.bs.modal', function (e) {
+            document.getElementById("retrievePassword").querySelector('form').reset();
+            $('#recovery-email').removeClass('is-invalid');
         });
     </script>
     </body>
