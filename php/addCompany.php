@@ -17,6 +17,18 @@ $emailAddress2 = isset($_POST['emailAddress2']) ? $_POST['emailAddress2'] : '';
 $companyNotes = isset($_POST['companyNotes']) ? $_POST['companyNotes'] : '';
 $clientNotes = isset($_POST['clientNotes']) ? $_POST['clientNotes'] : '';
 
+$planimetry_image = $_FILES["planimetry_image"];
+$logo = $_FILES["logo"];
+
+$target_dir_logo = "img/loghi/";
+
+$target_file_logo = $target_dir_logo . $nome; # FIXME: Controlla che il file non esista di già!
+
+$isWritable = is_writable($target_file_logo);
+$isDir = is_dir($target_dir_logo);
+
+move_uploaded_file($logo["tmp_name"], "/srv/www/PCTO-Alfatecnica-Private/" . $target_file_logo);
+
 $Query = "INSERT INTO Companies(name, site, path_logo, address, CAP, city, province, phoneNumber1, emailAddress1, personalReference, phoneNumber2, cellPhoneNumber, emailAddress2, companyNotes, clientNotes) 
     VALUES (:name, :site, :path_logo, :address, :CAP, :city, :province, :phoneNumber, :emailAddress, :personalReference, :phoneNumber2, :cellPhoneNumber, :emailAddress2, :companyNotes, :clientNotes)";
 try {
@@ -26,11 +38,9 @@ try {
     exit;
 }
 
-$tmp = "img/loghi/azienda1.png"; # Necessaria causa PHP deficiente
-
 $pre->bindParam(':name', $name, PDO::PARAM_STR);
 $pre->bindParam(':site', $site, PDO::PARAM_STR);
-$pre->bindParam(":path_logo", $tmp, PDO::PARAM_STR); # TODO: fixare questo
+$pre->bindParam(":path_logo", $target_file_logo, PDO::PARAM_STR);
 $pre->bindParam(':address', $address, PDO::PARAM_STR);
 $pre->bindParam(':CAP', $CAP, PDO::PARAM_INT);
 $pre->bindParam(':city', $city, PDO::PARAM_STR);
