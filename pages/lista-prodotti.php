@@ -193,12 +193,17 @@ if (isset($_SESSION['session_id'])) {
     </body>
 
     <script>
-        let modalFieldsNames = [];
+        let modalFields = [];
+        let modalDeletedFields = [];
+        let modalNewFields = [];
+
+        let modalSections = [];
+        let modalDeletedSections = [];
+
         let isEditingProduct = 0;
         let modalLabelMode = "Aggiungi";
         let modalLabelType = "prodotto";
-        let modalDeletedFieldsIds = [];
-        let modalNewFieldsIds = [];
+        let modalLabelFieldType = "Campo";
         let modalType = "addProduct";
 
         const productModal = document.getElementById('productModal')
@@ -208,40 +213,23 @@ if (isset($_SESSION['session_id'])) {
 
             const modalTitle = productModal.querySelector('.modal-title');
 
-            modalFieldsNames = [];
-            modalDeletedFieldsIds = [];
-            modalNewFieldsIds = [];
-            $("#name").val("");
+            resetModal();
 
             if (modalType === "addProduct") {
-                modalFieldsNames.push({'id': 0, 'name': ""})
                 isEditingProduct = 0;
                 modalLabelMode = "Aggiungi";
+                modalLabelFieldType = "Campo";
                 modalTitle.textContent = modalLabelMode + " " + modalLabelType;
                 $('#productModalConfirmButton').text(modalLabelMode);
 
+                addSection();
+                addField();
+
                 loadNewProductFields();
-
-                $(".hide-with-editing").each(function () {
-                    $(this).show();
-                })
-
-                $(".disabled-with-editing").each(function () {
-                    $(this).prop("disabled", false);
-                })
-
             } else {
                 isEditingProduct = modalType;
                 modalLabelMode = "Modifica";
                 $('#productModalConfirmButton').text(modalLabelMode);
-
-                $(".hide-with-editing").each(function () {
-                    $(this).hide();
-                })
-
-                $(".disabled-with-editing").each(function () {
-                    $(this).prop("disabled", true);
-                })
 
                 $.get('../php/productCategory/getProductCategoryFields.php', {
                     id: modalType
@@ -253,8 +241,12 @@ if (isset($_SESSION['session_id'])) {
 
                         $("#name").val(fieldsNames[0]["product_category_name"])
                         fieldsNames.forEach(fieldName => {
-                            modalFieldsNames.push({'name': fieldName['field_name'], 'id': fieldName['field_id']})
+                            modalFields.push({'name': fieldName['field_name'], 'id': fieldName['field_id']})
                         });
+
+                        // modalLabelFieldType = fieldsNames[0]["visualization_type"] == 1 ? "Campo" : "Domanda";
+                        modalLabelFieldType = "Campo";
+
                         loadNewProductFields();
                     })
                     .fail(function () {
@@ -268,52 +260,158 @@ if (isset($_SESSION['session_id'])) {
             modalLabelType = "prodotto";
             const modalTitle = productModal.querySelector('.modal-title');
             modalTitle.textContent = modalLabelMode + " " + modalLabelType;
+            modalLabelFieldType = "Campo";
+            resetModal();
+            addField();
+            loadNewProductFields();
         });
 
         $("#isForm").on('click', function () {
             modalLabelType = "formulario";
             const modalTitle = productModal.querySelector('.modal-title');
             modalTitle.textContent = modalLabelMode + " " + modalLabelType;
+            modalLabelFieldType = "Domanda";
+            if (modalSections.length === 0) {
+                modalSections.push({'id': 0, 'name': ""});
+            }
+            resetModal();
+            addSection();
+            loadNewProductFields();
         });
+
+        function resetModal() {
+            modalFields = [];
+            modalDeletedFields = [];
+            modalNewFields = [];
+
+            modalSections = [];
+            modalDeletedSections = [];
+
+            $("#name").val("");
+
+            if (modalType === "addProduct") {
+                $(".hide-with-editing").each(function () {
+                    $(this).show();
+                })
+
+                $(".disabled-with-editing").each(function () {
+                    $(this).prop("disabled", false);
+                })
+            }
+            else {
+                $(".hide-with-editing").each(function () {
+                    $(this).hide();
+                })
+
+                $(".disabled-with-editing").each(function () {
+                    $(this).prop("disabled", true);
+                })
+            }
+        }
 
         function loadNewProductFields() {
             let fieldsHtml = "";
-            modalFieldsNames.forEach((field, index) => {
-                fieldsHtml += '<div class="input-group mb-2"> ' +
-                    `<span class="input-group-text" id="addNameLabel" style="min-width: 100px;">Campo ${index + 1}</span> ` +
-                    `<input class="form-control field-input" type="text" id="${index}input" aria-describedby="addNameLabel" value="${field['name']}" placeholder="Nome campo" onchange="updateField(${index})">`;
-                if (index === modalFieldsNames.length - 1) {
-                    fieldsHtml += `<button class="btn btn-outline-primary" type="button" onclick="addField()"><i class="bi bi-plus-circle"></i></button> `;
-                }
-                if (modalFieldsNames.length > 1) {
-                    fieldsHtml += `<button class="btn btn-outline-secondary removeField" type="button" onclick="removeField(${index})"><i class="bi bi-trash3"></i></button> `;
-                }
-                fieldsHtml += `</div>`;
-            })
+            console.log(modalFields);
+            console.log(modalSections);
+            if (!isForm()) {
+                modalFields.forEach((field, fieldIndex) => {
+                    fieldsHtml += '<div class="input-group mb-2"> ' +
+                        `<span class="input-group-text" id="addNameLabel" style="min-width: 110px;">${modalLabelFieldType} ${fieldIndex + 1}</span> ` +
+                        `<input class="form-control field-input" type="text" id="${fieldIndex}input" aria-describedby="addNameLabel" value="${field['name']}" placeholder="Nome campo" onchange="updateField(${fieldIndex})">`;
+                    if (fieldIndex === modalFields.length - 1) {
+                        fieldsHtml += `<button class="btn btn-outline-primary" type="button" onclick="addField()"><i class="bi bi-plus-circle"></i></button> `;
+                    }
+                    if (modalFields.length > 1) {
+                        fieldsHtml += `<button class="btn btn-outline-secondary removeField" type="button" onclick="removeField(${fieldIndex})"><i class="bi bi-trash3"></i></button> `;
+                    }
+                    fieldsHtml += `</div>`;
+                })
+            }
+            else {
+                modalSections.forEach((section, sectionIndex) => {
+                    fieldsHtml += '<div class="input-group mb-2"> ' +
+                        `<span class="input-group-text" id="addSectionLabel" style="min-width: 110px;">Sezione ${sectionIndex + 1}</span> ` +
+                        `<input class="form-control field-check" type="text" id="${sectionIndex}inputSection" aria-describedby="addSectionLabel" value="${section['name']}" placeholder="Nome sezione" onchange="updateSection(${sectionIndex})">`;
+                    if (modalSections.length > 1) {
+                        fieldsHtml += `<button class="btn btn-outline-secondary removeField" type="button" onclick="removeSection(${sectionIndex})"><i class="bi bi-trash3"></i></button> `;
+                    }
+                    fieldsHtml += `</div>`;
+                    section['fields'].forEach((field, fieldIndex) => {
+                        fieldsHtml += `<div class="input-group ${(fieldIndex === section['fields'].length - 1) ? "mb-4" : "mb-2"}"> ` +
+                            `<span class="input-group-text" id="addNameLabel" style="min-width: 110px;">${modalLabelFieldType} ${fieldIndex + 1}</span> ` +
+                            `<input class="form-control field-check" type="text" id="${sectionIndex}${fieldIndex}input" aria-describedby="addNameLabel" value="${field['name']}" placeholder="Nome campo" onchange="updateField('${fieldIndex}','${sectionIndex}')">`;
+                        if (fieldIndex === section['fields'].length - 1) {
+                            fieldsHtml += `<button class="btn btn-outline-primary" type="button" onclick="addField(${sectionIndex})"><i class="bi bi-plus-circle"></i></button> `;
+                        }
+                        if (section['fields'].length > 1) {
+                            fieldsHtml += `<button class="btn btn-outline-secondary removeField" type="button" onclick="removeField('${fieldIndex}', '${sectionIndex}')"><i class="bi bi-trash3"></i></button> `;
+                        }
+                        fieldsHtml += `</div>`;
+                    })
+                });
+                fieldsHtml += `<button class="btn btn-primary w-100 mb-2" type="button" onclick="addSection()">Nuova sezione</button> `;
+            }
             fieldsHtml += `<div class="mb-3"></div>`;
             $("#modalFields").html(fieldsHtml);
         }
 
-        function addField() {
-            modalFieldsNames.push({'id': (modalFieldsNames.length+1)*-1, 'name': ""});
+        function addField(sectionId) {
+            if (sectionId === undefined) {
+                modalFields.push({'id': (modalFields.length + 1) * -1, 'name': ""});
+            }
+            else {
+                modalSections[sectionId]['fields'].push({'id': (modalFields.length + 1) * -1, 'name': ""})
+            }
             loadNewProductFields();
         }
 
-        function removeField(index) {
-            modalDeletedFieldsIds.push(modalFieldsNames[index]);
-            modalFieldsNames.splice(index, 1);
+        function addSection() {
+            modalSections.push({'id': modalSections.length, 'name': "", 'fields': []});
+            addField(modalSections.length - 1);
+        }
+
+        function removeField(fieldIndex, sectionIndex) {
+            if (sectionIndex === undefined) {
+                modalDeletedFields.push(modalFields[fieldIndex]);
+                modalFields.splice(fieldIndex, 1);
+            }
+            else {
+                modalDeletedFields.push({'section': sectionIndex, 'field': modalSections[sectionIndex]['fields'][fieldIndex]});
+                modalSections[sectionIndex]['fields'].splice(fieldIndex, 1);
+            }
             loadNewProductFields();
         }
 
-        function updateField(index) {
-            modalFieldsNames[index]["name"] = $("#" + index + "input").val()
-            modalNewFieldsIds.push(modalFieldsNames[index]);
+        function removeSection(index) {
+            modalDeletedSections.push(modalFields[index]);
+            modalSections.splice(index, 1);
+            loadNewProductFields();
+        }
+
+        function updateField(fieldIndex, sectionIndex) {
+            if (sectionIndex === undefined) {
+                modalFields[fieldIndex]["name"] = $("#" + fieldIndex + "input").val()
+                modalNewFields.push(modalFields[fieldIndex]);
+            }
+            else {
+                modalSections[sectionIndex]["fields"][fieldIndex]["name"] = $("#" + sectionIndex + "" + fieldIndex + "input").val()
+                modalNewFields.push(modalFields[fieldIndex]);
+            }
+        }
+
+        function updateSection(index) {
+            modalSections[index]["name"] = $("#" + index + "inputSection").val()
+            modalDeletedSections.push(modalFields[index]);
+        }
+
+        function isForm() {
+            return modalLabelFieldType === "Domanda"
         }
 
         function checkFields() {
             let canProceed = true;
             $(this).removeClass('is-invalid');
-            $(".field-input").each(function () {
+            $(".field-input .field-check").each(function () {
                 $(this).removeClass('is-invalid');
                 if ($(this).val() === "") {
                     $(this).addClass('is-invalid');
@@ -326,8 +424,7 @@ if (isset($_SESSION['session_id'])) {
         function confirmModalButton() {
             if (modalType === "addProduct") {
                 addProductCategoryToDatabase()
-            }
-            else {
+            } else {
                 updateProductCategoryInDataBase();
             }
         }
@@ -336,9 +433,25 @@ if (isset($_SESSION['session_id'])) {
             if (checkFields()) {
                 suspendProductModal(true);
                 let parameters = {};
+
+                if (isForm()) {
+                    parameters["visualization_type"] = 1;
+                    modalSections.forEach((section, sectionIndex) => {
+                        parameters[sectionIndex + "sectionName"] = section["name"];
+                        section["fields"].forEach((field, fieldIndex) => {
+                            parameters[sectionIndex + "" + fieldIndex + "fieldName"] = field["name"];
+                        });
+                    });
+                }
+                else {
+                    parameters["visualization_type"] = 0;
+                }
+
                 $(".field-input").each(function () {
                     parameters[$(this).attr('id')] = $(this).val();
                 });
+
+                console.log(parameters);
 
                 $.post('../php/productCategory/addProductCategory.php', parameters)
                     .done(function () {
@@ -349,16 +462,19 @@ if (isset($_SESSION['session_id'])) {
                         suspendProductModal(false);
                         modalError(true);
                     })
+                    .always(function (response) {
+                        console.log(response.responseText)
+                    })
             } else {
                 alert("Per procedere è necessario compilare tutti i campi.");
             }
         }
 
         function updateProductCategoryInDataBase() {
-            if (modalDeletedFieldsIds.length > 0 || modalNewFieldsIds.length > 0) {
-                modalNewFieldsIds.forEach((newField, index) => {
-                    if (modalDeletedFieldsIds.indexOf(newField) !== -1) {
-                        modalNewFieldsIds.splice(index, 1);
+            if (modalDeletedFields.length > 0 || modalNewFields.length > 0) {
+                modalNewFields.forEach((newField, index) => {
+                    if (modalDeletedFields.indexOf(newField) !== -1) {
+                        modalNewFields.splice(index, 1);
                     }
                 });
 
@@ -366,18 +482,17 @@ if (isset($_SESSION['session_id'])) {
                 let newFields = 0;
                 let updatedFields = 0;
                 let deletedFields = 0;
-                modalNewFieldsIds.forEach(newField => {
+                modalNewFields.forEach(newField => {
                     if (newField['id'] < 0) {
                         parameters[newFields + "newFieldName"] = newField['name'];
                         newFields++;
-                    }
-                    else {
+                    } else {
                         parameters[updatedFields + "updateFieldId"] = newField['id'];
                         parameters[updatedFields + "updateFieldName"] = newField['name'];
                         updatedFields++;
                     }
                 });
-                modalDeletedFieldsIds.forEach(deletedField => {
+                modalDeletedFields.forEach(deletedField => {
                     parameters[deletedFields + "deleteFieldId"] = deletedField['id'];
                     deletedFields++;
                 });
@@ -401,12 +516,16 @@ if (isset($_SESSION['session_id'])) {
         }
 
         function deleteProductCategoryFromDatabase(productCategoryId) {
+            modalLoading(true);
             $.post('../php/productCategory/deleteProductCategory.php', {id: productCategoryId})
                 .done(function () {
                     modalConfirmation(true);
                 })
                 .fail(function () {
                     modalError(true);
+                })
+                .always(function () {
+                    onlyModalLoading(false);
                 })
         }
 
@@ -433,8 +552,16 @@ if (isset($_SESSION['session_id'])) {
             $("#errorModal").modal(!error ? 'hide' : 'show');
         }
 
+        function hideModal() {
+            $("#productModal").modal('hide');
+        }
+
         function modalLoading(loading) {
             $("#productModal").modal(loading ? 'hide' : 'show');
+            $("#loadingModal").modal(!loading ? 'hide' : 'show');
+        }
+
+        function onlyModalLoading(loading) {
             $("#loadingModal").modal(!loading ? 'hide' : 'show');
         }
 

@@ -2,18 +2,38 @@
 require_once('../connessione.php');
 
 $productCategoryName = $_POST["name"];
+$visualizationType = $_POST["visualization_type"];
 $iconPath = (isset($_POST["icon_path"]) ? $_POST('icon_path') : "");
 
 try {
     $pdo->beginTransaction();
     $pdo->query("INSERT INTO Product_Category (name, visualization_type, icon_image_path) VALUES ('" . $productCategoryName . "', 0, '" . $iconPath . "')");
 
-    $fieldId = 0;
     $newProductCategoryId = $pdo->lastInsertId();
-    while ($_POST[$fieldId . "input"] !== null) {
-        $pdo->query("INSERT INTO Product_Fields (product_category_id, name) VALUES ('" . $newProductCategoryId. "', '" . $_POST[$fieldId . "input"] . "')");
-        $fieldId++;
+
+    if ($visualizationType == 0) {
+        $fieldId = 0;
+        while ($_POST[$fieldId . "input"] !== null) {
+            $pdo->query("INSERT INTO Product_Fields (product_category_id, name) VALUES ('" . $newProductCategoryId . "', '" . $_POST[$fieldId . "input"] . "')");
+            $fieldId++;
+        }
     }
+    else {
+        $sectionId = 0;
+        while ($_POST[$sectionId . "sectionName"] !== null) {
+            $pdo->query("INSERT INTO Form_Sections (name) VALUES ('" . $_POST[$sectionId . "sectionName"] . "')");
+            $newSectionId = $pdo->lastInsertId();
+            echo $newSectionId;
+
+            $fieldId = 0;
+            while ($_POST[$sectionId . $fieldId . "fieldName"] !== null) {
+                $pdo->query("INSERT INTO Form_Fields (product_category_id, question, section_id) VALUES ('" . $newProductCategoryId . "', '" . $_POST[$sectionId . $fieldId . "fieldName"] . "', '" . $sectionId . "')");
+                $fieldId++;
+            }
+            $sectionId++;
+        }
+    }
+
     $pdo->commit();
 } catch (Exception $e) {
     echo $e;
