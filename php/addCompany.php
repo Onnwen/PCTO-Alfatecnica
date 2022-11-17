@@ -23,12 +23,14 @@ $logo = $_FILES["logo"];
 $target_dir_logo = "img/loghi/";
 $target_dir_planimetry = "img/planimetrie/";
 
-$target_file_logo = $target_dir_logo . $nome; # FIXME: Controlla che il file non esista di già!
-$target_file_planimetry = $target_dir_planimetry . $nome; #FIXME: Controlla che il file non esista di già!
+$target_file_logo = $target_dir_logo . $name; # FIXME: Controlla che il file non esista di già!
+$target_file_planimetry = $target_dir_planimetry . $name; #FIXME: Controlla che il file non esista di già!
 
 # TODO: Calcola le dimensioni dell'immagine uploaddata
-$planimetry_image_width = 0;
-$planimetry_image_height = 0;
+$image_data = getimagesize($planimetry_image["tmp_name"]);
+
+$planimetry_image_width = $image_data[0];
+$planimetry_image_height = $image_data[1];
 
 move_uploaded_file($logo["tmp_name"], "/srv/www/PCTO-Alfatecnica-Private/" . $target_file_logo);
 move_uploaded_file($planimetry_image["tmp_name"], "/srv/www/PCTO-Alfatecnica-Private/" . $target_file_planimetry);
