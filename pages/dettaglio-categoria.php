@@ -103,9 +103,9 @@ if(isset($_SESSION['session_id'])) {
                         <?php
                         for($soldProductIndex = 0; $soldProductIndex < count($soldProducts); $soldProductIndex++) {
                             echo "<tr>";
-                            echo "<th>$soldProductIndex</th>";
+                            echo "<td>$soldProductIndex</td>";
                             foreach ($soldProducts[$soldProductIndex] as $field) {
-                                echo "<th scope='col'>{$field['value']}</th>";
+                                echo "<td scope='col'>{$field['value']}</td>";
                             }
                             echo "</tr>";
                         }
