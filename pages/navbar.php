@@ -13,7 +13,7 @@ echo '<nav class="navbar navbar-expand-lg navbar-light" style="background-color:
                     <a class="nav-link" href="lista-anagrafica.php">Anagrafica</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" style="color: red">Revisione</a>
+                    <a class="nav-link" href="revisioni.php">Revisioni</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#" style="color: red">Prodotti</a>
