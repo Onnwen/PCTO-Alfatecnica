@@ -13,12 +13,33 @@ if ($productCategory['visualization_type'] == 0) {
     $productCategoryFields->bindParam(":product_category_id", $_GET['id'], PDO::PARAM_INT);
     $productCategoryFields->execute();
 
-    $productCategory['fields'] = array();
     while ($field = $productCategoryFields->fetch(PDO::FETCH_ASSOC)) {
-        $productCategory['fields'][] = $field;
+        $productCategory['attributes'][] = $field;
     }
 } else {
-    echo "Not supported";
+    $productCategoryFieldsSql = "SELECT field_id as id, question as name, section_id FROM Form_Fields WHERE product_category_id = :product_category_id;";
+    $productCategoryFields = $pdo->prepare($productCategoryFieldsSql);
+    $productCategoryFields->bindParam(":product_category_id", $_GET['id'], PDO::PARAM_INT);
+    $productCategoryFields->execute();
+
+    $previousSectionId = -1;
+    while ($field = $productCategoryFields->fetch(PDO::FETCH_ASSOC)) {
+        if ($previousSectionId != $field['section_id']) {
+            $sectionDataSql = "SELECT name, section_id FROM Form_Sections WHERE section_id = :section_id;";
+            $sectionData = $pdo->prepare($sectionDataSql);
+            $sectionData->bindParam(":section_id", $field['section_id'], PDO::PARAM_INT);
+            $sectionData->execute();
+            $sectionData = $sectionData->fetch(PDO::FETCH_ASSOC);
+
+            $previousSectionId = $sectionData['section_id'];
+            $productCategory['attributes'][] = [
+                "id" => $sectionData['section_id'],
+                "name" => $sectionData['name'],
+                "fields" => array()
+            ];
+        }
+        $productCategory['attributes'][count($productCategory['attributes'])-1]['fields'][] = $field;
+    }
 }
 
 echo json_encode($productCategory);
