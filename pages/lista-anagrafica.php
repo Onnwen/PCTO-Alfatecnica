@@ -359,7 +359,7 @@ if (isset($_SESSION['session_id'])) {
                         '<td style="text-align: center;">' +
                         '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#companyModal" data-bs-whatever="' + resp[i].id + '"><i class="fa-solid fa-pen"></i></button>' +
                         '<button class="btn btn-outline-info" onclick="window.location.href=\'dettaglio-anagrafica.php?id_ana=' + resp[i].id + '\'"><i class="fa-solid fa-circle-info"></i></button>' +
-                        '<button class="btn btn-outline-danger"><i class="fa-solid fa-trash-can"></i></button>' +
+                        '<button class="btn btn-outline-danger" onclick="deleteCompany(' + resp[i].id + ')"><i class="fa-solid fa-trash-can"></i></button>' +
                         '</td>' +
                         '</tr>';
                 }
@@ -434,6 +434,25 @@ if (isset($_SESSION['session_id'])) {
                     suspendCompanyModal(false);
                     modalError(true);
                 },
+            });
+        }
+
+        function deleteCompany(id) {
+            modalLoading(true);
+
+            $.ajax({
+                url: '../php/deleteCompany.php',
+                type: 'post',
+                data: {id: id},
+                success: function(){
+                    modalConfirmation(true);
+                },
+                fail: function(){
+                    modalError(true);
+                },
+                always: function(){
+                    modalLoading(false);
+                }
             });
         }
 
