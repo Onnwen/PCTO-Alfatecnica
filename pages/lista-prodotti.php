@@ -29,6 +29,16 @@ if (isset($_SESSION['session_id'])) {
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <title>Alfatecnica - Lista Prodotti</title>
         <link rel="icon" href="img/logo.png">
+
+        <style>
+            .removeField {
+                display: none;
+            }
+
+            .input-group:hover .removeField {
+                display: inline;
+            }
+        </style>
     </head>
 
     <body>
@@ -196,7 +206,7 @@ if (isset($_SESSION['session_id'])) {
         let modalAttributes = [];
         let modalDeletedAttributes = [];
         let modalNewAttribues = [];
-        
+
         let isEditingProduct = 0;
         let modalLabelMode = "Aggiungi";
         let modalLabelType = "prodotto";
@@ -290,8 +300,7 @@ if (isset($_SESSION['session_id'])) {
                 $(".disabled-with-editing").each(function () {
                     $(this).prop("disabled", false);
                 })
-            }
-            else {
+            } else {
                 $(".hide-with-editing").each(function () {
                     $(this).hide();
                 })
@@ -311,16 +320,15 @@ if (isset($_SESSION['session_id'])) {
                     fieldsHtml += '<div class="input-group mb-2"> ' +
                         `<span class="input-group-text" id="addNameLabel" style="min-width: 110px;">${modalLabelFieldType} ${fieldIndex + 1}</span> ` +
                         `<input class="form-control field-input" type="text" id="${fieldIndex}input" aria-describedby="addNameLabel" value="${field['name']}" placeholder="Nome campo" onchange="updateField(${fieldIndex})">`;
-                    if (fieldIndex === modalAttributes.length - 1) {
-                        fieldsHtml += `<button class="btn btn-outline-primary" type="button" onclick="addField()"><i class="bi bi-plus-circle"></i></button> `;
-                    }
                     if (modalAttributes.length > 1) {
                         fieldsHtml += `<button class="btn btn-outline-secondary removeField" type="button" onclick="removeField(${fieldIndex})"><i class="bi bi-trash3"></i></button> `;
                     }
+                    if (fieldIndex === modalAttributes.length - 1) {
+                        fieldsHtml += `<button class="btn btn-outline-primary" type="button" onclick="addField()"><i class="bi bi-plus-circle"></i></button> `;
+                    }
                     fieldsHtml += `</div>`;
                 })
-            }
-            else {
+            } else {
                 modalAttributes.forEach((section, sectionIndex) => {
                     fieldsHtml += '<div class="input-group mb-2"> ' +
                         `<span class="input-group-text" id="addSectionLabel" style="min-width: 110px;">Sezione ${sectionIndex + 1}</span> ` +
@@ -333,11 +341,11 @@ if (isset($_SESSION['session_id'])) {
                         fieldsHtml += `<div class="input-group ${(fieldIndex === section['fields'].length - 1) ? "mb-4" : "mb-2"}"> ` +
                             `<span class="input-group-text" id="addNameLabel" style="min-width: 110px;">${modalLabelFieldType} ${fieldIndex + 1}</span> ` +
                             `<input class="form-control field-check" type="text" id="${sectionIndex}${fieldIndex}input" aria-describedby="addNameLabel" value="${field['name']}" placeholder="Nome campo" onchange="updateField('${fieldIndex}','${sectionIndex}')">`;
-                        if (fieldIndex === section['fields'].length - 1) {
-                            fieldsHtml += `<button class="btn btn-outline-primary" type="button" onclick="addField(${sectionIndex})"><i class="bi bi-plus-circle"></i></button> `;
-                        }
                         if (section['fields'].length > 1) {
                             fieldsHtml += `<button class="btn btn-outline-secondary removeField" type="button" onclick="removeField('${fieldIndex}', '${sectionIndex}')"><i class="bi bi-trash3"></i></button> `;
+                        }
+                        if (fieldIndex === section['fields'].length - 1) {
+                            fieldsHtml += `<button class="btn btn-outline-primary" type="button" onclick="addField(${sectionIndex})"><i class="bi bi-plus-circle"></i></button> `;
                         }
                         fieldsHtml += `</div>`;
                     })
@@ -351,8 +359,7 @@ if (isset($_SESSION['session_id'])) {
         function addField(sectionId) {
             if (sectionId === undefined) {
                 modalAttributes.push({'id': (modalAttributes.length + 1) * -1, 'name': ""});
-            }
-            else {
+            } else {
                 modalAttributes[sectionId]['fields'].push({'id': (modalAttributes.length + 1) * -1, 'name': ""})
             }
             loadNewProductFields();
@@ -367,9 +374,11 @@ if (isset($_SESSION['session_id'])) {
             if (sectionIndex === undefined) {
                 modalDeletedAttributes.push(modalAttributes[fieldIndex]);
                 modalAttributes.splice(fieldIndex, 1);
-            }
-            else {
-                modalDeletedAttributes.push({'section': sectionIndex, 'field': modalAttributes[sectionIndex]['fields'][fieldIndex]});
+            } else {
+                modalDeletedAttributes.push({
+                    'section': sectionIndex,
+                    'field': modalAttributes[sectionIndex]['fields'][fieldIndex]
+                });
                 modalAttributes[sectionIndex]['fields'].splice(fieldIndex, 1);
             }
             loadNewProductFields();
@@ -385,8 +394,7 @@ if (isset($_SESSION['session_id'])) {
             if (sectionIndex === undefined) {
                 modalAttributes[fieldIndex]["name"] = $("#" + fieldIndex + "input").val()
                 modalNewAttribues.push(modalAttributes[fieldIndex]);
-            }
-            else {
+            } else {
                 modalAttributes[sectionIndex]["fields"][fieldIndex]["name"] = $("#" + sectionIndex + "" + fieldIndex + "input").val()
                 modalNewAttribues.push(modalAttributes[fieldIndex]);
             }
@@ -435,8 +443,7 @@ if (isset($_SESSION['session_id'])) {
                             parameters[sectionIndex + "" + fieldIndex + "fieldName"] = field["name"];
                         });
                     });
-                }
-                else {
+                } else {
                     parameters["visualization_type"] = 0;
                 }
 
