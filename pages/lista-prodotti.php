@@ -206,7 +206,7 @@ if (isset($_SESSION['session_id'])) {
         let modalLabelFieldType = "Campo";
         let modalType = "addProduct";
 
-        const productModal = document.getElementById('productModal')
+        const productModal = document.getElementById('productModal');
         productModal.addEventListener('show.bs.modal', function (event) {
             const button = event.relatedTarget;
             modalType = button.getAttribute('data-bs-whatever');
@@ -239,13 +239,10 @@ if (isset($_SESSION['session_id'])) {
 
                         modalTitle.textContent = modalLabelMode + " " + modalLabelType;
 
-                        $("#name").val(fieldsNames[0]["product_category_name"])
-                        fieldsNames.forEach(fieldName => {
-                            modalFields.push({'name': fieldName['field_name'], 'id': fieldName['field_id']})
-                        });
+                        $("#name").val(fieldsNames["product_category_name"]);
+                        modalFields = fieldsNames["fields"];
 
-                        // modalLabelFieldType = fieldsNames[0]["visualization_type"] == 1 ? "Campo" : "Domanda";
-                        modalLabelFieldType = "Campo";
+                        modalLabelFieldType = fieldsNames["visualization_type"] === 0 ? "Campo" : "Domanda";
 
                         loadNewProductFields();
                     })
