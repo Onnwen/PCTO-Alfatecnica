@@ -170,7 +170,7 @@ if (isset($_SESSION['session_id'])) {
                                 echo "<tr>";
                                 echo "<th class='text-center align-middle'>{$productCategory['name']}</th>";
                                 echo "<th class='text-center align-middle'>" . ($productCategory['visualization_type'] == 0 ? "Prodotto" : "Questionario") . "</th>";
-                                echo '<td class="text-center align-middle"><button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#productModal" data-bs-whatever="' . $productCategory['product_category_id'] . '"><i class="fa-solid fa-pen"></i></button><button class="btn btn-outline-info"><i class="fa-solid fa-circle-info"></i></button><button class="btn btn-outline-danger" onclick="deleteProductCategoryFromDatabase(' . $productCategory['product_category_id'] . ')"><i class="fa-solid fa-trash-can"></i></button></td>';
+                                echo '<td class="text-center align-middle"><button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#productModal" data-bs-whatever="' . $productCategory['product_category_id'] . '"><i class="fa-solid fa-pen"></i></button><button class="btn btn-outline-danger" onclick="deleteProductCategoryFromDatabase(' . $productCategory['product_category_id'] . ')"><i class="fa-solid fa-trash-can"></i></button></td>';
                                 echo "</tr>";
                             }
                             ?>
