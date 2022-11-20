@@ -117,7 +117,7 @@ if (isset($_SESSION['session_id'])) {
                     <div class="col-sm-12 col-md-10 col-lg-8 col-xl-8" >
                         <div class="form-wrap w-100 p-md-5 p-sm-1" style="background: rgba(109,109,109,0.09);width: 500px;border-radius: 20px">
                             <img src="img/logo.png" style="width: 100%;height: auto" alt="logo">
-                            <label id="errorLabel">dsadasd</label>
+                            <label id="errorLabel" style="width: 100%;color: red; text-align: center"></label>
                             <form role="form" action="javascript:0;" method="post" id="login-form" autocomplete="off" >
                                 <div class="form-group">
                                     <label for="emailInput" class="sr-only">Email</label>
@@ -151,11 +151,13 @@ if (isset($_SESSION['session_id'])) {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <label id="emailRetrievePassword" for="recovery-email" class="sr-only">Inserisci il tuo account</label>
-                    <input type="email" name="recovery-email" id="recovery-email" class="form-control" autocomplete="off">
+                    <form>
+                        <label id="emailRetrievePassword" for="recovery-email" class="sr-only">Inserisci il tuo account</label>
+                        <input type="email" name="recovery-email" id="recovery-email" class="form-control" autocomplete="off">
+                    </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Annulla</button>
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Annulla</button>
                     <button id="recoveryButton" type="button" class="btn btn-success">Recupera</button>
                 </div>
             </div>
@@ -351,7 +353,6 @@ if (isset($_SESSION['session_id'])) {
                 if (email.val() === '' || !validateEmail(email.val())) {
                     email.addClass('is-invalid');
                     email.attr('for', 'floatingInputInvalid');
-                    password.addClass('is-invalid');
                     filled = false;
                 } else {
                     email.removeClass('is-invalid');
@@ -360,7 +361,7 @@ if (isset($_SESSION['session_id'])) {
                     //backend
                 }
             });
-        }
+        });
         $('#retrievePassword').on('hide.bs.modal', function (e) {
             document.getElementById("retrievePassword").querySelector('form').reset();
             $('#recovery-email').removeClass('is-invalid');
