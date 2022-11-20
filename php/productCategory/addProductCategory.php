@@ -2,12 +2,12 @@
 require_once('../connessione.php');
 
 $productCategoryName = $_POST["name"];
-$visualizationType = $_POST["visualization_type"];
+$visualizationType = $_POST["type"];
 $iconPath = (isset($_POST["icon_path"]) ? $_POST('icon_path') : "");
 
 try {
     $pdo->beginTransaction();
-    $pdo->query("INSERT INTO Product_Category (name, visualization_type, icon_image_path) VALUES ('" . $productCategoryName . "', '". $visualizationType . "', '" . $iconPath . "')");
+    $pdo->query("INSERT INTO Product_Category (name, type, icon_image_path) VALUES ('" . $productCategoryName . "', '". $visualizationType . "', '" . $iconPath . "')");
 
     $newProductCategoryId = $pdo->lastInsertId();
     $pdo->commit();

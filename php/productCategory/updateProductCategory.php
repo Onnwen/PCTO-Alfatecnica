@@ -2,6 +2,7 @@
 require_once('../connessione.php');
 
 $productCategoryId = $_POST["product_category_id"];
+$productCategoryType = $_POST["type"];
 
 try {
     $pdo->beginTransaction();
