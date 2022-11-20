@@ -62,11 +62,9 @@ INSERT INTO `Companies` VALUES
 (23,'Per testare immagini','awdfds','img/loghi/azienda1.png','fasdfasda',698,'sdfasd','aa','asdkjfhlaks','adlkfsjaskdjf','asdfjasdjfl','aldskjflkasdf','dfjhasdkjfsa','sldkjflkasdjf','asdlkfjlkasdjf','sdlfkjalskdjf',NULL,NULL,NULL),
 (24,'Per testare le immagini parte 2','dafljsdklf','img/loghi/azienda1.png','alskflksdajf',465,'dslkfjasdl','alksdflka','asldfkjlask','asdlfkjaskldf','dfakljsdlkf','asdlkfjlask','asdlkfjlkasd','dslakfjsdlkf','asdlkfalskdf','afsdkljflajsd',NULL,NULL,NULL),
 (25,'Ultima Prova','Afghanistan','img/loghi/azienda1.png','Via dei Talebani, 2',1234,'Kabul','Kabul','NO','osama@binladen.com','Osama Bin Laden','NO','NO','osamabinladen@gmail.com','Terroristi','Attento alla dinamite',NULL,NULL,NULL),
-(26,'LLLL','asdfas','img/loghi/LLLL-MicrosoftTeams-image4.jpg','asdfasd',64,'asdfas','asdf','asdfa','asdf','adfa','asdf','sdf','asdf','asdf','asdf',NULL,NULL,NULL),
 (27,'PLZ','aflksd','img/loghi/PLZ-MicrosoftTeams-image4.jpg','asdlkfj',6546,'asldkfj','alskdjflksadjf','asdlkfjlaskd','asdlkjlksadjf','sdalkfjalkd','alkwdjflaksd','asdkfjlksdaf','asdlkfjlaskdf','asdlkfjskldaf','falksdlkfjad',NULL,NULL,NULL),
 (28,'BNBBN','adfjlaskdfj','img/loghi/BNBBN-MicrosoftTeams-image.jpg','oqiurwohf',54,'asdkfja','asdkjfh','kjadfkjsd','adsfasdkjf','KLHFkjdshfk','lksadjflskdj','sdkjfhajkdf','dsalfsdlkfjsadlkjflasdkfjl','lkasdjfklasdf','lkasdfjlkasdjfl',NULL,NULL,NULL),
 (29,'dfgd','asdfs','img/loghi/dfgd-MicrosoftTeams-image2.jpg','asdf',324,'asdf','asdf','cvbdfgh','rty','asdf','asdfasf','asdf','asdfas','cgwear','vawret',NULL,NULL,NULL),
-(30,'Ultima','asdf','img/loghi/Ultima-MicrosoftTeams-image.jpg','asdf',123,'asdf','asdf','sdf','asdf','asdf','asdf','asdfa','asdf','fasd','asdf',NULL,NULL,NULL),
 (31,'asòàdljkflàaskj','asdfj','img/loghi/asòàdljkflàaskj','sduyiaasdy',23,'sdfyui','sdfs','asdfsdf','asdf','asdfsa','asdf','asdfasdf','sdaf','asdfasdfasdf','asdfasdfsdf','img/planimetrie/asòàdljkflàaskj',1500,2000),
 (32,'LKSKLSJL','wdjkf','img/loghi/LKSKLSJL','asduiosdafasd',23423,'asdfasdf','asdfsdf','asdfasdf','asdfas','anfòkasuy','sdfhdf','asdiufi','wetg','sdalfjkweuio','aweuibn8v','img/planimetrie/LKSKLSJL',1500,2000);
 /*!40000 ALTER TABLE `Companies` ENABLE KEYS */;
@@ -116,7 +114,7 @@ CREATE TABLE `Form_Fields` (
   KEY `Form_Fields_Product_Category_product_category_id_fk` (`product_category_id`),
   CONSTRAINT `Form_Fields_Form_Sections_section_id_fk` FOREIGN KEY (`section_id`) REFERENCES `Form_Sections` (`section_id`) ON DELETE CASCADE,
   CONSTRAINT `Form_Fields_Product_Category_product_category_id_fk` FOREIGN KEY (`product_category_id`) REFERENCES `Product_Category` (`product_category_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -126,8 +124,15 @@ CREATE TABLE `Form_Fields` (
 LOCK TABLES `Form_Fields` WRITE;
 /*!40000 ALTER TABLE `Form_Fields` DISABLE KEYS */;
 INSERT INTO `Form_Fields` VALUES
-(8,42,'CRICANNA',8),
-(9,42,'TERMINALE',9);
+(10,43,'FORM_TEST_1_SECTION_1_QUESTION_1',10),
+(11,43,'FORM_TEST_1_SECTION_1_QUESTION_2',10),
+(12,43,'FORM_TEST_1_SECTION_1_QUESTION_3',10),
+(13,43,'FORM_TEST_1_SECTION_1_QUESTION_4',10),
+(14,43,'FORM_TEST_1_SECTION_2_QUESTION_1',11),
+(15,43,'FORM_TEST_1_SECTION_2_QUESTION_2',11),
+(16,43,'FORM_TEST_1_SECTION_3_QUESTION_1',12),
+(17,43,'FORM_TEST_1_SECTION_3_QUESTION_2',12),
+(18,43,'FORM_TEST_1_SECTION_3_QUESTION_3',12);
 /*!40000 ALTER TABLE `Form_Fields` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -142,7 +147,7 @@ CREATE TABLE `Form_Sections` (
   `section_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`section_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -152,8 +157,11 @@ CREATE TABLE `Form_Sections` (
 LOCK TABLES `Form_Sections` WRITE;
 /*!40000 ALTER TABLE `Form_Sections` DISABLE KEYS */;
 INSERT INTO `Form_Sections` VALUES
-(8,'ALPIDIO'),
-(9,'SCARTA');
+(10,'FORM_TEST_1_SECTION_1'),
+(11,'FORM_TEST_1_SECTION_2'),
+(12,'FORM_TEST_1_SECTION_3'),
+(13,'DELETE'),
+(14,'DELETE');
 /*!40000 ALTER TABLE `Form_Sections` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -167,11 +175,11 @@ DROP TABLE IF EXISTS `Product_Category`;
 CREATE TABLE `Product_Category` (
   `product_category_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) DEFAULT NULL,
-  `visualization_type` int(11) DEFAULT NULL,
+  `type` int(11) DEFAULT NULL,
   `icon_image_path` varchar(100) DEFAULT NULL,
   `revisionMonthDuration` int(11) DEFAULT NULL,
   PRIMARY KEY (`product_category_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -184,10 +192,9 @@ INSERT INTO `Product_Category` VALUES
 (1,'Estintore',0,'img/prodotti/estintore.png',6),
 (2,'Idrante',0,'img/prodotti/idrante.png',6),
 (3,'Testing',0,NULL,6),
-(30,'TEST_PRODUCT',0,'',6),
+(30,'TEST_PRODUCT_1',0,'',6),
 (31,'TEST_PRODUCT_2',0,'',6),
-(40,'ANDREWSCARTA',0,'',6),
-(42,'STORCILOVE',1,'',6);
+(43,'FORM_TEST_1',1,'',NULL);
 /*!40000 ALTER TABLE `Product_Category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -452,4 +459,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-11-19 22:10:51
+-- Dump completed on 2022-11-20 21:53:43
