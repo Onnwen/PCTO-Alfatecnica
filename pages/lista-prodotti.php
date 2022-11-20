@@ -231,7 +231,7 @@ if (isset($_SESSION['session_id'])) {
                 modalLabelMode = "Modifica";
                 $('#productModalConfirmButton').text(modalLabelMode);
 
-                $.get('../php/productCategory/getProductCategoryFields.php', {
+                $.get('../php/productCategory/getProductCategory.php', {
                     id: modalType
                 })
                     .done(function (response) {
