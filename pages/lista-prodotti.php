@@ -193,13 +193,10 @@ if (isset($_SESSION['session_id'])) {
     </body>
 
     <script>
-        let modalFields = [];
-        let modalDeletedFields = [];
-        let modalNewFields = [];
-
-        let modalSections = [];
-        let modalDeletedSections = [];
-
+        let modalAttributes = [];
+        let modalDeletedAttributes = [];
+        let modalNewAttribues = [];
+        
         let isEditingProduct = 0;
         let modalLabelMode = "Aggiungi";
         let modalLabelType = "prodotto";
@@ -240,8 +237,7 @@ if (isset($_SESSION['session_id'])) {
                         modalTitle.textContent = modalLabelMode + " " + modalLabelType;
 
                         $("#name").val(fieldsNames["product_category_name"]);
-                        modalFields = fieldsNames["fields"];
-
+                        modalAttributes = fieldsNames["attributes"];
                         modalLabelFieldType = fieldsNames["visualization_type"] === 0 ? "Campo" : "Domanda";
 
                         loadNewProductFields();
@@ -268,8 +264,8 @@ if (isset($_SESSION['session_id'])) {
             const modalTitle = productModal.querySelector('.modal-title');
             modalTitle.textContent = modalLabelMode + " " + modalLabelType;
             modalLabelFieldType = "Domanda";
-            if (modalSections.length === 0) {
-                modalSections.push({'id': 0, 'name': ""});
+            if (modalAttributes.length === 0) {
+                modalAttributes.push({'id': 0, 'name': ""});
             }
             resetModal();
             addSection();
@@ -277,12 +273,12 @@ if (isset($_SESSION['session_id'])) {
         });
 
         function resetModal() {
-            modalFields = [];
-            modalDeletedFields = [];
-            modalNewFields = [];
+            modalAttributes = [];
+            modalDeletedAttributes = [];
+            modalNewAttribues = [];
 
-            modalSections = [];
-            modalDeletedSections = [];
+            modalAttributes = [];
+            modalDeletedAttributes = [];
 
             $("#name").val("");
 
@@ -308,28 +304,28 @@ if (isset($_SESSION['session_id'])) {
 
         function loadNewProductFields() {
             let fieldsHtml = "";
-            console.log(modalFields);
-            console.log(modalSections);
+            console.log(modalAttributes);
+            console.log(modalAttributes);
             if (!isForm()) {
-                modalFields.forEach((field, fieldIndex) => {
+                modalAttributes.forEach((field, fieldIndex) => {
                     fieldsHtml += '<div class="input-group mb-2"> ' +
                         `<span class="input-group-text" id="addNameLabel" style="min-width: 110px;">${modalLabelFieldType} ${fieldIndex + 1}</span> ` +
                         `<input class="form-control field-input" type="text" id="${fieldIndex}input" aria-describedby="addNameLabel" value="${field['name']}" placeholder="Nome campo" onchange="updateField(${fieldIndex})">`;
-                    if (fieldIndex === modalFields.length - 1) {
+                    if (fieldIndex === modalAttributes.length - 1) {
                         fieldsHtml += `<button class="btn btn-outline-primary" type="button" onclick="addField()"><i class="bi bi-plus-circle"></i></button> `;
                     }
-                    if (modalFields.length > 1) {
+                    if (modalAttributes.length > 1) {
                         fieldsHtml += `<button class="btn btn-outline-secondary removeField" type="button" onclick="removeField(${fieldIndex})"><i class="bi bi-trash3"></i></button> `;
                     }
                     fieldsHtml += `</div>`;
                 })
             }
             else {
-                modalSections.forEach((section, sectionIndex) => {
+                modalAttributes.forEach((section, sectionIndex) => {
                     fieldsHtml += '<div class="input-group mb-2"> ' +
                         `<span class="input-group-text" id="addSectionLabel" style="min-width: 110px;">Sezione ${sectionIndex + 1}</span> ` +
                         `<input class="form-control field-check" type="text" id="${sectionIndex}inputSection" aria-describedby="addSectionLabel" value="${section['name']}" placeholder="Nome sezione" onchange="updateSection(${sectionIndex})">`;
-                    if (modalSections.length > 1) {
+                    if (modalAttributes.length > 1) {
                         fieldsHtml += `<button class="btn btn-outline-secondary removeField" type="button" onclick="removeSection(${sectionIndex})"><i class="bi bi-trash3"></i></button> `;
                     }
                     fieldsHtml += `</div>`;
@@ -354,51 +350,51 @@ if (isset($_SESSION['session_id'])) {
 
         function addField(sectionId) {
             if (sectionId === undefined) {
-                modalFields.push({'id': (modalFields.length + 1) * -1, 'name': ""});
+                modalAttributes.push({'id': (modalAttributes.length + 1) * -1, 'name': ""});
             }
             else {
-                modalSections[sectionId]['fields'].push({'id': (modalFields.length + 1) * -1, 'name': ""})
+                modalAttributes[sectionId]['fields'].push({'id': (modalAttributes.length + 1) * -1, 'name': ""})
             }
             loadNewProductFields();
         }
 
         function addSection() {
-            modalSections.push({'id': modalSections.length, 'name': "", 'fields': []});
-            addField(modalSections.length - 1);
+            modalAttributes.push({'id': modalAttributes.length, 'name': "", 'fields': []});
+            addField(modalAttributes.length - 1);
         }
 
         function removeField(fieldIndex, sectionIndex) {
             if (sectionIndex === undefined) {
-                modalDeletedFields.push(modalFields[fieldIndex]);
-                modalFields.splice(fieldIndex, 1);
+                modalDeletedAttributes.push(modalAttributes[fieldIndex]);
+                modalAttributes.splice(fieldIndex, 1);
             }
             else {
-                modalDeletedFields.push({'section': sectionIndex, 'field': modalSections[sectionIndex]['fields'][fieldIndex]});
-                modalSections[sectionIndex]['fields'].splice(fieldIndex, 1);
+                modalDeletedAttributes.push({'section': sectionIndex, 'field': modalAttributes[sectionIndex]['fields'][fieldIndex]});
+                modalAttributes[sectionIndex]['fields'].splice(fieldIndex, 1);
             }
             loadNewProductFields();
         }
 
         function removeSection(index) {
-            modalDeletedSections.push(modalFields[index]);
-            modalSections.splice(index, 1);
+            modalDeletedAttributes.push(modalAttributes[index]);
+            modalAttributes.splice(index, 1);
             loadNewProductFields();
         }
 
         function updateField(fieldIndex, sectionIndex) {
             if (sectionIndex === undefined) {
-                modalFields[fieldIndex]["name"] = $("#" + fieldIndex + "input").val()
-                modalNewFields.push(modalFields[fieldIndex]);
+                modalAttributes[fieldIndex]["name"] = $("#" + fieldIndex + "input").val()
+                modalNewAttribues.push(modalAttributes[fieldIndex]);
             }
             else {
-                modalSections[sectionIndex]["fields"][fieldIndex]["name"] = $("#" + sectionIndex + "" + fieldIndex + "input").val()
-                modalNewFields.push(modalFields[fieldIndex]);
+                modalAttributes[sectionIndex]["fields"][fieldIndex]["name"] = $("#" + sectionIndex + "" + fieldIndex + "input").val()
+                modalNewAttribues.push(modalAttributes[fieldIndex]);
             }
         }
 
         function updateSection(index) {
-            modalSections[index]["name"] = $("#" + index + "inputSection").val()
-            modalDeletedSections.push(modalFields[index]);
+            modalAttributes[index]["name"] = $("#" + index + "inputSection").val()
+            modalDeletedAttributes.push(modalAttributes[index]);
         }
 
         function isForm() {
@@ -433,7 +429,7 @@ if (isset($_SESSION['session_id'])) {
 
                 if (isForm()) {
                     parameters["visualization_type"] = 1;
-                    modalSections.forEach((section, sectionIndex) => {
+                    modalAttributes.forEach((section, sectionIndex) => {
                         parameters[sectionIndex + "sectionName"] = section["name"];
                         section["fields"].forEach((field, fieldIndex) => {
                             parameters[sectionIndex + "" + fieldIndex + "fieldName"] = field["name"];
@@ -468,10 +464,10 @@ if (isset($_SESSION['session_id'])) {
         }
 
         function updateProductCategoryInDataBase() {
-            if (modalDeletedFields.length > 0 || modalNewFields.length > 0) {
-                modalNewFields.forEach((newField, index) => {
-                    if (modalDeletedFields.indexOf(newField) !== -1) {
-                        modalNewFields.splice(index, 1);
+            if (modalDeletedAttributes.length > 0 || modalNewAttribues.length > 0) {
+                modalNewAttribues.forEach((newField, index) => {
+                    if (modalDeletedAttributes.indexOf(newField) !== -1) {
+                        modalNewAttribues.splice(index, 1);
                     }
                 });
 
@@ -479,7 +475,7 @@ if (isset($_SESSION['session_id'])) {
                 let newFields = 0;
                 let updatedFields = 0;
                 let deletedFields = 0;
-                modalNewFields.forEach(newField => {
+                modalNewAttribues.forEach(newField => {
                     if (newField['id'] < 0) {
                         parameters[newFields + "newFieldName"] = newField['name'];
                         newFields++;
@@ -489,7 +485,7 @@ if (isset($_SESSION['session_id'])) {
                         updatedFields++;
                     }
                 });
-                modalDeletedFields.forEach(deletedField => {
+                modalDeletedAttributes.forEach(deletedField => {
                     parameters[deletedFields + "deleteFieldId"] = deletedField['id'];
                     deletedFields++;
                 });
