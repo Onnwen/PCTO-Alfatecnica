@@ -3,7 +3,7 @@ session_start();
 require_once('../php/connessione.php');
 
 if (isset($_SESSION['session_id'])) {
-    $productsCategorySql = "select product_category_id, name, visualization_type from Product_Category;";
+    $productsCategorySql = "select product_category_id, name, type from Product_Category;";
     $productsCategory = array();
     $pre = $pdo->prepare($productsCategorySql);
     $pre->execute();
@@ -179,7 +179,7 @@ if (isset($_SESSION['session_id'])) {
                             foreach ($productsCategory as $productCategory) {
                                 echo "<tr>";
                                 echo "<th class='text-center align-middle'>{$productCategory['name']}</th>";
-                                echo "<th class='text-center align-middle'>" . ($productCategory['visualization_type'] == 0 ? "Prodotto" : "Questionario") . "</th>";
+                                echo "<th class='text-center align-middle'>" . ($productCategory['type'] == 0 ? "Prodotto" : "Questionario") . "</th>";
                                 echo '<td class="text-center align-middle"><button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#productModal" data-bs-whatever="' . $productCategory['product_category_id'] . '"><i class="fa-solid fa-pen"></i></button><button class="btn btn-outline-danger" onclick="deleteProductCategoryFromDatabase(' . $productCategory['product_category_id'] . ')"><i class="fa-solid fa-trash-can"></i></button></td>';
                                 echo "</tr>";
                             }
@@ -248,7 +248,7 @@ if (isset($_SESSION['session_id'])) {
 
                         $("#name").val(fieldsNames["product_category_name"]);
                         modalAttributes = fieldsNames["attributes"];
-                        modalLabelFieldType = fieldsNames["visualization_type"] === 0 ? "Campo" : "Domanda";
+                        modalLabelFieldType = fieldsNames["type"] === 0 ? "Campo" : "Domanda";
 
                         loadNewProductFields();
                     })
@@ -313,8 +313,6 @@ if (isset($_SESSION['session_id'])) {
 
         function loadNewProductFields() {
             let fieldsHtml = "";
-            console.log(modalAttributes);
-            console.log(modalAttributes);
             if (!isForm()) {
                 modalAttributes.forEach((field, fieldIndex) => {
                     fieldsHtml += '<div class="input-group mb-2"> ' +
@@ -436,7 +434,7 @@ if (isset($_SESSION['session_id'])) {
                 let parameters = {};
 
                 if (isForm()) {
-                    parameters["visualization_type"] = 1;
+                    parameters["type"] = 1;
                     modalAttributes.forEach((section, sectionIndex) => {
                         parameters[sectionIndex + "sectionName"] = section["name"];
                         section["fields"].forEach((field, fieldIndex) => {
@@ -444,14 +442,12 @@ if (isset($_SESSION['session_id'])) {
                         });
                     });
                 } else {
-                    parameters["visualization_type"] = 0;
+                    parameters["type"] = 0;
                 }
 
                 $(".field-input").each(function () {
                     parameters[$(this).attr('id')] = $(this).val();
                 });
-
-                console.log(parameters);
 
                 $.post('../php/productCategory/addProductCategory.php', parameters)
                     .done(function () {
@@ -462,15 +458,17 @@ if (isset($_SESSION['session_id'])) {
                         suspendProductModal(false);
                         modalError(true);
                     })
-                    .always(function (response) {
-                        console.log(response.responseText)
-                    })
             } else {
                 alert("Per procedere è necessario compilare tutti i campi.");
             }
         }
 
         function updateProductCategoryInDataBase() {
+            console.log(modalDeletedAttributes);
+            console.log(modalNewAttribues);
+
+            return;
+
             if (modalDeletedAttributes.length > 0 || modalNewAttribues.length > 0) {
                 modalNewAttribues.forEach((newField, index) => {
                     if (modalDeletedAttributes.indexOf(newField) !== -1) {
@@ -497,8 +495,6 @@ if (isset($_SESSION['session_id'])) {
                     deletedFields++;
                 });
 
-                console.log(parameters)
-
                 suspendProductModal(true);
                 $.post('../php/productCategory/updateProductCategory.php', parameters)
                     .done(function () {
@@ -508,9 +504,6 @@ if (isset($_SESSION['session_id'])) {
                     .fail(function () {
                         suspendProductModal(false);
                         modalError(true);
-                    })
-                    .always(function (response) {
-                        console.log(response.responseText)
                     })
             }
         }
