@@ -250,6 +250,10 @@ if (isset($_SESSION['session_id'])) {
                         modalAttributes = fieldsNames["attributes"];
                         modalLabelFieldType = fieldsNames["type"] === 0 ? "Campo" : "Domanda";
 
+                        if (fieldsNames["type"] === 1) {
+                            $("#productModalConfirmButton").prop("disabled",true);
+                        }
+
                         loadNewProductFields();
                     })
                     .fail(function () {
@@ -291,6 +295,7 @@ if (isset($_SESSION['session_id'])) {
             modalDeletedAttributes = [];
 
             $("#name").val("");
+            $("#productModalConfirmButton").prop("disabled",false);
 
             if (modalType === "addProduct") {
                 $(".hide-with-editing").each(function () {
@@ -394,13 +399,18 @@ if (isset($_SESSION['session_id'])) {
                 modalNewAttribues.push(modalAttributes[fieldIndex]);
             } else {
                 modalAttributes[sectionIndex]["fields"][fieldIndex]["name"] = $("#" + sectionIndex + "" + fieldIndex + "input").val()
-                modalNewAttribues.push(modalAttributes[fieldIndex]);
+                modalNewAttribues.push(modalAttributes[sectionIndex]["fields"][fieldIndex]);
+                modalNewAttribues.at(-1)['isSection'] = false;
             }
         }
 
         function updateSection(index) {
             modalAttributes[index]["name"] = $("#" + index + "inputSection").val()
-            modalDeletedAttributes.push(modalAttributes[index]);
+            modalNewAttribues.push({
+                'name': modalAttributes[index]["name"],
+                'id': modalAttributes[index]["id"],
+                'isSection': true
+            });
         }
 
         function isForm() {
@@ -464,22 +474,21 @@ if (isset($_SESSION['session_id'])) {
         }
 
         function updateProductCategoryInDataBase() {
-            console.log(modalDeletedAttributes);
-            console.log(modalNewAttribues);
+            let parameters = {"product_category_id": isEditingProduct, "name": $("#name").val()};
 
-            return;
-
-            if (modalDeletedAttributes.length > 0 || modalNewAttribues.length > 0) {
+            if (isForm()) {
+                console.log("Not supported");
+            } else {
                 modalNewAttribues.forEach((newField, index) => {
                     if (modalDeletedAttributes.indexOf(newField) !== -1) {
                         modalNewAttribues.splice(index, 1);
                     }
                 });
 
-                let parameters = {"product_category_id": isEditingProduct};
                 let newFields = 0;
                 let updatedFields = 0;
                 let deletedFields = 0;
+
                 modalNewAttribues.forEach(newField => {
                     if (newField['id'] < 0) {
                         parameters[newFields + "newFieldName"] = newField['name'];
@@ -494,18 +503,18 @@ if (isset($_SESSION['session_id'])) {
                     parameters[deletedFields + "deleteFieldId"] = deletedField['id'];
                     deletedFields++;
                 });
-
-                suspendProductModal(true);
-                $.post('../php/productCategory/updateProductCategory.php', parameters)
-                    .done(function () {
-                        suspendProductModal(false);
-                        modalConfirmation(true);
-                    })
-                    .fail(function () {
-                        suspendProductModal(false);
-                        modalError(true);
-                    })
             }
+
+            suspendProductModal(true);
+            $.post('../php/productCategory/updateProductCategory.php', parameters)
+                .done(function () {
+                    suspendProductModal(false);
+                    modalConfirmation(true);
+                })
+                .fail(function () {
+                    suspendProductModal(false);
+                    modalError(true);
+                })
         }
 
         function deleteProductCategoryFromDatabase(productCategoryId) {
