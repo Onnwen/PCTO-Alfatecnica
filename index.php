@@ -22,7 +22,6 @@ if (isset($_SESSION['session_id'])) {
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
         <script src="https://kit.fontawesome.com/c0c3eed4d9.js" crossorigin="anonymous"></script>
-        <script src="https://www.myersdaily.org/joseph/javascript/md5.js"></script>
         <link rel="stylesheet" href="./css/login.css">
         <title>Alfatecnica - Accedi</title>
     </head>
@@ -100,9 +99,7 @@ if (isset($_SESSION['session_id'])) {
                 passwordLabel.attr('for', 'floatingInputInvalid');
                 passwordLabel.html('Invalid Password');
             } else {
-                let pwMd5 = md5(md5(password.val()));
-                console.log(pwMd5);
-                $.post('php/login/login.php', {email: email.val(), pw: pwMd5}, function (resp) {
+                $.post('php/login/login.php', {email: email.val(), pw: password.val()}, function (resp) {
                     if (resp === 'userWrong') {
                         errorMessage.html('Credenziali errate');
                         $('#passwordInput, #emailInput').addClass('is-invalid');
