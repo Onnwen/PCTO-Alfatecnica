@@ -6,6 +6,8 @@ $surname = isset($_POST['surname']) ? $_POST['surname'] : '';
 $email = isset($_POST['email']) ? $_POST['email'] : '';
 $password = isset($_POST['password']) ? $_POST['password'] : '';
 $companyCode = isset($_POST['companyCode']) ? $_POST['companyCode'] : '';
+$password = password_hash($password,PASSWORD_DEFAULT);
+
 $insertUser =
     "INSERT INTO Users (`email`,`hashed_password`,`first_name`,`last_name`,`role`)
         values ('".$email."' , '".$password."' , '".$name."' , '".$surname."' , 1)"; //after everyone must be only user and not admin(1)
@@ -15,6 +17,7 @@ $insertUser_Company =
 $select = "SELECT email
            FROM Users
            WHERE email = '". $email ."';";
+
 $pre = $pdo->prepare($select);
 $pre->execute();
 $check = $pre->fetch(PDO::FETCH_ASSOC);

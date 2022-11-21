@@ -12,7 +12,6 @@ if (isset($_SESSION['session_id'])) {
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
-        <script src="https://www.myersdaily.org/joseph/javascript/md5.js"></script>
         <style>
             #login {
                 padding-top: 50px;
@@ -255,8 +254,7 @@ if (isset($_SESSION['session_id'])) {
             } else if (password.val() === '') {
                 errorMessage.html('Password non inserita');
             } else {
-                let pwMd5 = md5(md5(password.val()));
-                $.post('php/login/login.php', {email: email.val(), pw: pwMd5}, function (resp) {
+                $.post('php/login/login.php', {email: email.val(), pw: password.val()}, function (resp) {
                     if (resp === 'userWrong') {
                         errorMessage.html('Credenziali errate');
                         $('#passwordInput, #emailInput').addClass('is-invalid');
@@ -315,8 +313,7 @@ if (isset($_SESSION['session_id'])) {
                     companyCode.removeClass('is-invalid');
                 }
                 if (allFilled){
-                    let pwMd5 = md5(md5(password.val()));
-                    $.post('php/login/registration.php', {name: name.val(), surname: surname.val(),email: email.val(), password: pwMd5, companyCode: companyCode.val().toString()})
+                    $.post('php/login/registration.php', {name: name.val(), surname: surname.val(),email: email.val(), password: password.val(), companyCode: companyCode.val().toString()})
                         .done(function (resp){
                             if (resp === 'userAlreadyRegistered') { //significherà che l'utente è gia presente quindi fara tornare alla pagina login con un modal
                                 $('#errorRegistrationLabel').html("Le credenziali che hai inserito sono già presenti nel nostro database, esegui il login per poter accedere ai nostri servizi.");
