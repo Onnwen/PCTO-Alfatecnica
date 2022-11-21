@@ -30,6 +30,7 @@ if(!$check){
         exit;
     }
 }else{
-    echo "utenteGiàRegistrato";
+    echo "userAlreadyRegistered";
+    exit;
 }
 ?>

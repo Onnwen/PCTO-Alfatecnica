@@ -231,7 +231,7 @@ if (isset($_SESSION['session_id'])) {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    La tua registrazione non è andata come ci aspetavamo. Qualcosa è andato storto, contattaci per risolvere il problema.
+                    <label id="errorRegistrationLabel">La tua registrazione non è andata come ci aspetavamo. Qualcosa è andato storto, contattaci per risolvere il problema.</label>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
@@ -318,10 +318,10 @@ if (isset($_SESSION['session_id'])) {
                     let pwMd5 = md5(md5(password.val()));
                     $.post('php/login/registration.php', {name: name.val(), surname: surname.val(),email: email.val(), password: pwMd5, companyCode: companyCode.val().toString()})
                         .done(function (resp){
-                            if (resp === 'userWrong') { //significherà che l'utente è gia presente quindi fara tornare alla pagina login con un modal
-                                $('#afterRegistrationLabel').html("Le credenziali che hai inserito sono già presenti nel nostro database, esegui il login per poter accedere ai nostri servizi.");
+                            if (resp === 'userAlreadyRegistered') { //significherà che l'utente è gia presente quindi fara tornare alla pagina login con un modal
+                                $('#errorRegistrationLabel').html("Le credenziali che hai inserito sono già presenti nel nostro database, esegui il login per poter accedere ai nostri servizi.");
                                 $('#registrationModal').modal('hide');
-                                $('#justRegistered').modal('show');
+                                $('#errorModal').modal('show');
                             } else {
                                 $('#afterRegistrationLabel').html("La registrazione è avvenuta con successo. Riceverai una mail in cui dovrai confermare la tua registrazione.");
                                 $('#registrationModal').modal('hide');
@@ -329,6 +329,7 @@ if (isset($_SESSION['session_id'])) {
                             }
                         })
                         .fail(function (){
+                            $('#errorRegistrationLabel').html("La tua registrazione non è andata come ci aspetavamo. Qualcosa è andato storto, contattaci per risolvere il problema.");
                             $('#registrationModal').modal('hide');
                             $("#errorModal").modal('show');
                         })
