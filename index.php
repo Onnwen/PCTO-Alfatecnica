@@ -316,7 +316,7 @@ if (isset($_SESSION['session_id'])) {
                 }
                 if (allFilled){
                     let pwMd5 = md5(md5(password.val()));
-                    $.post('php/login/registration.php', {name: name.val(), surname: surname.val(),email: email.val(), password: pwMd5, companyCode: companyCode.val()})
+                    $.post('php/login/registration.php', {name: name.val(), surname: surname.val(),email: email.val(), password: pwMd5, companyCode: companyCode.val().toString()})
                         .done(function (resp){
                             if (resp === 'userWrong') { //significherà che l'utente è gia presente quindi fara tornare alla pagina login con un modal
                                 $('#afterRegistrationLabel').html("Le credenziali che hai inserito sono già presenti nel nostro database, esegui il login per poter accedere ai nostri servizi.");
