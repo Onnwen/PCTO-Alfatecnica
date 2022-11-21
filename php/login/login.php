@@ -10,7 +10,6 @@ $select = "SELECT email, hashed_password AS password
            WHERE email = :email";
 $pre = $pdo->prepare($select);
 $pre->bindParam(':email', $email, PDO::PARAM_STR);
-$pre->bindParam(':pw', $pw, PDO::PARAM_STR);
 $pre->execute();
 $check = $pre->fetch(PDO::FETCH_ASSOC);
 if(!$check){

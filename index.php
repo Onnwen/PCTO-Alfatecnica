@@ -117,7 +117,7 @@ if (isset($_SESSION['session_id'])) {
                         <div class="form-wrap w-100 p-md-5 p-sm-1" style="background: rgba(109,109,109,0.09);width: 500px;border-radius: 20px">
                             <img src="img/logo.png" style="width: 100%;height: auto" alt="logo">
                             <label id="errorLabel" style="width: 100%;color: red; text-align: center"></label>
-                            <form role="form" action="javascript:0;" method="post" id="login-form" autocomplete="off" >
+                            <form role="form" action="javascript:0;" method="post" id="login-form" autocomplete="on" >
                                 <div class="form-group">
                                     <label for="emailInput" class="sr-only">Email</label>
                                     <input type="email" name="email" id="emailInput" class="form-control" placeholder="Inserire mail">
