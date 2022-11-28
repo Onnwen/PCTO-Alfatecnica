@@ -472,10 +472,7 @@ if(isset($_SESSION['session_id'])){
 
         <!-- FOOTER -->
 
-        <hr>
-        <footer class="py-3 my-4">
-          <p class="text-center text-muted ">© 2022 Alfatecnica, Inc</p>
-        </footer>
+<?php require_once("footer.php"); ?>
     </body>
 </html>
     <?php

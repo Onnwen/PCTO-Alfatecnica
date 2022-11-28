@@ -26,7 +26,7 @@ CREATE TABLE `Companies` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   `site` varchar(100) NOT NULL,
-  `path_logo` varchar(40) NOT NULL,
+  `path_logo` varchar(100) DEFAULT NULL,
   `address` varchar(150) NOT NULL,
   `CAP` int(10) NOT NULL,
   `city` varchar(50) NOT NULL,
@@ -43,7 +43,7 @@ CREATE TABLE `Companies` (
   `planimetry_image_width` int(11) DEFAULT NULL,
   `planimetry_image_height` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -62,9 +62,11 @@ INSERT INTO `Companies` VALUES
 (23,'Per testare immagini','awdfds','img/loghi/azienda1.png','fasdfasda',698,'sdfasd','aa','asdkjfhlaks','adlkfsjaskdjf','asdfjasdjfl','aldskjflkasdf','dfjhasdkjfsa','sldkjflkasdjf','asdlkfjlkasdjf','sdlfkjalskdjf',NULL,NULL,NULL),
 (24,'Per testare le immagini parte 2','dafljsdklf','img/loghi/azienda1.png','alskflksdajf',465,'dslkfjasdl','alksdflka','asldfkjlask','asdlfkjaskldf','dfakljsdlkf','asdlkfjlask','asdlkfjlkasd','dslakfjsdlkf','asdlkfalskdf','afsdkljflajsd',NULL,NULL,NULL),
 (25,'Ultima Prova','Afghanistan','img/loghi/azienda1.png','Via dei Talebani, 2',1234,'Kabul','Kabul','NO','osama@binladen.com','Osama Bin Laden','NO','NO','osamabinladen@gmail.com','Terroristi','Attento alla dinamite',NULL,NULL,NULL),
-(26,'LLLL','asdfas','img/loghi/LLLL-MicrosoftTeams-image4.jpg','asdfasd',64,'asdfas','asdf','asdfa','asdf','adfa','asdf','sdf','asdf','asdf','asdf',NULL,NULL,NULL),
 (27,'PLZ','aflksd','img/loghi/PLZ-MicrosoftTeams-image4.jpg','asdlkfj',6546,'asldkfj','alskdjflksadjf','asdlkfjlaskd','asdlkjlksadjf','sdalkfjalkd','alkwdjflaksd','asdkfjlksdaf','asdlkfjlaskdf','asdlkfjskldaf','falksdlkfjad',NULL,NULL,NULL),
-(28,'BNBBN','adfjlaskdfj','img/loghi/BNBBN-MicrosoftTeams-image.jpg','oqiurwohf',54,'asdkfja','asdkjfh','kjadfkjsd','adsfasdkjf','KLHFkjdshfk','lksadjflskdj','sdkjfhajkdf','dsalfsdlkfjsadlkjflasdkfjl','lkasdjfklasdf','lkasdfjlkasdjfl',NULL,NULL,NULL);
+(28,'BNBBN','adfjlaskdfj','img/loghi/BNBBN-MicrosoftTeams-image.jpg','oqiurwohf',54,'asdkfja','asdkjfh','kjadfkjsd','adsfasdkjf','KLHFkjdshfk','lksadjflskdj','sdkjfhajkdf','dsalfsdlkfjsadlkjflasdkfjl','lkasdjfklasdf','lkasdfjlkasdjfl',NULL,NULL,NULL),
+(29,'dfgd','asdfs','img/loghi/dfgd-MicrosoftTeams-image2.jpg','asdf',324,'asdf','asdf','cvbdfgh','rty','asdf','asdfasf','asdf','asdfas','cgwear','vawret',NULL,NULL,NULL),
+(31,'asòàdljkflàaskj','asdfj','img/loghi/asòàdljkflàaskj','sduyiaasdy',23,'sdfyui','sdfs','asdfsdf','asdf','asdfsa','asdf','asdfasdf','sdaf','asdfasdfasdf','asdfasdfsdf','img/planimetrie/asòàdljkflàaskj',1500,2000),
+(32,'LKSKLSJL','wdjkf','img/loghi/LKSKLSJL','asduiosdafasd',23423,'asdfasdf','asdfsdf','asdfasdf','asdfas','anfòkasuy','sdfhdf','asdiufi','wetg','sdalfjkweuio','aweuibn8v','img/planimetrie/LKSKLSJL',1500,2000);
 /*!40000 ALTER TABLE `Companies` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -110,9 +112,9 @@ CREATE TABLE `Form_Fields` (
   PRIMARY KEY (`field_id`),
   KEY `Form_Fields_Form_Sections_section_id_fk` (`section_id`),
   KEY `Form_Fields_Product_Category_product_category_id_fk` (`product_category_id`),
-  CONSTRAINT `Form_Fields_Form_Sections_section_id_fk` FOREIGN KEY (`section_id`) REFERENCES `Form_Sections` (`section_id`) ON UPDATE CASCADE,
-  CONSTRAINT `Form_Fields_Product_Category_product_category_id_fk` FOREIGN KEY (`product_category_id`) REFERENCES `Product_Category` (`product_category_id`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  CONSTRAINT `Form_Fields_Form_Sections_section_id_fk` FOREIGN KEY (`section_id`) REFERENCES `Form_Sections` (`section_id`) ON DELETE CASCADE,
+  CONSTRAINT `Form_Fields_Product_Category_product_category_id_fk` FOREIGN KEY (`product_category_id`) REFERENCES `Product_Category` (`product_category_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -121,6 +123,16 @@ CREATE TABLE `Form_Fields` (
 
 LOCK TABLES `Form_Fields` WRITE;
 /*!40000 ALTER TABLE `Form_Fields` DISABLE KEYS */;
+INSERT INTO `Form_Fields` VALUES
+(10,43,'FORM_TEST_1_SECTION_1_QUESTION_1',10),
+(11,43,'FORM_TEST_1_SECTION_1_QUESTION_2',10),
+(12,43,'FORM_TEST_1_SECTION_1_QUESTION_3',10),
+(13,43,'FORM_TEST_1_SECTION_1_QUESTION_4',10),
+(14,43,'FORM_TEST_1_SECTION_2_QUESTION_1',11),
+(15,43,'FORM_TEST_1_SECTION_2_QUESTION_2',11),
+(16,43,'FORM_TEST_1_SECTION_3_QUESTION_1',12),
+(17,43,'FORM_TEST_1_SECTION_3_QUESTION_2',12),
+(18,43,'FORM_TEST_1_SECTION_3_QUESTION_3',12);
 /*!40000 ALTER TABLE `Form_Fields` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -135,7 +147,7 @@ CREATE TABLE `Form_Sections` (
   `section_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`section_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -144,6 +156,12 @@ CREATE TABLE `Form_Sections` (
 
 LOCK TABLES `Form_Sections` WRITE;
 /*!40000 ALTER TABLE `Form_Sections` DISABLE KEYS */;
+INSERT INTO `Form_Sections` VALUES
+(10,'FORM_TEST_1_SECTION_1'),
+(11,'FORM_TEST_1_SECTION_2'),
+(12,'FORM_TEST_1_SECTION_3'),
+(13,'DELETE'),
+(14,'DELETE');
 /*!40000 ALTER TABLE `Form_Sections` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -157,10 +175,11 @@ DROP TABLE IF EXISTS `Product_Category`;
 CREATE TABLE `Product_Category` (
   `product_category_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) DEFAULT NULL,
-  `visualization_type` int(11) DEFAULT NULL,
+  `type` int(11) DEFAULT NULL,
   `icon_image_path` varchar(100) DEFAULT NULL,
+  `revisionMonthDuration` int(11) DEFAULT NULL,
   PRIMARY KEY (`product_category_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -170,9 +189,12 @@ CREATE TABLE `Product_Category` (
 LOCK TABLES `Product_Category` WRITE;
 /*!40000 ALTER TABLE `Product_Category` DISABLE KEYS */;
 INSERT INTO `Product_Category` VALUES
-(1,'Estintore',NULL,'img/prodotti/estintore.png'),
-(2,'Idrante',NULL,'img/prodotti/idrante.png'),
-(3,'Testing',NULL,NULL);
+(1,'Estintore',0,'img/prodotti/estintore.png',6),
+(2,'Idrante',0,'img/prodotti/idrante.png',6),
+(3,'Testing',0,NULL,6),
+(30,'TEST_PRODUCT_1',0,'',6),
+(31,'TEST_PRODUCT_2',0,'',6),
+(43,'FORM_TEST_1',1,'',NULL);
 /*!40000 ALTER TABLE `Product_Category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -184,13 +206,13 @@ DROP TABLE IF EXISTS `Product_Data`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Product_Data` (
-  `sold_product_id` int(11) DEFAULT NULL,
-  `field_id` int(11) DEFAULT NULL,
-  `value` varchar(100) DEFAULT NULL,
+  `sold_product_id` int(11) NOT NULL,
+  `field_id` int(11) NOT NULL,
+  `value` varchar(100) NOT NULL,
   KEY `Product_Data_Product_Fields_field_id_fk` (`field_id`),
   KEY `Product_Data_Sold_Products_sold_product_id_fk` (`sold_product_id`),
-  CONSTRAINT `Product_Data_Product_Fields_field_id_fk` FOREIGN KEY (`field_id`) REFERENCES `Product_Fields` (`field_id`) ON UPDATE CASCADE,
-  CONSTRAINT `Product_Data_Sold_Products_sold_product_id_fk` FOREIGN KEY (`sold_product_id`) REFERENCES `Sold_Products` (`sold_product_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `Product_Data_Product_Fields_field_id_fk` FOREIGN KEY (`field_id`) REFERENCES `Product_Fields` (`field_id`),
+  CONSTRAINT `Product_Data_Sold_Products_sold_product_id_fk` FOREIGN KEY (`sold_product_id`) REFERENCES `Sold_Products` (`sold_product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -256,11 +278,13 @@ DROP TABLE IF EXISTS `Product_Fields`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Product_Fields` (
-  `field_id` int(11) NOT NULL,
-  `product_category_id` int(11) DEFAULT NULL,
-  `name` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`field_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `field_id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_category_id` int(11) NOT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`field_id`),
+  KEY `Product_Fields_Product_Category_product_category_id_fk` (`product_category_id`),
+  CONSTRAINT `Product_Fields_Product_Category_product_category_id_fk` FOREIGN KEY (`product_category_id`) REFERENCES `Product_Category` (`product_category_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1518 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -288,8 +312,13 @@ INSERT INTO `Product_Fields` VALUES
 (17,2,'Esercizio'),
 (18,2,'Dislocazione'),
 (19,2,'Tipo manutenzione'),
-(21,3,'TestingField1'),
-(22,3,'TestingField2');
+(22,3,'TestingField1'),
+(1508,3,'TestingField2'),
+(1510,3,'TestingField3'),
+(1511,3,'TestingField4'),
+(1515,30,'TEST_PRODUCT_FIELD_1'),
+(1516,30,'TEST_PRODUCT_FIELD_2'),
+(1517,30,'TEST_PRODUCT_FIELD_3');
 /*!40000 ALTER TABLE `Product_Fields` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -430,4 +459,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-11-15 18:34:33
+-- Dump completed on 2022-11-20 21:53:43

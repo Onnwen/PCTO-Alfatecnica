@@ -98,7 +98,6 @@ if (isset($_SESSION['session_id'])) {
             .form-control {
                 color: #212121;
             }
-
             .btn-success{
                 background-color: #1fa67b;
                 border-color: #1fa67b;
