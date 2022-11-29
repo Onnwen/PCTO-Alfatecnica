@@ -10,7 +10,7 @@ if (isset($_SESSION['session_id'])) {
         $result = $pdo->prepare($query);
         $result->execute();
         $idUser = $result->fetchAll(PDO::FETCH_ASSOC);
-    }
+
 ?>
     <html>
 
@@ -51,4 +51,6 @@ if (isset($_SESSION['session_id'])) {
 
     </html>
 <?php
-} ?>
+    }
+}
+ ?>
