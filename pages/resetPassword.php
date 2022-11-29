@@ -8,7 +8,6 @@ if(isset($_SESSION['session_id'])){
         $result = $pdo->prepare($query);
         $result->execute();
         $result->fetchAll(PDO::FETCH_ASSOC);
-
         $idUser = $result;
     }
     ?>
@@ -37,6 +36,7 @@ if(isset($_SESSION['session_id'])){
 
     <script>
         updateInDataBase(){
+            console.log(<?php echo $result ?>);
             console.log(<?php echo $idUser ?>);
         }
     </script>
