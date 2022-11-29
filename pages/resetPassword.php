@@ -1,9 +1,11 @@
 <?php
 session_start();
-require_once("../php/connessione.php");
-if(isset($_SESSION['session_id'])){
+require_once('php/connessione.php');
+if (isset($_SESSION['session_id'])) {
+    header('location: pages/lista-anagrafica.php');
+} else {
     $stringPasswordRetriver = isset($_GET['stringPasswordRetriver']) ? $_GET['stringPasswordRetriver'] : '';
-    if(isset($stringPasswordRetriver)){
+    if(isset($stringPasswordRetriver)) {
         $query = "SELECT user_id as idUser FROM User WHERE stringRetrivePasword = $stringPasswordRetriver";
         $result = $pdo->prepare($query);
         $result->execute();
@@ -35,6 +37,11 @@ if(isset($_SESSION['session_id'])){
     <button onclick="updateInDataBase()">Conferma</button>
 
     <script>
+        const validatePassword = (password) => {
+            return password.match(
+                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+            );
+        };
         updateInDataBase(){
             console.log(<?php echo $result ?>);
             console.log(<?php echo $idUser ?>);
@@ -42,9 +49,5 @@ if(isset($_SESSION['session_id'])){
     </script>
     </body>
     </html>
-
-    <?php
-} else {
-    echo "<script>window.location.replace('../index.php');</script>";
-}
-?>
+<?php
+    } ?>
