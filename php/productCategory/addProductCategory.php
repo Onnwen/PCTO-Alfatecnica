@@ -3,7 +3,18 @@ require_once('../connessione.php');
 
 $productCategoryName = $_POST["name"];
 $visualizationType = $_POST["type"];
-$iconPath = (isset($_POST["icon_path"]) ? $_POST('icon_path') : "");
+
+$icon_image = (isset($_POST["icon"]) ? $_POST('icon') : "");
+
+if (isset($_POST["icon"])) {
+    $icon_image = $_FILES["icon"];
+    $target_dir_icon = "img/prodotti/";
+    $target_file_icon = $target_dir_icon . $productCategoryName;
+    $image_data = getimagesize($icon_image["tmp_name"]);
+    $logo_image_width = $image_data[0];
+    $logo_image_height = $image_data[1];
+    move_uploaded_file($icon_image["tmp_name"], "/srv/www/PCTO-Alfatecnica-Private/" . $target_file_icon);
+}
 
 try {
     $pdo->beginTransaction();
