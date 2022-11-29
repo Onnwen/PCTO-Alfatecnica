@@ -10,7 +10,7 @@ if (isset($_SESSION['session_id'])) {
         $result = $pdo->prepare($query);
         $result->execute();
         $idUser = $result->fetchAll(PDO::FETCH_ASSOC);
-
+        $idUser = $idUser[0]["idUser"];
 ?>
     <html>
 
@@ -38,13 +38,16 @@ if (isset($_SESSION['session_id'])) {
         <button onclick="updateInDataBase()">Conferma</button>
 
         <script>
+            const idUser = <?php echo $idUser?>
+            const newPassword = $('#newPassword');
+            const confirmPassword = $('#confirmPassword');
             const validatePassword = (password) => {
                 return password.match(
                     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
                 );
             };
             updateInDataBase() {
-                console.log(<?php echo $idUser[0]["idUser"] ?>);
+
             }
         </script>
     </body>
