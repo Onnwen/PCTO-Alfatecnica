@@ -245,8 +245,8 @@ if (isset($_SESSION['session_id'])) {
         };
 
         const validatePassword = (password) => {
-            return email.match(
-                /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            return password.match(
+                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
             );
         };
 
@@ -304,7 +304,7 @@ if (isset($_SESSION['session_id'])) {
                 } else {
                     email.removeClass('is-invalid');
                 }
-                if (password.val() === '') {
+                if (password.val() === '' || !validatePassword(password.val())) {
                     password.addClass('is-invalid');
                     password.attr('for', 'floatingInputInvalid');
                     allFilled = false;
