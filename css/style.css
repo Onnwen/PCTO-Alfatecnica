@@ -15,6 +15,11 @@ html{
 
 /* LOGIN */
 
+.highlighted {
+    color: red;
+    font-weight: 400;
+}
+
 .form-signin {
     width: 100%;
     max-width: 330px;
