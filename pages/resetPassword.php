@@ -1,19 +1,19 @@
 <?php
 session_start();
-require_once('php/connessione.php');
+require_once('../php/connessione.php');
 if (isset($_SESSION['session_id'])) {
     header('location: pages/lista-anagrafica.php');
 } else {
     $stringPasswordRetriver = isset($_GET['stringPasswordRetriver']) ? $_GET['stringPasswordRetriver'] : '';
-    if(isset($stringPasswordRetriver)) {
-        $query = "SELECT user_id as idUser FROM User WHERE stringRetrivePasword = $stringPasswordRetriver";
+    if (isset($stringPasswordRetriver)) {
+        $query = "SELECT user_id as idUser FROM Users WHERE stringRetrivePassword = '$stringPasswordRetriver'";
         $result = $pdo->prepare($query);
         $result->execute();
-        $result->fetchAll(PDO::FETCH_ASSOC);
-        $idUser = $result;
+        $idUser = $result->fetchAll(PDO::FETCH_ASSOC);
     }
-    ?>
+?>
     <html>
+
     <head>
         <title>Recupera password</title>
         <meta charset="UTF-8">
@@ -26,28 +26,29 @@ if (isset($_SESSION['session_id'])) {
         <script src="https://kit.fontawesome.com/c0c3eed4d9.js" crossorigin="anonymous"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
     </head>
-    <body>
-    <p>Reimposta Password</p>
-    <form>
-        <label for="newPassword">Nuova password:</label>
-        <input type="text" value="Nuova password" id="newPassword"><br>
-        <label for="confirmPassword">Conferma password:</label>
-        <input type="text" value="Conferma password" id="confirmPassword"><br>
-    </form>
-    <button onclick="updateInDataBase()">Conferma</button>
 
-    <script>
-        const validatePassword = (password) => {
-            return password.match(
-                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
-            );
-        };
-        updateInDataBase(){
-            console.log(<?php echo $result ?>);
-            console.log(<?php echo $idUser ?>);
-        }
-    </script>
+    <body>
+        <p>Reimposta Password</p>
+        <form>
+            <label for="newPassword">Nuova password:</label>
+            <input type="text" value="Nuova password" id="newPassword"><br>
+            <label for="confirmPassword">Conferma password:</label>
+            <input type="text" value="Conferma password" id="confirmPassword"><br>
+        </form>
+        <button onclick="updateInDataBase()">Conferma</button>
+
+        <script>
+            const validatePassword = (password) => {
+                return password.match(
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+                );
+            };
+            updateInDataBase() {
+                console.log(<?php echo $idUser[0]["idUser"] ?>);
+            }
+        </script>
     </body>
+
     </html>
-    <?php
+<?php
 } ?>
