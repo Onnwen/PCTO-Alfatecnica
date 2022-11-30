@@ -362,7 +362,7 @@ if (isset($_SESSION['session_id'])) {
                     email.removeClass('is-invalid');
                 }
                 if (filled){
-                    $.post('php/login/retrivePassword.php', {email : email.val()}, function (response) {
+                    $.post('php/login/mailRetrievePassword.php', {email : email.val()}, function (response) {
                         console.log(response);
                     })
                 }

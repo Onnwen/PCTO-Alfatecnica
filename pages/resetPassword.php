@@ -31,11 +31,47 @@ if (isset($_SESSION['session_id'])) {
         <p>Reimposta Password</p>
         <form>
             <label for="newPassword">Nuova password:</label>
-            <input type="text" value="Nuova password" id="newPassword"><br>
+            <input type="text" placeholder="Nuova password" id="newPassword"><br>
             <label for="confirmPassword">Conferma password:</label>
-            <input type="text" value="Conferma password" id="confirmPassword"><br>
+            <input type="text" placeholder="Conferma password" id="confirmPassword"><br>
         </form>
         <button onclick="updateInDataBase()">Conferma</button>
+
+        <!-- Modal successo -->
+        <div class="modal fade" id="justChanged" tabindex="-1" aria-labelledby="changePasswordLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" style="color: darkgreen" id="changedLabel">La password è stata reimpostata</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="afterChangedLabel">
+                        Le password è stata modificata ora puoi fare il login per accedere ai nostri servizi. Premendo "Ok" verrai reinderizzato al login.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="window.location.href='index.php'">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal errore -->
+        <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" style="color: darkred" id="errorModalLabel">È stato riscontrato un problema</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <label id="errorRegistrationLabel">La tua password non è stata modificata correttamente. Ci scusiamo per il disagio.</label>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="window.location.href='index.php'">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <script>
             const idUser = <?php echo $idUser?>
@@ -47,7 +83,35 @@ if (isset($_SESSION['session_id'])) {
                 );
             };
             updateInDataBase() {
+                valueControl = true;
+                if(newPassword.val() === '' || !validatePassword(newPassword.val())){
+                    name.addClass('is-invalid');
+                    name.attr('for', 'floatingInputInvalid');
+                    valueControl = false;
+                } else {
+                    name.removeClass('is-invalid');
+                }
+                if (confirmPassword.val() === '' || !validatePassword(confirmPassword.val())){
+                    name.addClass('is-invalid');
+                    name.attr('for', 'floatingInputInvalid');
+                    valueControl = false;
+                } else {
+                    name.removeClass('is-invalid');
+                }
 
+                if(valueControl){
+                    $.post('../login/changePassword.php', {idUser: idUser,newPassword: newPassword})
+                        .done(response){
+                            if(response === "done"){
+                                $('#justChanged').modal('show');
+                            } else {
+                                $('#errorModal').modal('show');
+                            }
+                        }
+                        .fail(){
+                            $('#errorModal').modal('show');
+                        }
+                }
             }
         </script>
     </body>
