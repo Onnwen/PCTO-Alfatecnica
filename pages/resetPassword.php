@@ -49,7 +49,7 @@ if (isset($_SESSION['session_id'])) {
                 } else {
                     confirmPassword.removeClass('is-invalid');
                 }
-                console.log(valueControl);
+                console.log(validatePassword(newPassword.val()));
                 if(valueControl){
                     console.log("cao");
                     $.post('../php/login/changePassword.php', {idUser: idUser,newPassword: newPassword})
