@@ -31,16 +31,25 @@ $image_data = getimagesize($planimetry_image["tmp_name"]);
 $planimetry_image_width = $image_data[0];
 $planimetry_image_height = $image_data[1];
 
-move_uploaded_file($logo["tmp_name"], "/srv/www/PCTO-Alfatecnica-Private/" . $target_file_logo);
-move_uploaded_file($planimetry_image["tmp_name"], "/srv/www/PCTO-Alfatecnica-Private/" . $target_file_planimetry);
+move_uploaded_file($logo["tmp_name"], getcwd() . "/../" . $target_file_logo);
+move_uploaded_file($planimetry_image["tmp_name"], getcwd() . "/../" . $target_file_planimetry);
 
-$Query = "INSERT INTO Companies(name, site, path_logo, address, CAP, city, province, phoneNumber1, emailAddress1, personalReference, phoneNumber2, cellPhoneNumber, emailAddress2, companyNotes, clientNotes, planimetry_image_url, planimetry_image_width, planimetry_image_height) 
-    VALUES (:name, :site, :path_logo, :address, :CAP, :city, :province, :phoneNumber, :emailAddress, :personalReference, :phoneNumber2, :cellPhoneNumber, :emailAddress2, :companyNotes, :clientNotes, :planimetry_image_url, :planimetry_image_width, :planimetry_image_height)";
+$Query = "INSERT INTO Companies(name, site, path_logo, address, CAP, city, province, phoneNumber1, emailAddress1, personalReference, phoneNumber2, cellPhoneNumber, emailAddress2, companyNotes, clientNotes, planimetry_image_url, planimetry_image_width, planimetry_image_height, unique_Code) 
+    VALUES (:name, :site, :path_logo, :address, :CAP, :city, :province, :phoneNumber, :emailAddress, :personalReference, :phoneNumber2, :cellPhoneNumber, :emailAddress2, :companyNotes, :clientNotes, :planimetry_image_url, :planimetry_image_width, :planimetry_image_height, :unique_Code)";
 try {
     $pre = $pdo->prepare($Query);
 } catch (Exception $e) {
     echo $e->getMessage();
     exit;
+}
+
+# Generazione di Codice Unico random; cosa molto temporanea; TODO: sistemare/trovare approccio migliore
+$characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+$randomString = '';
+
+for ($i = 0; $i < 6; $i++) {
+    $index = rand(0, strlen($characters) - 1);
+    $randomString .= $characters[$index];
 }
 
 $pre->bindParam(':name', $name, PDO::PARAM_STR);
@@ -61,6 +70,7 @@ $pre->bindParam(':clientNotes', $clientNotes, PDO::PARAM_STR);
 $pre->bindParam(':planimetry_image_url', $target_file_planimetry, PDO::PARAM_STR);
 $pre->bindParam(':planimetry_image_width', $planimetry_image_width, PDO::PARAM_INT);
 $pre->bindParam(':planimetry_image_height', $planimetry_image_height, PDO::PARAM_INT);
+$pre->bindParam(':unique_Code', $randomString, PDO::PARAM_STR);
 
 $pre->execute();
 
