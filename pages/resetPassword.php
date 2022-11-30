@@ -7,11 +7,10 @@ if (isset($_SESSION['session_id'])) {
     $stringPasswordRetriver = isset($_GET['stringPasswordRetriver']) ? $_GET['stringPasswordRetriver'] : '';
     if (isset($stringPasswordRetriver)) {
         $query = "SELECT user_id as idUser FROM Users WHERE stringRetrivePassword = '$stringPasswordRetriver'";
-        $result = $pdo->prepare($query);
-        $result->execute();
-        $idUser = $result->fetch(PDO::FETCH_ASSOC);
-        $idUser = $idUser["idUser"];
-        echo $idUser;
+        $pre = $pdo->prepare($query);
+        $pre->execute();
+        $check = $pre->fetch(PDO::FETCH_ASSOC);
+        $idUser = $check['idUser'];
 ?>
     <html>
 
