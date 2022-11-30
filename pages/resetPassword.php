@@ -52,16 +52,17 @@ if (isset($_SESSION['session_id'])) {
                 }
 
                 if(valueControl){
-                    $.post('../login/changePassword.php', {idUser: idUser,newPassword: newPassword})
-                        .done(response){
-                        if(response === "done"){
-                            $('#justChanged').modal('show');
-                        } else {
+                    $.post('../login/changePassword.php', {idUser: idUser,newPassword: newPassword}){
+                    .done(response){
+                            if(response === "done"){
+                                $('#justChanged').modal('show');
+                            } else {
+                                $('#errorModal').modal('show');
+                            }
+                        }
+                    .fail(){
                             $('#errorModal').modal('show');
                         }
-                    }
-                .fail(){
-                        $('#errorModal').modal('show');
                     }
                 }
             }
@@ -76,7 +77,7 @@ if (isset($_SESSION['session_id'])) {
             <label for="confirmPassword">Conferma password:</label>
             <input type="text" placeholder="Conferma password" id="confirmPassword"><br>
         </form>
-        <button onclick="updateInDatabase()">Conferma</button>
+        <button type="submit" onclick="updateInDatabase()">Conferma</button>
 
         <!-- Modal successo -->
         <div class="modal fade" id="justChanged" tabindex="-1" aria-labelledby="changePasswordLabel" aria-hidden="true">
