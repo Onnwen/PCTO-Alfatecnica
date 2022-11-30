@@ -55,7 +55,7 @@ if (isset($_SESSION['session_id'])) {
                 console.log(valueControl);
                 if(valueControl){
                     console.log("cao");
-                    $.post('../php/login/changePassword.php', {idUser: idUser,newPassword: newPassword})
+                    $.post('../php/login/changePassword.php', {idUser: idUser, newPassword: newPassword.val()})
                         .done(function (response){
                             if(response === "correctModify"){
                                 $('#justChanged').modal('show');
