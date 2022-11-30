@@ -25,6 +25,47 @@ if (isset($_SESSION['session_id'])) {
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
         <script src="https://kit.fontawesome.com/c0c3eed4d9.js" crossorigin="anonymous"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+        <script>
+            const idUser = <?php echo $idUser?>
+            const newPassword = $('#newPassword');
+            const confirmPassword = $('#confirmPassword');
+            const validatePassword = (password) => {
+                return password.match(
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+                );
+            };
+            function updateInDataBase() {
+                valueControl = true;
+                if(newPassword.val() === '' || !validatePassword(newPassword.val())){
+                    name.addClass('is-invalid');
+                    name.attr('for', 'floatingInputInvalid');
+                    valueControl = false;
+                } else {
+                    name.removeClass('is-invalid');
+                }
+                if (confirmPassword.val() === '' || !validatePassword(confirmPassword.val())){
+                    name.addClass('is-invalid');
+                    name.attr('for', 'floatingInputInvalid');
+                    valueControl = false;
+                } else {
+                    name.removeClass('is-invalid');
+                }
+
+                if(valueControl){
+                    $.post('../login/changePassword.php', {idUser: idUser,newPassword: newPassword})
+                        .done(response){
+                        if(response === "done"){
+                            $('#justChanged').modal('show');
+                        } else {
+                            $('#errorModal').modal('show');
+                        }
+                    }
+                .fail(){
+                        $('#errorModal').modal('show');
+                    }
+                }
+            }
+        </script>
     </head>
 
     <body>
@@ -73,47 +114,7 @@ if (isset($_SESSION['session_id'])) {
             </div>
         </div>
 
-        <script>
-            const idUser = <?php echo $idUser?>
-            const newPassword = $('#newPassword');
-            const confirmPassword = $('#confirmPassword');
-            const validatePassword = (password) => {
-                return password.match(
-                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
-                );
-            };
-            function updateInDataBase() {
-                valueControl = true;
-                if(newPassword.val() === '' || !validatePassword(newPassword.val())){
-                    name.addClass('is-invalid');
-                    name.attr('for', 'floatingInputInvalid');
-                    valueControl = false;
-                } else {
-                    name.removeClass('is-invalid');
-                }
-                if (confirmPassword.val() === '' || !validatePassword(confirmPassword.val())){
-                    name.addClass('is-invalid');
-                    name.attr('for', 'floatingInputInvalid');
-                    valueControl = false;
-                } else {
-                    name.removeClass('is-invalid');
-                }
 
-                if(valueControl){
-                    $.post('../login/changePassword.php', {idUser: idUser,newPassword: newPassword})
-                        .done(response){
-                            if(response === "done"){
-                                $('#justChanged').modal('show');
-                            } else {
-                                $('#errorModal').modal('show');
-                            }
-                        }
-                        .fail(){
-                            $('#errorModal').modal('show');
-                        }
-                }
-            }
-        </script>
     </body>
 
     </html>
