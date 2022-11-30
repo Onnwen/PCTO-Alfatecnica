@@ -9,8 +9,8 @@ if (isset($_SESSION['session_id'])) {
         $query = "SELECT user_id as idUser FROM Users WHERE stringRetrivePassword = '$stringPasswordRetriver'";
         $result = $pdo->prepare($query);
         $result->execute();
-        $idUser = $result->fetchAll(PDO::FETCH_ASSOC);
-        $idUser = $idUser[0]["idUser"];
+        $idUser = $result->fetch(PDO::FETCH_ASSOC);
+        $idUser = $idUser["idUser"];
 ?>
     <html>
 
@@ -76,7 +76,7 @@ if (isset($_SESSION['session_id'])) {
             <label for="confirmPassword">Conferma password:</label>
             <input type="text" placeholder="Conferma password" id="confirmPassword"><br>
         </form>
-        <button onclick="updateInDataBase()">Conferma</button>
+        <button onclick="javascript:updateInDataBase()">Conferma</button>
 
         <!-- Modal successo -->
         <div class="modal fade" id="justChanged" tabindex="-1" aria-labelledby="changePasswordLabel" aria-hidden="true">
