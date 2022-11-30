@@ -35,18 +35,18 @@ if (isset($_SESSION['session_id'])) {
             function updateDB() {
                 valueControl = true;
                 if(newPassword.val() === '' || !validatePassword(newPassword.val())){
-                    name.addClass('is-invalid');
-                    name.attr('for', 'floatingInputInvalid');
+                    newPassword.addClass('is-invalid');
+                    newPassword.attr('for', 'floatingInputInvalid');
                     valueControl = false;
                 } else {
-                    name.removeClass('is-invalid');
+                    newPassword.removeClass('is-invalid');
                 }
                 if (confirmPassword.val() === '' || !validatePassword(confirmPassword.val())){
-                    name.addClass('is-invalid');
-                    name.attr('for', 'floatingInputInvalid');
+                    confirmPassword.addClass('is-invalid');
+                    confirmPassword.attr('for', 'floatingInputInvalid');
                     valueControl = false;
                 } else {
-                    name.removeClass('is-invalid');
+                    confirmPassword.removeClass('is-invalid');
                 }
 
                 if(valueControl){
