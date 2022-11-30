@@ -1,5 +1,5 @@
 <?php
-require_once('../php/connessione.php');
+require_once('../connessione.php');
 
 $idUser = $_POST['idUser'];
 $oldPassword = $_POST['oldPassword'];
