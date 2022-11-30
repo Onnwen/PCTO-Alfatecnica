@@ -4,7 +4,7 @@ require_once('../php/connessione.php');
 if (isset($_SESSION['session_id'])) {
     header('location: pages/lista-anagrafica.php');
 } else {
-    $stringPasswordRetriever = $_GET['stringPasswordRetriever'];
+    $stringPasswordRetriever = $_GET['stringpasswordretriever'];
     if (isset($stringPasswordRetriver)) {
         $query = "SELECT user_id as idUser FROM Users WHERE stringRetrievePassword = '$stringPasswordRetriever'";
         $pre = $pdo->prepare($query);
