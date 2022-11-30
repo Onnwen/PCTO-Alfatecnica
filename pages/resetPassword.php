@@ -82,7 +82,7 @@ if (isset($_SESSION['session_id'])) {
                     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
                 );
             };
-            updateInDataBase() {
+            function updateInDataBase() {
                 valueControl = true;
                 if(newPassword.val() === '' || !validatePassword(newPassword.val())){
                     name.addClass('is-invalid');
