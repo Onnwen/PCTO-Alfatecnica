@@ -11,6 +11,7 @@ if (isset($_SESSION['session_id'])) {
         $result->execute();
         $idUser = $result->fetch(PDO::FETCH_ASSOC);
         $idUser = $idUser["idUser"];
+        echo $idUser;
 ?>
     <html>
 
