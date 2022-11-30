@@ -6,7 +6,7 @@ $oldPassword = $_POST['oldPassword'];
 $newPassword = $_POST['newPassword'];
 
 
-if ((isset($oldPassword) || $oldPassword !== '')&&(isset($newPassword) || $newPassword !== '')){
+if ((isset($oldPassword) || $oldPassword !== null)&&(isset($newPassword) || $newPassword !== '')){
     $oldPassword = password_hash($oldPassword,PASSWORD_DEFAULT);
     $newPassword = password_hash($newPassword,PASSWORD_DEFAULT);
     $select = "SELECT hashed_password AS password
