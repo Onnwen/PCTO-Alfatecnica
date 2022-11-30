@@ -34,6 +34,7 @@ if (isset($_SESSION['session_id'])) {
                 );
             };
             function updateDB() {
+                debugger;
                 let newPassword = $('#newPassword');
                 let confirmPassword = $('#confirmPassword');
                 valueControl = true;
@@ -51,7 +52,7 @@ if (isset($_SESSION['session_id'])) {
                 } else {
                     confirmPassword.removeClass('is-invalid');
                 }
-                console.log(validatePassword(newPassword.val()));
+                console.log(valueControl);
                 if(valueControl){
                     console.log("cao");
                     $.post('../php/login/changePassword.php', {idUser: idUser,newPassword: newPassword})
