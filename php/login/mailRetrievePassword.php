@@ -14,7 +14,7 @@
     $mail = $_POST["email"];
 
     if (isset($mail)){
-        $select = "SELECT first_name as name, stringRetrivePassword as stringVerify
+        $select = "SELECT first_name as name, stringRetrievePassword as stringVerify
            FROM Users
            WHERE email = '$mail'";
         $pre = $pdo->prepare($select);
