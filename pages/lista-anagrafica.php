@@ -438,7 +438,7 @@ if (isset($_SESSION['session_id'])) {
         }
 
         function deleteCompany(id) {
-            modalLoading(true);
+            // modalLoading(true);
 
             $.ajax({
                 url: '../php/deleteCompany.php',
@@ -451,7 +451,7 @@ if (isset($_SESSION['session_id'])) {
                     modalError(true);
                 },
                 always: function(){
-                    modalLoading(false);
+                    // modalLoading(false);
                 }
             });
         }
