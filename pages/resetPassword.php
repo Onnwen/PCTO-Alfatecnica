@@ -94,7 +94,7 @@ if (isset($_SESSION['session_id'])) {
                         Le password è stata modificata ora puoi fare il login per accedere ai nostri servizi. Premendo "Ok" verrai reinderizzato al login.
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="window.location.href='index.php'">Ok</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="window.location.href='../index.php'">Ok</button>
                     </div>
                 </div>
             </div>
@@ -112,7 +112,7 @@ if (isset($_SESSION['session_id'])) {
                         <label id="errorRegistrationLabel">La tua password non è stata modificata correttamente. Ci scusiamo per il disagio.</label>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="window.location.href='index.php'">Ok</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="window.location.href='../index.php'">Ok</button>
                     </div>
                 </div>
             </div>
