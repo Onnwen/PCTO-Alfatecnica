@@ -34,7 +34,7 @@ if (isset($_SESSION['session_id'])) {
                     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
                 );
             };
-            function updateInDataBase() {
+            function updateInDatabase() {
                 valueControl = true;
                 if(newPassword.val() === '' || !validatePassword(newPassword.val())){
                     name.addClass('is-invalid');
@@ -76,7 +76,7 @@ if (isset($_SESSION['session_id'])) {
             <label for="confirmPassword">Conferma password:</label>
             <input type="text" placeholder="Conferma password" id="confirmPassword"><br>
         </form>
-        <button onclick="javascript:updateInDataBase()">Conferma</button>
+        <button onclick="updateInDatabase()">Conferma</button>
 
         <!-- Modal successo -->
         <div class="modal fade" id="justChanged" tabindex="-1" aria-labelledby="changePasswordLabel" aria-hidden="true">
