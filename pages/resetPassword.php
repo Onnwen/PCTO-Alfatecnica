@@ -27,16 +27,15 @@ if (isset($_SESSION['session_id'])) {
         <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
         <script>
             const idUser = <?php echo $idUser?>;
-            const newPassword = $('#newPassword');
-            const confirmPassword = $('#confirmPassword');
+
             const validatePassword = (password) => {
                 return password.match(
                     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
                 );
             };
             function updateDB() {
-                console.log($('#newPassword').val());
-                console.log($('#confirmPassword').val());
+                let newPassword = $('#newPassword');
+                let confirmPassword = $('#confirmPassword');
                 valueControl = true;
                 if(newPassword.val() === '' || !validatePassword(newPassword.val())){
                     newPassword.addClass('is-invalid');
