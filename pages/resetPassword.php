@@ -52,9 +52,9 @@ if (isset($_SESSION['session_id'])) {
                 }
 
                 if(valueControl){
-                    $.post('../login/changePassword.php', {idUser: idUser,newPassword: newPassword});
+                    $.post('../login/changePassword.php', {idUser: idUser,newPassword: newPassword})
                     .done(function (response){
-                            if(response === "done"){
+                            if(response === "correctModify"){
                                 $('#justChanged').modal('show');
                             } else {
                                 $('#errorModal').modal('show');
