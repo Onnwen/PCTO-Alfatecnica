@@ -52,7 +52,7 @@ if (isset($_SESSION['session_id'])) {
                 }
 
                 if(valueControl){
-                    $.post('../login/changePassword.php', {idUser: idUser,newPassword: newPassword}){
+                    $.post('../login/changePassword.php', {idUser: idUser,newPassword: newPassword})
                     .done(response){
                             if(response === "done"){
                                 $('#justChanged').modal('show');
@@ -63,7 +63,6 @@ if (isset($_SESSION['session_id'])) {
                     .fail(){
                             $('#errorModal').modal('show');
                         }
-                    }
                 }
             }
         </script>
