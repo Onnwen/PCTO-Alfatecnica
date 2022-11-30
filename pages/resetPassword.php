@@ -30,7 +30,9 @@ if (isset($_SESSION['session_id'])) {
             const newPassword = $('#newPassword');
             const confirmPassword = $('#confirmPassword');
             const validatePassword = (password) => {
-                return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password);
+                return password.match(
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+                );
             };
             function updateDB() {
                 console.log("ewntro nella funzione");
