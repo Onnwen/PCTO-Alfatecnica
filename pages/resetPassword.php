@@ -5,7 +5,7 @@ if (isset($_SESSION['session_id'])) {
     header('location: pages/lista-anagrafica.php');
 } else {
     $stringPasswordRetriever = $_GET['stringpasswordretriever'];
-    if (isset($stringPasswordRetriver)) {
+    if (isset($stringPasswordRetriever)) {
         $query = "SELECT user_id as idUser FROM Users WHERE stringRetrievePassword = '$stringPasswordRetriever'";
         $pre = $pdo->prepare($query);
         $pre->execute();
