@@ -240,10 +240,10 @@
     <center>
         <img class="center" src="https://thecouriernv.tplinkdns.com/PCTO-Alfatecnica-Staging/img/logo.png" height="200" alt="Alfatecnica">
     </center>
-    <p>Buongiorno<?php echo isset($_POST["name"]) ? " " . $_POST["name"] : "" ?>,</p>
+    <p>Buongiorno<?php echo isset($check["nome"]) ? " " . $check["nome"] : "" ?>,</p>
     <p>Ricevi questa mail perché hai segnalato di aver dimenticato la tua password. Utilizza il tasto sottostante per cambiare credenziali di accesso.</p>
     <center>
-        <a class="center" href="<?php echo $_POST["url"] ?? "https://thecouriernv.tplinkdns.com/PCTO-Alfatecnica-Staging/index.php" ?>" target="_blank">Cambia password</a>
+        <a class="center" href="<?php echo $url ?? "https://thecouriernv.tplinkdns.com/PCTO-Alfatecnica-Staging/index.php" ?>" target="_blank">Cambia password</a>
     </center>
 </div>
 
