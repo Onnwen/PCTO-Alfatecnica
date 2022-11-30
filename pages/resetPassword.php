@@ -33,6 +33,7 @@ if (isset($_SESSION['session_id'])) {
                 return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password);
             };
             function updateDB() {
+                console.log("ewntro nella funzione");
                 valueControl = true;
                 if(newPassword.val() === '' || !validatePassword(newPassword.val())){
                     newPassword.addClass('is-invalid');
@@ -48,7 +49,7 @@ if (isset($_SESSION['session_id'])) {
                 } else {
                     confirmPassword.removeClass('is-invalid');
                 }
-
+                console.log(valueControl);
                 if(valueControl){
                     console.log("cao");
                     $.post('../php/login/changePassword.php', {idUser: idUser,newPassword: newPassword})
