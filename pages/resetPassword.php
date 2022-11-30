@@ -35,8 +35,8 @@ if (isset($_SESSION['session_id'])) {
                 );
             };
             function updateDB() {
-                console.log(newPassword.val());
-                console.log(confirmPassword.val());
+                console.log($('#newPassword').val());
+                console.log($('#confirmPassword').val());
                 valueControl = true;
                 if(newPassword.val() === '' || !validatePassword(newPassword.val())){
                     newPassword.addClass('is-invalid');
