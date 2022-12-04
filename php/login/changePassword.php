@@ -17,8 +17,12 @@ if ((isset($oldPassword) || $oldPassword !== null)&&(isset($newPassword) || $new
     $check = $pre->fetch(PDO::FETCH_ASSOC);
     if (password_verify($oldPassword,$check['password'])){
         $update = "UPDATE Users SET hashed_password = '$newPassword'";
-        $res = $pdo->query($update);
-        if ($res)
+        $res1 = $pdo->query($update);
+        $query = "UPDATE Users
+                SET stringRetrievePassword = null
+                WHERE user_id = '". $idUser ."';";
+        $res2 = $pdo->query($query);
+        if ($res1 && $res2)
             echo 'correctModify';
         else
             echo 'newPaswordException';
@@ -29,8 +33,12 @@ if ((isset($oldPassword) || $oldPassword !== null)&&(isset($newPassword) || $new
 } else if (isset($newPassword) || $newPassword !== ''){
     $newPassword = password_hash($newPassword,PASSWORD_DEFAULT);
     $update = "UPDATE Users SET hashed_password = '$newPassword'";
-    $res = $pdo->query($update);
-    if ($res)
+    $res1 = $pdo->query($update);
+    $query = "UPDATE Users
+                SET stringRetrievePassword = null
+                WHERE user_id = '". $idUser ."';";
+    $res2 = $pdo->query($query);
+    if ($res1 && $res2)
         echo 'correctModify';
     else
         echo 'newPaswordException';
