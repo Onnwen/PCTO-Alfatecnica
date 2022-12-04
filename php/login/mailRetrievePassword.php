@@ -1,4 +1,14 @@
 <?php
+    function generateRandomString($length = 20)
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%ˆ&*()_+{}|:"<>?';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
     require('../connessione.php');
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
@@ -14,15 +24,29 @@
     $mail = $_POST["email"];
 
     if (isset($mail)){
-        $select = "SELECT first_name as name, stringRetrievePassword as stringVerify
+        $checkQuery = "SELECT first_name as name
            FROM Users
            WHERE email = '$mail'";
-        $pre = $pdo->prepare($select);
+        $pre = $pdo->prepare($checkQuery);
         $pre->execute();
         $check = $pre->fetch(PDO::FETCH_ASSOC);
         if ($check){
-            $mailer = new PHPMailer;
+            $stringToInsert = generateRandomString();
+            //insertion of the new stringVerifier in the database
+            $insertStringVerifier = "UPDATE Users
+                                        SET stringRetrievePassword = '". $stringToInsert ."'
+                                        WHERE email = '". $mail ."';";
+            try {
+                $pre = $pdo->prepare($insertStringVerifier);
+            } catch (Exception $e) {
+                //failure
+                echo $e->getMessage();
+                exit;
+            }
+            $pre->execute();
 
+            //mailer
+            $mailer = new PHPMailer;
             $mailer->isSMTP();
             $mailer->Host = 'smtp.gmail.com';
             $mailer->SMTPAuth = true;
@@ -281,7 +305,7 @@
                                 <p>Buongiorno ' . $check["name"] .',</p>
                                 <p>Ricevi questa mail perch&eacute hai segnalato di aver dimenticato la tua password. Utilizza il tasto sottostante per cambiare credenziali di accesso.</p>
                                 <center>
-                                    <a class="center" href="localhost/PCTO-Alfatecnica/pages/resetPassword.php?stringpasswordretriever='.$check["stringVerify"].'" target="_blank">Cambia password</a>
+                                    <a class="center" href="localhost/PCTO-Alfatecnica/pages/resetPassword.php?stringpasswordretriever='.$stringToInsert.'" target="_blank">Cambia password</a>
                                 </center>
                             </div>
                             
@@ -291,7 +315,12 @@
                             </body>
                             </html>';
             $mailer-> send();
-            echo $check["stringVerify"];
+
+            //all ok
+            echo "mailDone";
         }
+    } else {
+        //failure
+        echo "mailError";
     }
 ?>
