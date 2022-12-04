@@ -12,6 +12,10 @@ if (isset($_SESSION['session_id'])) {
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.6/dist/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
         <style>
             #login {
                 padding-top: 50px;
@@ -151,7 +155,7 @@ if (isset($_SESSION['session_id'])) {
                 <div class="modal-body">
                     <form>
                         <label id="emailRetrievePassword" for="recovery-email" class="sr-only">Inserisci il tuo account</label>
-                        <input type="email" name="recovery-email" id="recovery-email" class="form-control" autocomplete="off">
+                        <input type="email" name="recovery-email" id="recovery-email" class="form-control" autocomplete="off" placeholder="Inserisci la mail di accesso">
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -202,19 +206,19 @@ if (isset($_SESSION['session_id'])) {
         </div>
     </div>
 
-    <!-- Modal dopo registrazione -->
+    <!-- Modal successo -->
     <div class="modal fade" id="justRegistered" tabindex="-1" aria-labelledby="registeredLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" style="color: darkgreen" id="registeredLabel">Sei già registrato</h5>
+                    <h5 class="modal-title" style="color: darkgreen" id="registeredLabel">Operazione eseguita con successo</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="afterRegistrationLabel">
-                    Le credenziali che hai inserito sono già presenti nel nostro database, esegui il login per poter accedere ai nostri servizi.
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
+                    <!-- button to reload the page -->
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal" onclick="window.location.reload();">Ok</button>
                 </div>
             </div>
         </div>
@@ -229,10 +233,10 @@ if (isset($_SESSION['session_id'])) {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <label id="errorRegistrationLabel">La tua registrazione non è andata come ci aspetavamo. Qualcosa è andato storto, contattaci per risolvere il problema.</label>
+                    <label id="errorRegistrationLabel"></label>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal" onclick="window.location.reload();">Ok</button>
                 </div>
             </div>
         </div>
@@ -319,21 +323,31 @@ if (isset($_SESSION['session_id'])) {
                     companyCode.removeClass('is-invalid');
                 }
                 if (allFilled){
+                    const confirmButton = $("#registrationButton");
+                    confirmButton.prop('disabled', true);
+                    confirmButton.html('<div class="spinner-border spinner-border-sm" role="status"></div>');
                     $.post('php/login/registration.php', {name: name.val(), surname: surname.val(),email: email.val(), password: password.val(), companyCode: companyCode.val().toString()})
                         .done(function (resp){
                             if (resp === 'userAlreadyRegistered') { //significherà che l'utente è gia presente quindi fara tornare alla pagina login con un modal
                                 $('#errorRegistrationLabel').html("Le credenziali che hai inserito sono già presenti nel nostro database, esegui il login per poter accedere ai nostri servizi.");
                                 $('#registrationModal').modal('hide');
+                                confirmButton.removeAttr('disabled');
+                                confirmButton.html('Registrati');
                                 $('#errorModal').modal('show');
                             } else {
                                 $('#afterRegistrationLabel').html("La registrazione è avvenuta con successo. Riceverai una mail in cui dovrai confermare la tua registrazione.");
                                 $('#registrationModal').modal('hide');
+                                confirmButton.removeAttr('disabled');
+                                confirmButton.html('Registrati');
                                 $('#justRegistered').modal('show');
+
                             }
                         })
                         .fail(function (){
                             $('#errorRegistrationLabel').html("La tua registrazione non è andata come ci aspetavamo. Qualcosa è andato storto, contattaci per risolvere il problema.");
                             $('#registrationModal').modal('hide');
+                            confirmButton.removeAttr('disabled');
+                            confirmButton.html('Registrati');
                             $("#errorModal").modal('show');
                         })
                 }
@@ -362,9 +376,38 @@ if (isset($_SESSION['session_id'])) {
                     email.removeClass('is-invalid');
                 }
                 if (filled){
-                    $.post('php/login/mailRetrievePassword.php', {email : email.val()}, function (response) {
-                        console.log(response);
-                    })
+                    const confirmButton = $("#recoveryButton");
+                    confirmButton.prop('disabled', true);
+                    confirmButton.html('<div class="spinner-border spinner-border-sm" role="status"></div>');
+                    $.post('php/login/mailRetrievePassword.php', {email : email.val()})
+                        .done (function (resp){
+                            if (resp === 'mailDone') {
+                                $('#afterRegistrationLabel').html("La richiesta è stata inoltrata con successo. Riceverai una mail in cui dovrai reimpostare la password.");
+                                $('#retrievePassword').modal('hide');
+                                confirmButton.removeAttr('disabled');
+                                confirmButton.html('Recupera');
+                                $('#justRegistered').modal('show');
+                            } else if (resp === 'mailError') {
+                                $('#errorRegistrationLabel').html("La richiesta non è stata inoltrata perchè i dati inseriti non sono all'interno del nosstro database.");
+                                $('#retrievePassword').modal('hide');
+                                confirmButton.removeAttr('disabled');
+                                confirmButton.html('Recupera');
+                                $('#errorModal').modal('show');
+                            } else {
+                                $('#errorRegistrationLabel').html("La tua richiesta non è andata come ci aspetavamo. Qualcosa è andato storto, contattaci per risolvere il problema.");
+                                $('#retrievePassword').modal('hide');
+                                confirmButton.removeAttr('disabled');
+                                confirmButton.html('Recupera');
+                                $("#errorModal").modal('show');
+                            }
+                        })
+                        .fail (function (){
+                            $('#errorRegistrationLabel').html("La tua richiesta non è andata come ci aspetavamo. Qualcosa è andato storto, contattaci per risolvere il problema.");
+                            $('#retrievePassword').modal('hide');
+                            confirmButton.removeAttr('disabled');
+                            confirmButton.html('Recupera');
+                            $("#errorModal").modal('show');
+                        })
                 }
             });
         });
