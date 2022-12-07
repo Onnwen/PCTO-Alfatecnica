@@ -14,8 +14,8 @@ $companyCode = isset($_POST['companyCode']) ? $_POST['companyCode'] : '';
 $password = password_hash($password,PASSWORD_DEFAULT);
 
 $insertUser =
-    "INSERT INTO Users (`email`,`hashed_password`,`first_name`,`last_name`,`role`,`company_code`,`active`)
-        values ('".$email."' , '".$password."' , '".$name."' , '".$surname."' , 1 , '". $companyCode ."', 0)"; //after everyone must be only user and not admin(1)
+    "INSERT INTO Users (`email`,`hashed_password`,`first_name`,`last_name`,`role`,`active`)
+        values ('".$email."' , '".$password."' , '".$name."' , '".$surname."' , 1 , 0)"; //after everyone must be only user and not admin(1)
 $insertUser_Company =
     "INSERT INTO User_Company (`user_id`,`company_id`)
         VALUES ((SELECT Users.user_id FROM Users WHERE Users.email = '".$email ."'), (SELECT id FROM Companies WHERE Companies.unique_Code = '".$companyCode."'))";
