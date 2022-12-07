@@ -120,7 +120,7 @@ if (isset($_SESSION['session_id'])) {
             </style>
             <script>
                 function updateDB(){
-                    $.post("../php/confirmRegistration.php", {email: "<?php echo $mail; ?>"}, function(response){
+                    $.post("../php/login/confirmRegistration.php", {email: "<?php echo $mail; ?>"}, function(response){
                         if(response == "1"){
                             window.location.href = "pages/login.php";
                         } else {
