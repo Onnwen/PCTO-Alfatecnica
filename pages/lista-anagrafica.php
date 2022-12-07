@@ -212,7 +212,10 @@ if (isset($_SESSION['session_id'])) {
                     <input type="text" id="companySite" class="form-control" placeholder="Sede" aria-label="Sede">
                 </div>
                 <div class="col">
-                    <input type="text" id="companyLastDate" class="form-control" placeholder="Data ultima prestazione" aria-label="Data ultima prestazione">
+                    <input style="height: 38px;" type="date" id="companyLastDate" class="form-control" aria-label="Data ultima prestazione">
+                    <script>
+                        document.getElementById('companyLastDate').max = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().split("T")[0];
+                    </script>
                 </div>
                 <div class="col searchIcon">
                     <button type="button" class="btn btn-outline-success" onclick="search();"><i class="fa-solid fa-magnifying-glass"></i>Cerca</button>
@@ -288,11 +291,7 @@ if (isset($_SESSION['session_id'])) {
 
         <!-- FOOTER -->
 
-        <hr>
-
-        <footer class="py-3 my-4">
-            <p class="text-center text-muted ">© 2022 Alfatecnica, Inc</p>
-        </footer>
+        <?php require_once("footer.php"); ?>
     </body>
     <script>
         let currentPage = <?php echo (!(filter_var($_GET['pagina'], FILTER_VALIDATE_INT) === false) ? $_GET['pagina'] : 0) ?>;
@@ -356,7 +355,7 @@ if (isset($_SESSION['session_id'])) {
                         '<td style="text-align: center;">' +
                         '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#companyModal" data-bs-whatever="' + resp[i].id + '"><i class="fa-solid fa-pen"></i></button>' +
                         '<button class="btn btn-outline-info" onclick="window.location.href=\'dettaglio-anagrafica.php?id_ana=' + resp[i].id + '\'"><i class="fa-solid fa-circle-info"></i></button>' +
-                        '<button class="btn btn-outline-danger"><i class="fa-solid fa-trash-can"></i></button>' +
+                        '<button class="btn btn-outline-danger" onclick="deleteCompany(' + resp[i].id + ')"><i class="fa-solid fa-trash-can"></i></button>' +
                         '</td>' +
                         '</tr>';
                 }
@@ -391,35 +390,66 @@ if (isset($_SESSION['session_id'])) {
             let companyNotes = $('#companyNotes').val();
             let clientNotes = $('#clientNotes').val();
 
-            $.post(isUpdating ? '../php/modifyCompany.php' : '../php/addCompany.php', {
-                    name: name,
-                    site: site,
-                    address: address,
-                    CAP: CAP,
-                    city: city,
-                    province: province,
-                    phoneNumber: phoneNumber,
-                    emailAddress: emailAddress,
-                    personalReference: personalReference,
-                    phoneNumber2: phoneNumber2,
-                    cellPhoneNumber: cellPhoneNumber,
-                    emailAddress2: emailAddress2,
-                    companyNotes: companyNotes,
-                    clientNotes: clientNotes,
-                    id: editingCompany
-                })
-                .done(function(response) {
+            let planimetry_image = $('#planimetry_image').prop('files')[0];
+            let logo = $('#logo').prop('files')[0];
+
+            let formData = new FormData();
+
+            formData.append('name', name);
+            formData.append('site', site);
+            formData.append('address', address);
+            formData.append('CAP', CAP);
+            formData.append('city', city);
+            formData.append('province', province);
+            formData.append('phoneNumber', phoneNumber);
+            formData.append('emailAddress', emailAddress);
+            formData.append('personalReference', personalReference);
+            formData.append('phoneNumber2', phoneNumber2);
+            formData.append('cellPhoneNumber', cellPhoneNumber);
+            formData.append('emailAddress2', emailAddress2);
+            formData.append('companyNotes', companyNotes);
+            formData.append('clientNotes', clientNotes);
+            formData.append('planimetry_image', planimetry_image);
+            formData.append('logo', logo);
+
+            $.ajax({
+                url: isUpdating ? '../php/modifyCompany.php' : '../php/addCompany.php',
+                type: 'post',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response){
                     suspendCompanyModal(false);
-                    if (response === 'invalidInsert') {
+                    if(response==='invalidInsert'){
                         modalError(true);
-                    } else {
+                    }else{
                         modalConfirmation(true);
                     }
-                })
-                .fail(function() {
+                },
+                fail: function(){
                     suspendCompanyModal(false);
                     modalError(true);
-                });
+                },
+            });
+        }
+
+        function deleteCompany(id) {
+            // modalLoading(true);
+
+            $.ajax({
+                url: '../php/deleteCompany.php',
+                type: 'post',
+                data: {id: id},
+                success: function(){
+                    modalConfirmation(true);
+                },
+                fail: function(){
+                    modalError(true);
+                },
+                always: function(){
+                    // modalLoading(false);
+                }
+            });
         }
 
         function suspendCompanyModal(suspended) {
