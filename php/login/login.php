@@ -15,8 +15,11 @@ $check = $pre->fetch(PDO::FETCH_ASSOC);
 if(!$check){
     echo 'userWrong';
     exit;
-} else if($check['active'] == 0){
+} else if ($check['active'] === '0') {
     echo 'userNotActive';
+    exit;
+} else if ($check['activedByCompany'] === '0') {
+    echo 'userNotAccepted';
     exit;
 } else if (password_verify($pw,$check['hashed_password'])){
     session_regenerate_id();
@@ -28,5 +31,3 @@ if(!$check){
     echo 'passwordWrong';
     exit;
 }
-
-
