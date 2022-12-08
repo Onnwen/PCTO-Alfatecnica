@@ -593,12 +593,18 @@ if (isset($_SESSION['session_id'])) {
                 $(".anagrafiche").css("display", "none");
                 $(".anagrafiche_cards").css("display", "none");
                 $(".table_anagrafiche").css("display", "block");
+
+                $("#cards").addClass("selected");
+                $("#table").removeClass("selected");
             } else if (newMode === "griglia") {
                 console.log("Visualizzazione Griglia");
 
                 $(".anagrafiche").css("display", "block");
                 $(".anagrafiche_cards").css("display", "block");
                 $(".table_anagrafiche").css("display", "none");
+
+                $("#cards").removeClass("selected");
+                $("#table").addClass("selected");
             } else {
                 console.log("ERRORE: Modalità di visualizzazione invalida! Resetto a Tabella");
 
