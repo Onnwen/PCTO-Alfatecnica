@@ -338,6 +338,13 @@ if (isset($_SESSION['session_id'])) {
                 const tabella = document.getElementById('tabella-ajax');
                 maxPageNumber = Math.ceil(resp.length / maxCardsPerPage) - 1;
 
+                // Redirect se l'utente immette un numero di pagina troppo grande nel link
+                // FIXME: La pagina si carica due volte, ma non c'è molto che possa fare a riguardo, visto che il numero di pagina massimo lo conosco solo dopo aver finito il caricamento della pagina
+
+                if (currentPage > maxPageNumber) {
+                    paginatore(maxPageNumber);
+                }
+
                 for (let i = (maxCardsPerPage * currentPage <= resp.length ? maxCardsPerPage * currentPage : maxCardsPerPage * Math.floor(resp.length / maxCardsPerPage)); i < resp.length && i < maxCardsPerPage * (currentPage + 1); i++) {
                     console.log("Pagina = " + currentPage + " ; " + i);
                     cards.innerHTML += '<div class="col">' +
