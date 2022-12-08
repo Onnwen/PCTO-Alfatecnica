@@ -1,56 +1,4 @@
-<?php
-session_start();
-require_once('../connessione.php');
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-require '../../vendor/phpmailer/phpmailer/src/Exception.php';
-require '../../vendor/phpmailer/phpmailer/src/PHPMailer.php';
-require '../../vendor/phpmailer/phpmailer/src/SMTP.php';
-require '../../vendor/autoload.php';
-
-$name = isset($_POST['name']) ? $_POST['name'] : '';
-$surname = isset($_POST['surname']) ? $_POST['surname'] : '';
-$email = isset($_POST['email']) ? $_POST['email'] : '';
-$password = isset($_POST['password']) ? $_POST['password'] : '';
-$companyCode = isset($_POST['companyCode']) ? $_POST['companyCode'] : '';
-$password = password_hash($password,PASSWORD_DEFAULT);
-
-$insertUser =
-    "INSERT INTO Users (`email`,`hashed_password`,`first_name`,`last_name`,`role`,`active`)
-        values ('".$email."' , '".$password."' , '".$name."' , '".$surname."' , 1 , 0)"; //after everyone must be only user and not admin(1)
-$insertUser_Company =
-    "INSERT INTO User_Company (`user_id`,`company_id`)
-        VALUES ((SELECT Users.user_id FROM Users WHERE Users.email = '".$email ."'), (SELECT id FROM Companies WHERE Companies.unique_Code = '".$companyCode."'))";
-$select = "SELECT email, first_name
-           FROM Users
-           WHERE email = '". $email ."';";
-
-$pre = $pdo->prepare($select);
-$pre->execute();
-$check = $pre->fetch(PDO::FETCH_ASSOC);
-if(!$check){
-    try {
-        $pre = $pdo->prepare($insertUser);
-        $pre->execute();
-        $pre = $pdo->prepare($insertUser_Company);
-        $pre->execute();
-
-        $mailer = new PHPMailer;
-        $mailer->isSMTP();
-        $mailer->Host = 'smtp.gmail.com';
-        $mailer->SMTPAuth = true;
-        $mailer->SMTPSecure = 'ssl';
-        $mailer->Port = 465;
-        $mailer->Username = 'alfatecnicasrl.mailer@gmail.com';
-        $mailer->Password = 'udmfxeagmfccdfuh';
-        $mailer->From = 'alfatecnicasrl.mailer@gmail.com';
-        $mailer->Sender = 'alfatecnicasrl.mailer@gmail.com';
-        $mailer->addAddress($email);
-        $mailer->isHTML(true);
-
-        $mailer->Subject = "Recupero password Alfatecnica";
-
-        $mailer->Body = '<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width">
@@ -304,16 +252,3 @@ if(!$check){
 </center>
 </body>
 </html>
-        ';
-        $mailer-> send();
-        echo "mailDone";
-    } catch (Exception $e) {
-        echo $e;
-        http_response_code(400);
-        exit;
-    }
-}else{
-    echo "userAlreadyRegistered";
-    exit;
-}
-?>
