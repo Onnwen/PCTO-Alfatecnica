@@ -276,13 +276,13 @@ if (isset($_SESSION['session_id'])) {
         <nav aria-label="Page navigation example ">
             <ul class="pagination justify-content-center ">
                 <li class="page-item" id="previousPageButton">
-                    <a class="page-link " href="# " aria-label="Previous " onClick="previousPage();">
+                    <a class="page-link " href="#" aria-label="Previous " onClick="previousPage();">
                         <span aria-hidden="true">&laquo;</span>
 
                     </a>
                 </li>
                 <li class="page-item" id="nextPageButton">
-                    <a class="page-link " href="# " aria-label="Next " onClick="nextPage();">
+                    <a class="page-link " href="#" aria-label="Next " onClick="nextPage();">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>
