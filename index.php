@@ -276,9 +276,6 @@ if (isset($_SESSION['session_id'])) {
                         password.attr('for', 'floatingInputInvalid');
                         email.attr('for', 'floatingInputInvalid');
                     } else {
-                        window.location.href = 'php/home/home.php';
-                    }
-                    } else {
                         window.location.href = "pages/lista-anagrafica.php";
                     }
                 });
