@@ -12,16 +12,16 @@ $pre = $pdo->prepare($select);
 $pre->bindParam(':email', $email, PDO::PARAM_STR);
 $pre->execute();
 $check = $pre->fetch(PDO::FETCH_ASSOC);
-if(!$check){
+if (!$check) {
     echo 'userWrong';
     exit;
-} else if($check['active'] == '0'){
+} else if ($check['active'] === '0') {
     echo 'userNotActive';
     exit;
-} else if ($check['activedByCompany'] == '0'){
+} else if ($check['activedByCompany'] === '0') {
     echo 'userNotAccepted';
     exit;
-} else if (password_verify($pw,$check['hashed_password'])){
+} else if (password_verify($pw, $check['hashed_password'])) {
     session_regenerate_id();
     $_SESSION['session_id'] = session_id();
     $_SESSION['session_email'] = $check['email'];
@@ -31,5 +31,3 @@ if(!$check){
     echo 'passwordWrong';
     exit;
 }
-
-
