@@ -300,6 +300,7 @@ if (isset($_SESSION['session_id'])) {
         let requestedSite = "<?php echo (isset($_GET['sede']) ? $_GET['sede'] : '') ?>";
         let requestedDate = "<?php echo (isset($_GET['data']) ? $_GET['data'] : '') ?>";
         let maxCardsPerPage = 5;
+        let maxPageNumber = 0;
 
         $(document).ready(function() {
             $(".change_cards").click(function() {
@@ -335,6 +336,8 @@ if (isset($_SESSION['session_id'])) {
             $.post(requestDestination, searchedQuery, function(resp) {
                 const cards = document.getElementById("cardContainer"); //prendere l'elemento con quel determinato id
                 const tabella = document.getElementById('tabella-ajax');
+                maxPageNumber = Math.ceil(resp.length / maxCardsPerPage) - 1;
+
                 for (let i = (maxCardsPerPage * currentPage <= resp.length ? maxCardsPerPage * currentPage : maxCardsPerPage * Math.floor(resp.length / maxCardsPerPage)); i < resp.length && i < maxCardsPerPage * (currentPage + 1); i++) {
                     console.log("Pagina = " + currentPage + " ; " + i);
                     cards.innerHTML += '<div class="col">' +
@@ -418,15 +421,15 @@ if (isset($_SESSION['session_id'])) {
                 data: formData,
                 contentType: false,
                 processData: false,
-                success: function(response){
+                success: function(response) {
                     suspendCompanyModal(false);
-                    if(response==='invalidInsert'){
+                    if (response === 'invalidInsert') {
                         modalError(true);
-                    }else{
+                    } else {
                         modalConfirmation(true);
                     }
                 },
-                fail: function(){
+                fail: function() {
                     suspendCompanyModal(false);
                     modalError(true);
                 },
@@ -439,14 +442,16 @@ if (isset($_SESSION['session_id'])) {
             $.ajax({
                 url: '../php/deleteCompany.php',
                 type: 'post',
-                data: {id: id},
-                success: function(){
+                data: {
+                    id: id
+                },
+                success: function() {
                     modalConfirmation(true);
                 },
-                fail: function(){
+                fail: function() {
                     modalError(true);
                 },
-                always: function(){
+                always: function() {
                     // modalLoading(false);
                 }
             });
@@ -534,19 +539,24 @@ if (isset($_SESSION['session_id'])) {
             let inputSite = document.getElementById("companySite").value;
             let inputDate = document.getElementById("companyLastDate").value;
 
-            let companyQueryString = inputCompany !== "" ? "nome_azienda=" + inputCompany + "&": "";
+            let companyQueryString = inputCompany !== "" ? "nome_azienda=" + inputCompany + "&" : "";
             let siteQueryString = inputSite !== "" ? "sede=" + inputSite + "&" : "";
             let dateQueryString = inputDate !== "" ? "data=" + inputDate + "&" : "";
 
-            window.location.href = 'lista-anagrafica.php?' + companyQueryString + siteQueryString +  dateQueryString + "pagina=0";
+            window.location.href = 'lista-anagrafica.php?' + companyQueryString + siteQueryString + dateQueryString + "pagina=0";
         }
 
         function nextPage() {
-            paginatore(currentPage + 1);
+            if (currentPage < maxPageNumber) {
+                paginatore(currentPage + 1);
+            }
         }
 
         function previousPage() {
-            paginatore(currentPage - 1 >= 0 ? currentPage - 1 : 0);
+            let previousPageNumber = currentPage - 1;
+            if (previousPageNumber >= 0) {
+                paginatore(previousPageNumber);
+            }
         }
 
         function paginatore(pagina) {
@@ -554,7 +564,7 @@ if (isset($_SESSION['session_id'])) {
             let siteQueryString = requestedSite !== "" ? "sede=" + requestedSite + "&" : "";
             let dateQueryString = requestedDate !== "" ? "data=" + requestedDate + "&" : "";
 
-            window.location.href = 'lista-anagrafica.php?' + companyQueryString + siteQueryString + dateQueryString  + "pagina=" + pagina;
+            window.location.href = 'lista-anagrafica.php?' + companyQueryString + siteQueryString + dateQueryString + "pagina=" + pagina;
         }
     </script>
 
