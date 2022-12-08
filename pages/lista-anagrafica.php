@@ -275,13 +275,13 @@ if (isset($_SESSION['session_id'])) {
         <!-- PAGINATOR -->
         <nav aria-label="Page navigation example ">
             <ul class="pagination justify-content-center ">
-                <li class="page-item ">
+                <li class="page-item" id="previousPageButton">
                     <a class="page-link " href="# " aria-label="Previous " onClick="previousPage();">
                         <span aria-hidden="true">&laquo;</span>
 
                     </a>
                 </li>
-                <li class="page-item ">
+                <li class="page-item" id="nextPageButton">
                     <a class="page-link " href="# " aria-label="Next " onClick="nextPage();">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
@@ -344,6 +344,15 @@ if (isset($_SESSION['session_id'])) {
                 if (currentPage > maxPageNumber) {
                     paginatore(maxPageNumber);
                 }
+
+                // Nascondi bottoni del paginatore se sono inutili
+                if (currentPage === maxPageNumber) {
+                    $("#nextPageButton").hide();
+                } else if (currentPage === 0) {
+                    $("#previousPageButton").hide();
+                }
+
+
 
                 for (let i = (maxCardsPerPage * currentPage <= resp.length ? maxCardsPerPage * currentPage : maxCardsPerPage * Math.floor(resp.length / maxCardsPerPage)); i < resp.length && i < maxCardsPerPage * (currentPage + 1); i++) {
                     console.log("Pagina = " + currentPage + " ; " + i);
