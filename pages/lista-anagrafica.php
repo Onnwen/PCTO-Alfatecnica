@@ -294,6 +294,10 @@ if (isset($_SESSION['session_id'])) {
         <?php require_once("footer.php"); ?>
     </body>
     <script>
+        let currentMode = "<?php echo isset($_GET['visuale']) ? $_GET['visuale'] : "tabella" ?>";
+
+        changeMode(currentMode);
+
         let currentPage = <?php echo (!(filter_var($_GET['pagina'], FILTER_VALIDATE_INT) === false) ? $_GET['pagina'] : 0) ?>;
 
         let requestedCompany = "<?php echo (isset($_GET['nome_azienda']) ? $_GET['nome_azienda'] : '') ?>";
@@ -304,15 +308,11 @@ if (isset($_SESSION['session_id'])) {
 
         $(document).ready(function() {
             $(".change_cards").click(function() {
-                $(".anagrafiche").css("display", "none");
-                $(".anagrafiche_cards").css("display", "none");
-                $(".table_anagrafiche").css("display", "block");
+                changeMode("tabella");
             });
 
             $(".change_table").click(function() {
-                $(".anagrafiche").css("display", "block");
-                $(".anagrafiche_cards").css("display", "block");
-                $(".table_anagrafiche").css("display", "none");
+                changeMode("griglia");
             });
 
             let requestDestination = "";
@@ -362,9 +362,9 @@ if (isset($_SESSION['session_id'])) {
                         '<div class="card-body">' +
                         '<h4 class="card-title">' + resp[i].nome + '</h4>' +
                         '<p class="card-text">' + resp[i].sede + '</p>' +
-                        '<a href="#"><i class="fa-solid fa-trash-can trash" style="float: left;"></i></a>' +
+                        '<a href="javascript:deleteCompany(' + resp[i].id + ')"><i class="fa-solid fa-trash-can trash" style="float: left;"></i></a>' +
                         '<button type="button" class="btn btn-outline-dark" onclick="window.location.href=\'dettaglio-anagrafica.php?id_ana=' + resp[i].id + '\'">Guarda</button>' +
-                        '<a href="#"><i class="fa-solid fa-pen-to-square edit"' +
+                        '<a href="#" data-bs-toggle="modal" data-bs-target="#companyModal" data-bs-whatever="' + resp[i].id + '"><i class="fa-solid fa-pen-to-square edit"' +
                         'style="float: right; vertical-align: middle;"></i></a>' +
                         '</div>' +
                         '</div>' +
@@ -579,8 +579,37 @@ if (isset($_SESSION['session_id'])) {
             let companyQueryString = requestedCompany !== "" ? "nome_azienda=" + requestedCompany + "&" : "";
             let siteQueryString = requestedSite !== "" ? "sede=" + requestedSite + "&" : "";
             let dateQueryString = requestedDate !== "" ? "data=" + requestedDate + "&" : "";
+            let modeQueryString = currentMode !== "tabella" ? "visuale=" + currentMode + "&" : "";
 
-            window.location.href = 'lista-anagrafica.php?' + companyQueryString + siteQueryString + dateQueryString + "pagina=" + pagina;
+            window.location.href = 'lista-anagrafica.php?' + companyQueryString + siteQueryString + dateQueryString + modeQueryString + "pagina=" + pagina;
+        }
+
+        function changeMode(newMode) {
+            currentMode = newMode;
+
+            if (newMode === "tabella") {
+                console.log("Visualizzazione Tabella");
+
+                $(".anagrafiche").css("display", "none");
+                $(".anagrafiche_cards").css("display", "none");
+                $(".table_anagrafiche").css("display", "block");
+
+                $("#cards").addClass("selected");
+                $("#table").removeClass("selected");
+            } else if (newMode === "griglia") {
+                console.log("Visualizzazione Griglia");
+
+                $(".anagrafiche").css("display", "block");
+                $(".anagrafiche_cards").css("display", "block");
+                $(".table_anagrafiche").css("display", "none");
+
+                $("#cards").removeClass("selected");
+                $("#table").addClass("selected");
+            } else {
+                console.log("ERRORE: Modalità di visualizzazione invalida! Resetto a Tabella");
+
+                changeMode("tabella");
+            }
         }
     </script>
 
