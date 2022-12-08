@@ -362,9 +362,9 @@ if (isset($_SESSION['session_id'])) {
                         '<div class="card-body">' +
                         '<h4 class="card-title">' + resp[i].nome + '</h4>' +
                         '<p class="card-text">' + resp[i].sede + '</p>' +
-                        '<a href="#"><i class="fa-solid fa-trash-can trash" style="float: left;"></i></a>' +
+                        '<a href="javascript:deleteCompany(' + resp[i].id + ')"><i class="fa-solid fa-trash-can trash" style="float: left;"></i></a>' +
                         '<button type="button" class="btn btn-outline-dark" onclick="window.location.href=\'dettaglio-anagrafica.php?id_ana=' + resp[i].id + '\'">Guarda</button>' +
-                        '<a href="#"><i class="fa-solid fa-pen-to-square edit"' +
+                        '<a href="#" data-bs-toggle="modal" data-bs-target="#companyModal" data-bs-whatever="' + resp[i].id + '"><i class="fa-solid fa-pen-to-square edit"' +
                         'style="float: right; vertical-align: middle;"></i></a>' +
                         '</div>' +
                         '</div>' +
