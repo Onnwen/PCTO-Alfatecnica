@@ -270,6 +270,14 @@ if (isset($_SESSION['session_id'])) {
                         $('#passwordInput, #emailInput').addClass('is-invalid');
                         password.attr('for', 'floatingInputInvalid');
                         email.attr('for', 'floatingInputInvalid');
+                    }else if(resp === 'userNotActive'){
+                        errorMessage.html('Utente non attivo');
+                        $('#passwordInput, #emailInput').addClass('is-invalid');
+                        password.attr('for', 'floatingInputInvalid');
+                        email.attr('for', 'floatingInputInvalid');
+                    } else {
+                        window.location.href = 'php/home/home.php';
+                    }
                     } else {
                         window.location.href = "pages/lista-anagrafica.php";
                     }
