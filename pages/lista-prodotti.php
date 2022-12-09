@@ -11,7 +11,7 @@ if (isset($_SESSION['session_id'])) {
         $productsCategory[] = $productCategory;
     }
 
-    ?>
+?>
 
     <!DOCTYPE html>
     <html lang="it">
@@ -42,164 +42,164 @@ if (isset($_SESSION['session_id'])) {
     </head>
 
     <body>
-    <?php require_once("navbar.php"); ?>
+        <?php require_once("navbar.php"); ?>
 
-    <hr>
-    <br>
+        <hr>
+        <br>
 
-    <!-- Confirmation Modal -->
-    <div class="modal fade" id="confirmedModal" tabindex="-1" aria-labelledby="confirmedModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" style="color: darkgreen" id="confirmedModalLabel">Effettuato con successo</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    L'operazione è avvenuta con successo. La pagina sarà ricaricata per applicare le modifiche.
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="reload()">Ok</button>
+        <!-- Confirmation Modal -->
+        <div class="modal fade" id="confirmedModal" tabindex="-1" aria-labelledby="confirmedModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" style="color: darkgreen" id="confirmedModalLabel">Effettuato con successo</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        L'operazione è avvenuta con successo. La pagina sarà ricaricata per applicare le modifiche.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="reload()">Ok</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Error Modal -->
-    <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" style="color: darkred" id="errorModalLabel">È stato riscontrato un problema</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    È stato riscontrato un errore durante il caricamento dei dati. Nessuna modifica è stata applicata.
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
+        <!-- Error Modal -->
+        <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" style="color: darkred" id="errorModalLabel">È stato riscontrato un problema</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        È stato riscontrato un errore durante il caricamento dei dati. Nessuna modifica è stata applicata.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Loading Modal -->
-    <div class="modal fade" id="loadingModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="loadingModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="loadingModalLabel">Attendi</h5>
-                    <div class="spinner-border spinner-border-sm" role="status"></div>
-                </div>
-                <div class="modal-body">
-                    Caricamento dei dati in corso.
+        <!-- Loading Modal -->
+        <div class="modal fade" id="loadingModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="loadingModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="loadingModalLabel">Attendi</h5>
+                        <div class="spinner-border spinner-border-sm" role="status"></div>
+                    </div>
+                    <div class="modal-body">
+                        Caricamento dei dati in corso.
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Add/Edit Product Modal -->
-    <div class="modal fade" id="productModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="productModalLabel">Aggiungi prodotto</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <label for="basic-url" class="form-label">Dati generali</label>
-                        <div class="row gx-2">
-                            <div class="col me-4">
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text disabled-with-editing" id="addNameLabel">Nome</span>
-                                    <input class="form-control field-input" type="text" id="name" aria-describedby="addNameLabel" placeholder="Nome">
+        <!-- Add/Edit Product Modal -->
+        <div class="modal fade" id="productModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="productModalLabel">Aggiungi prodotto</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <label for="basic-url" class="form-label">Dati generali</label>
+                            <div class="row gx-2">
+                                <div class="col me-4">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text disabled-with-editing" id="addNameLabel">Nome</span>
+                                        <input class="form-control field-input" type="text" id="name" aria-describedby="addNameLabel" placeholder="Nome">
+                                    </div>
+                                </div>
+                                <div class="col-2 hide-with-editing">
+                                    <input type="radio" class="btn-check" name="form" id="isProduct" autocomplete="off" checked>
+                                    <label class="btn btn-outline-secondary w-100" for="isProduct">Prodotto</label>
+                                </div>
+                                <div class="col-2 hide-with-editing">
+                                    <input type="radio" class="btn-check" name="form" id="isForm" autocomplete="off">
+                                    <label class="btn btn-outline-secondary w-100" for="isForm">Formulario</label>
                                 </div>
                             </div>
-                            <div class="col-2 hide-with-editing">
-                                <input type="radio" class="btn-check" name="form" id="isProduct" autocomplete="off" checked>
-                                <label class="btn btn-outline-secondary w-100" for="isProduct">Prodotto</label>
+                            <label for="basic-url" class="form-label">Attributi</label>
+                            <div id="modalFields">
                             </div>
-                            <div class="col-2 hide-with-editing">
-                                <input type="radio" class="btn-check" name="form" id="isForm" autocomplete="off">
-                                <label class="btn btn-outline-secondary w-100" for="isForm">Formulario</label>
-                            </div>
-                        </div>
-                        <label for="basic-url" class="form-label">Attributi</label>
-                        <div id="modalFields">
-                        </div>
-                        <div id="filesInput hide-with-editing">
-                            <label for="basic-url" class="form-label hide-with-editing">Icona</label>
-                            <div class="col hide-with-editing">
-                                <div class="input-group mb-3">
-                                    <input class="form-control hide-with-editing" type="file" id="icon_path" aria-describedby="addIconLabel">
+                            <div id="filesInput hide-with-editing">
+                                <label for="basic-url" class="form-label hide-with-editing">Icona</label>
+                                <div class="col hide-with-editing">
+                                    <div class="input-group mb-3">
+                                        <input class="form-control hide-with-editing" type="file" id="icon" aria-describedby="addIconLabel">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button id="productModalCloseButton" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-                    <button id="productModalConfirmButton" type="button" class="btn btn-success" onclick="confirmModalButton();">Aggiungi</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Aggiunta e ricerca -->
-    <div class="container">
-        <div class="row w-100">
-            <div class="col">
-                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#productModal" data-bs-whatever="addProduct" id="openProductModal">
-                    <i class="bi bi-box-fill"></i>&nbsp;&nbsp;Aggiungi prodotto
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <br>
-    <hr>
-
-    <!-- Lista prodotti -->
-    <div class="container">
-        <div class="row row-tabella">
-            <div class="col-sm-12">
-                <div class="table-responsive">
-                    <table class="table table-bordered">
-                        <thead>
-                        <tr style="text-align: center;">
-                            <th scope="col">Nome</th>
-                            <th scope="col">Tipologia</th>
-                            <th scope="col" style="width: 200px">Gestione</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr style="text-align: center;">
-                            <?php
-                            foreach ($productsCategory as $productCategory) {
-                                echo "<tr>";
-                                echo "<th class='text-center align-middle'>{$productCategory['name']}</th>";
-                                echo "<th class='text-center align-middle'>" . ($productCategory['type'] == 0 ? "Prodotto" : "Questionario") . "</th>";
-                                echo '<td class="text-center align-middle"><button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#productModal" data-bs-whatever="' . $productCategory['product_category_id'] . '"><i class="fa-solid fa-pen"></i></button><button class="btn btn-outline-danger" onclick="deleteProductCategoryFromDatabase(' . $productCategory['product_category_id'] . ')"><i class="fa-solid fa-trash-can"></i></button></td>';
-                                echo "</tr>";
-                            }
-                            ?>
-                        </tr>
-                        </tbody>
-                    </table>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="productModalCloseButton" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                        <button id="productModalConfirmButton" type="button" class="btn btn-success" onclick="confirmModalButton();">Aggiungi</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <br>
-    <br>
-    <!-- FOOTER -->
+        <!-- Aggiunta e ricerca -->
+        <div class="container">
+            <div class="row w-100">
+                <div class="col">
+                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#productModal" data-bs-whatever="addProduct" id="openProductModal">
+                        <i class="bi bi-box-fill"></i>&nbsp;&nbsp;Aggiungi prodotto
+                    </button>
+                </div>
+            </div>
+        </div>
 
-    <hr>
-    <footer class="py-3 my-4">
-        <p class="text-center text-muted ">© 2022 Alfatecnica, Inc</p>
-    </footer>
+        <br>
+        <hr>
+
+        <!-- Lista prodotti -->
+        <div class="container">
+            <div class="row row-tabella">
+                <div class="col-sm-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr style="text-align: center;">
+                                    <th scope="col">Nome</th>
+                                    <th scope="col">Tipologia</th>
+                                    <th scope="col" style="width: 200px">Gestione</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="text-align: center;">
+                                    <?php
+                                    foreach ($productsCategory as $productCategory) {
+                                        echo "<tr>";
+                                        echo "<th class='text-center align-middle'>{$productCategory['name']}</th>";
+                                        echo "<th class='text-center align-middle'>" . ($productCategory['type'] == 0 ? "Prodotto" : "Questionario") . "</th>";
+                                        echo '<td class="text-center align-middle"><button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#productModal" data-bs-whatever="' . $productCategory['product_category_id'] . '"><i class="fa-solid fa-pen"></i></button><button class="btn btn-outline-danger" onclick="deleteProductCategoryFromDatabase(' . $productCategory['product_category_id'] . ')"><i class="fa-solid fa-trash-can"></i></button></td>';
+                                        echo "</tr>";
+                                    }
+                                    ?>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <br>
+        <!-- FOOTER -->
+
+        <hr>
+        <footer class="py-3 my-4">
+            <p class="text-center text-muted ">© 2022 Alfatecnica, Inc</p>
+        </footer>
     </body>
 
     <script>
@@ -214,7 +214,7 @@ if (isset($_SESSION['session_id'])) {
         let modalType = "addProduct";
 
         const productModal = document.getElementById('productModal');
-        productModal.addEventListener('show.bs.modal', function (event) {
+        productModal.addEventListener('show.bs.modal', function(event) {
             const button = event.relatedTarget;
             modalType = button.getAttribute('data-bs-whatever');
 
@@ -239,9 +239,9 @@ if (isset($_SESSION['session_id'])) {
                 $('#productModalConfirmButton').text(modalLabelMode);
 
                 $.get('../php/productCategory/getProductCategory.php', {
-                    id: modalType
-                })
-                    .done(function (response) {
+                        id: modalType
+                    })
+                    .done(function(response) {
                         let fieldsNames = JSON.parse(response);
 
                         modalTitle.textContent = modalLabelMode + " " + modalLabelType;
@@ -251,19 +251,19 @@ if (isset($_SESSION['session_id'])) {
                         modalLabelFieldType = fieldsNames["type"] === 0 ? "Campo" : "Domanda";
 
                         if (fieldsNames["type"] === 1) {
-                            $("#productModalConfirmButton").prop("disabled",true);
+                            $("#productModalConfirmButton").prop("disabled", true);
                         }
 
                         loadNewProductFields();
                     })
-                    .fail(function () {
+                    .fail(function() {
                         dismissModal();
                         modalError(true);
                     })
             }
         });
 
-        $("#isProduct").on('click', function () {
+        $("#isProduct").on('click', function() {
             modalLabelType = "prodotto";
             const modalTitle = productModal.querySelector('.modal-title');
             modalTitle.textContent = modalLabelMode + " " + modalLabelType;
@@ -273,13 +273,16 @@ if (isset($_SESSION['session_id'])) {
             loadNewProductFields();
         });
 
-        $("#isForm").on('click', function () {
+        $("#isForm").on('click', function() {
             modalLabelType = "formulario";
             const modalTitle = productModal.querySelector('.modal-title');
             modalTitle.textContent = modalLabelMode + " " + modalLabelType;
             modalLabelFieldType = "Domanda";
             if (modalAttributes.length === 0) {
-                modalAttributes.push({'id': 0, 'name': ""});
+                modalAttributes.push({
+                    'id': 0,
+                    'name': ""
+                });
             }
             resetModal();
             addSection();
@@ -295,22 +298,22 @@ if (isset($_SESSION['session_id'])) {
             modalDeletedAttributes = [];
 
             $("#name").val("");
-            $("#productModalConfirmButton").prop("disabled",false);
+            $("#productModalConfirmButton").prop("disabled", false);
 
             if (modalType === "addProduct") {
-                $(".hide-with-editing").each(function () {
+                $(".hide-with-editing").each(function() {
                     $(this).show();
                 })
 
-                $(".disabled-with-editing").each(function () {
+                $(".disabled-with-editing").each(function() {
                     $(this).prop("disabled", false);
                 })
             } else {
-                $(".hide-with-editing").each(function () {
+                $(".hide-with-editing").each(function() {
                     $(this).hide();
                 })
 
-                $(".disabled-with-editing").each(function () {
+                $(".disabled-with-editing").each(function() {
                     $(this).prop("disabled", true);
                 })
             }
@@ -361,15 +364,25 @@ if (isset($_SESSION['session_id'])) {
 
         function addField(sectionId) {
             if (sectionId === undefined) {
-                modalAttributes.push({'id': (modalAttributes.length + 1) * -1, 'name': ""});
+                modalAttributes.push({
+                    'id': (modalAttributes.length + 1) * -1,
+                    'name': ""
+                });
             } else {
-                modalAttributes[sectionId]['fields'].push({'id': (modalAttributes.length + 1) * -1, 'name': ""})
+                modalAttributes[sectionId]['fields'].push({
+                    'id': (modalAttributes.length + 1) * -1,
+                    'name': ""
+                })
             }
             loadNewProductFields();
         }
 
         function addSection() {
-            modalAttributes.push({'id': modalAttributes.length, 'name': "", 'fields': []});
+            modalAttributes.push({
+                'id': modalAttributes.length,
+                'name': "",
+                'fields': []
+            });
             addField(modalAttributes.length - 1);
         }
 
@@ -420,7 +433,7 @@ if (isset($_SESSION['session_id'])) {
         function checkFields() {
             let canProceed = true;
             $(this).removeClass('is-invalid');
-            $(".field-input .field-check").each(function () {
+            $(".field-input .field-check").each(function() {
                 $(this).removeClass('is-invalid');
                 if ($(this).val() === "") {
                     $(this).addClass('is-invalid');
@@ -441,40 +454,53 @@ if (isset($_SESSION['session_id'])) {
         function addProductCategoryToDatabase() {
             if (checkFields()) {
                 suspendProductModal(true);
-                let parameters = {};
+                let parameters = new FormData();
 
                 if (isForm()) {
-                    parameters["type"] = 1;
+                    parameters.append("type", 1);
                     modalAttributes.forEach((section, sectionIndex) => {
-                        parameters[sectionIndex + "sectionName"] = section["name"];
+                        parameters.append(sectionIndex + "sectionName", section["name"]);
                         section["fields"].forEach((field, fieldIndex) => {
-                            parameters[sectionIndex + "" + fieldIndex + "fieldName"] = field["name"];
+                            parameters.append(sectionIndex + "" + fieldIndex + "fieldName", field["name"]);
                         });
                     });
                 } else {
-                    parameters["type"] = 0;
+                    parameters.append("type", 0);
                 }
 
-                $(".field-input").each(function () {
-                    parameters[$(this).attr('id')] = $(this).val();
+                $(".field-input").each(function() {
+                    parameters.append($(this).attr('id'), $(this).val());
                 });
 
-                $.post('../php/productCategory/addProductCategory.php', parameters)
-                    .done(function () {
+                // Gestisci upload immagine
+                let icon_image = $('#icon').prop('files')[0];
+                parameters.append('icon', icon_image);
+
+                $.ajax({
+                    url: '../php/productCategory/addProductCategory.php',
+                    type: 'post',
+                    data: parameters,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
                         suspendProductModal(false);
                         modalConfirmation(true);
-                    })
-                    .fail(function () {
+                    },
+                    fail: function() {
                         suspendProductModal(false);
                         modalError(true);
-                    })
+                    },
+                });
             } else {
                 alert("Per procedere è necessario compilare tutti i campi.");
             }
         }
 
         function updateProductCategoryInDataBase() {
-            let parameters = {"product_category_id": isEditingProduct, "name": $("#name").val()};
+            let parameters = {
+                "product_category_id": isEditingProduct,
+                "name": $("#name").val()
+            };
 
             if (isForm()) {
                 console.log("Not supported");
@@ -507,11 +533,11 @@ if (isset($_SESSION['session_id'])) {
 
             suspendProductModal(true);
             $.post('../php/productCategory/updateProductCategory.php', parameters)
-                .done(function () {
+                .done(function() {
                     suspendProductModal(false);
                     modalConfirmation(true);
                 })
-                .fail(function () {
+                .fail(function() {
                     suspendProductModal(false);
                     modalError(true);
                 })
@@ -519,14 +545,16 @@ if (isset($_SESSION['session_id'])) {
 
         function deleteProductCategoryFromDatabase(productCategoryId) {
             modalLoading(true);
-            $.post('../php/productCategory/deleteProductCategory.php', {id: productCategoryId})
-                .done(function () {
+            $.post('../php/productCategory/deleteProductCategory.php', {
+                    id: productCategoryId
+                })
+                .done(function() {
                     modalConfirmation(true);
                 })
-                .fail(function () {
+                .fail(function() {
                     modalError(true);
                 })
-                .always(function () {
+                .always(function() {
                     onlyModalLoading(false);
                 })
         }
@@ -575,12 +603,11 @@ if (isset($_SESSION['session_id'])) {
         function reload() {
             window.location.reload();
         }
-
     </script>
 
     </html>
 
-    <?php
+<?php
 } else {
     echo "<script>window.location.replace('../index.php');</script>";
 }

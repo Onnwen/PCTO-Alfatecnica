@@ -4,21 +4,19 @@ require_once('../connessione.php');
 $productCategoryName = $_POST["name"];
 $visualizationType = $_POST["type"];
 
-$icon_image = (isset($_POST["icon"]) ? $_POST('icon') : "");
-
-if (isset($_POST["icon"])) {
+if (isset($_FILES["icon"])) {
     $icon_image = $_FILES["icon"];
     $target_dir_icon = "img/prodotti/";
     $target_file_icon = $target_dir_icon . $productCategoryName;
     $image_data = getimagesize($icon_image["tmp_name"]);
     $logo_image_width = $image_data[0];
     $logo_image_height = $image_data[1];
-    move_uploaded_file($icon_image["tmp_name"], "/srv/www/PCTO-Alfatecnica-Private/" . $target_file_icon);
+    move_uploaded_file($icon_image["tmp_name"], getcwd() . "/../../" . $target_file_icon);
 }
 
 try {
     $pdo->beginTransaction();
-    $pdo->query("INSERT INTO Product_Category (name, type, icon_image_path) VALUES ('" . $productCategoryName . "', '". $visualizationType . "', '" . $iconPath . "')");
+    $pdo->query("INSERT INTO Product_Category (name, type, icon_image_path) VALUES ('" . $productCategoryName . "', '" . $visualizationType . "', '" . $target_file_icon . "')");
 
     $newProductCategoryId = $pdo->lastInsertId();
     $pdo->commit();
