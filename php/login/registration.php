@@ -323,7 +323,7 @@ if(!$check){
             $mailer->Password = 'udmfxeagmfccdfuh';
             $mailer->From = 'alfatecnicasrl.mailer@gmail.com';
             $mailer->Sender = 'alfatecnicasrl.mailer@gmail.com';
-            $mailer->addAddress($mail);
+            $mailer->addAddress($mail['email']);
             $mailer->isHTML(true);
 
             $mailer->Subject = "Conferma registrazione utente Alfatecnica";
