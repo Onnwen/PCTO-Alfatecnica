@@ -5,7 +5,7 @@ require_once('../connessione.php');
 $email = isset($_POST['email']) ? $_POST['email'] : '';
 $pw = isset($_POST['pw']) ? $_POST['pw'] : '';
 
-$select = "SELECT email, hashed_password, active AS password
+$select = "SELECT email, hashed_password, active, activedByCompany  AS password
            FROM Users
            WHERE email = :email";
 $pre = $pdo->prepare($select);
@@ -15,8 +15,11 @@ $check = $pre->fetch(PDO::FETCH_ASSOC);
 if(!$check){
     echo 'userWrong';
     exit;
-} else if($check['active'] == 0){
+} else if($check['active'] == '0'){
     echo 'userNotActive';
+    exit;
+} else if ($check['activedByCompany'] == '0'){
+    echo 'userNotAccepted';
     exit;
 } else if (password_verify($pw,$check['hashed_password'])){
     session_regenerate_id();
