@@ -254,8 +254,7 @@ if (isset($_SESSION['session_id'])) {
                 </div>
                 <div class="modal-footer">
                     <!-- button to reload the page -->
-                    <button type="button" class="btn btn-success" data-bs-dismiss="modal"
-                            onclick="window.location.reload();">Ok
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">Ok
                     </button>
                 </div>
             </div>
@@ -275,8 +274,7 @@ if (isset($_SESSION['session_id'])) {
                     <label id="errorRegistrationLabel"></label>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success" data-bs-dismiss="modal"
-                            onclick="window.location.reload();">Ok
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">Ok
                     </button>
                 </div>
             </div>

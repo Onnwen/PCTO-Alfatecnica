@@ -5,7 +5,7 @@ require_once('../connessione.php');
 $email = isset($_POST['email']) ? $_POST['email'] : '';
 $pw = isset($_POST['pw']) ? $_POST['pw'] : '';
 
-$select = "SELECT email, hashed_password, active, activedByCompany
+$select = "SELECT email, hashed_password, active, activedByCompany, role
            FROM Users
            WHERE email = :email";
 $pre = $pdo->prepare($select);
