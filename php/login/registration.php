@@ -35,6 +35,7 @@ if(!$check){
         $pre = $pdo->prepare($insertUser_Company);
         $pre->execute();
 
+        //mail to user
         $mailer = new PHPMailer;
         $mailer->isSMTP();
         $mailer->Host = 'smtp.gmail.com';
@@ -293,7 +294,7 @@ if(!$check){
         <img class="center" src="https://thecouriernv.tplinkdns.com/PCTO-Alfatecnica-Staging/img/logo.png" height="200" alt="Alfatecnica">
     </center>
     <p>Buongiorno ' . $check["first_name"] .',</p>
-    <p>Ricevi questa mail perch&eacute hai segnalato di aver dimenticato la tua password. Utilizza il tasto sottostante per cambiare credenziali di accesso.</p>
+    <p>Ricevi questa mail perch&eacute hai eseguito la registrazione al nostro sito. Devbi per questo verificare la tua mail e poi aspettare che l\'amministratore dell\'azienda a cui ti sei registrato ti accetti, ti sar&aacute poi inviata un\'altra mail per l\'accettazione.</p>
     <center>
         <a class="center" href="https://thecouriernv.tplinkdns.com/PCTO-Alfatecnica-PrivateLogin/pages/registrationConfirm.php?email='. $check['email'] .'" target="_blank">Cambia password</a>
     </center>
@@ -306,6 +307,8 @@ if(!$check){
 </html>
         ';
         $mailer-> send();
+
+        //mail to company admin to notify the new account registered, the accepration or not will be achived in the admin panel with also a mail for the result to the user
         echo "mailDone";
     } catch (Exception $e) {
         echo $e;

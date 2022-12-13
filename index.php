@@ -275,7 +275,12 @@ if (isset($_SESSION['session_id'])) {
                         $('#passwordInput, #emailInput').addClass('is-invalid');
                         password.attr('for', 'floatingInputInvalid');
                         email.attr('for', 'floatingInputInvalid');
-                    } else {
+                    } else if(resp === 'userNotAccepted'){
+                        errorMessage.html('Utente non verificato');
+                        $('#passwordInput, #emailInput').addClass('is-invalid');
+                        password.attr('for', 'floatingInputInvalid');
+                        email.attr('for', 'floatingInputInvalid');
+                    }else {
                         window.location.href = "pages/lista-anagrafica.php";
                     }
                 });
