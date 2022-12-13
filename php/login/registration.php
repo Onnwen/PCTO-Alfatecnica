@@ -569,8 +569,8 @@ if(!$check){
     <center>
         <img class="center" src="https://thecouriernv.tplinkdns.com/PCTO-Alfatecnica-Staging/img/logo.png" height="200" alt="Alfatecnica">
     </center>
-    <p>Buongiorno ' . $check["first_name"] .',</p>
-    <p>Essendo amministratore devi sapere che si è regstrato un nuovo utente, per far si che esso possa accedere ai nostri servizi è necesario entrare nella sezione uenti del pannello di amministazione e accettare la sua registrazione. <br>Cordiali saluti.</p>
+    <p>Buongiorno,</p>
+    <p>essendo lei un amministratore deve sapere che si &eacute; registrato un nuovo utente, per far si che esso possa accedere ai nostri servizi &eacute; necessario entrare nella sezione utenti del pannello di amministazione e accettare la sua registrazione. <br>Cordiali saluti.</p>
 </div>
 
 <center>
