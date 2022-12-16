@@ -71,7 +71,7 @@ if (isset($_SESSION['session_id'])) {
     </body>
     <script>
         $(document).ready(function() {
-            $.get("../php/getRevisions.php", function(response) {
+            $.get("../php/revisions/getRevisions.php", function(response) {
                 // Stampa le revisioni nella tabella
 
                 let tableString = "";
