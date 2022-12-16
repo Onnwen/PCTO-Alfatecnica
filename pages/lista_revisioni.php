@@ -87,8 +87,6 @@ if (isset($_SESSION['session_id'])) {
                     let millisecondDifference = DeadlineDate - today;
                     let monthDifference = millisecondDifference / 2592000000;
 
-                    console.log(monthDifference);
-
                     if (monthDifference <= 0) {
                         // Revisione scaduta
                         statusColor = "red";
