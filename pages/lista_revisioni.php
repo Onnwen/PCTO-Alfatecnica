@@ -22,6 +22,35 @@ if (isset($_SESSION['session_id'])) {
     <body>
         <?php require_once("navbar.php"); ?>
 
+        <!-- Modal -->
+        <div class="modal fade" id="revisionModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="revisionModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="revisionModalLabel">Registra Revisione</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <label for="basic-url" class="form-label">Data Revisione</label>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="addDateLabel">Data</span>
+                                        <input class="form-control" type="date" id="revisionDate" aria-describedby="addDateLabel">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="revisionModalCloseButton" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                        <button id="revisionModalConfirmButton" type="button" class="btn btn-success" onclick="makeNewRevision()">Conferma</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Tabella -->
         <div class="container">
             <div class="row">
@@ -113,8 +142,7 @@ if (isset($_SESSION['session_id'])) {
                     tableString += "<tr style='text-align: center; color: " + statusColor + "'>";
                     tableString += ("<td scope='col'>" + revision.CompanyName + "</td>" + "<td scope='col'>" + revision.ProductCategoryName + "</td>" + "<td scope='col'>" + revision.LastRevision + "</td>" + "<td scope='col'>" + revision.Deadline + "</td>");
                     // TODO: Far selezionare una data all'utente e passala a makeNewRevision()
-                    tableString += "<td scope='col'><button onClick='makeNewRevision(" + revision.ProductCategoryID + "," + revision.CompanyID + ")'>Registra revisione</button></td>";
-
+                    tableString += "<td scope='col'><a href='#' data-bs-toggle='modal' data-bs-target='#revisionModal' data-bs-whatever=''>Revisiona</a></td>";
                     tableString += "</tr>";
                 }
 
