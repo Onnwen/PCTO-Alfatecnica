@@ -74,7 +74,13 @@ if (isset($_SESSION['session_id'])) {
     </body>
     <script>
         function makeNewRevision(productId, companyId, revisionDate) {
-            console.log("Il test funzica");
+            $.post("../php/revisions/makeRevision.php", {
+                product: productId,
+                company: companyId,
+                revisionDate: revisionDate
+            }, function(response) {
+                // TODO: Mostra conferma all'utente e ricarica la pagina;
+            });
         }
 
         $(document).ready(function() {
@@ -106,8 +112,8 @@ if (isset($_SESSION['session_id'])) {
 
                     tableString += "<tr style='text-align: center; color: " + statusColor + "'>";
                     tableString += ("<td scope='col'>" + revision.CompanyName + "</td>" + "<td scope='col'>" + revision.ProductCategoryName + "</td>" + "<td scope='col'>" + revision.LastRevision + "</td>" + "<td scope='col'>" + revision.Deadline + "</td>");
-                    // TODO: Passare i parametri corretti a makeNewRevision()
-                    tableString += "<td scope='col'><button onClick='makeNewRevision()'>Registra revisione</button></td>";
+                    // TODO: Far selezionare una data all'utente e passala a makeNewRevision()
+                    tableString += "<td scope='col'><button onClick='makeNewRevision(" + revision.ProductCategoryID + "," + revision.CompanyID + ")'>Registra revisione</button></td>";
 
                     tableString += "</tr>";
                 }
