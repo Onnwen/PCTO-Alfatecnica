@@ -55,6 +55,9 @@ if (isset($_SESSION['session_id'])) {
                                     <th scope="col">
                                         Data Scadenza Revisione
                                     </th>
+                                    <th scope="col">
+                                        Azioni
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody id="ToFill">
@@ -70,6 +73,10 @@ if (isset($_SESSION['session_id'])) {
         <?php require_once("footer.php"); ?>
     </body>
     <script>
+        function makeNewRevision(productId, companyId, revisionDate) {
+            console.log("Il test funzica");
+        }
+
         $(document).ready(function() {
             $.get("../php/revisions/getRevisions.php", function(response) {
                 // Stampa le revisioni nella tabella
@@ -99,6 +106,8 @@ if (isset($_SESSION['session_id'])) {
 
                     tableString += "<tr style='text-align: center; color: " + statusColor + "'>";
                     tableString += ("<td scope='col'>" + revision.CompanyName + "</td>" + "<td scope='col'>" + revision.ProductCategoryName + "</td>" + "<td scope='col'>" + revision.LastRevision + "</td>" + "<td scope='col'>" + revision.Deadline + "</td>");
+                    // TODO: Passare i parametri corretti a makeNewRevision()
+                    tableString += "<td scope='col'><button onClick='makeNewRevision()'>Registra revisione</button></td>";
 
                     tableString += "</tr>";
                 }
