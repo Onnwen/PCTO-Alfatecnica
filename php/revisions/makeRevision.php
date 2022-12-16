@@ -11,7 +11,7 @@ $query = "INSERT INTO Revisions(product_category_id, company_id, data) VALUES(:p
 $pre = $pdo->prepare($query);
 
 $pre->bindParam(":product_category_id", $revisionedProduct, PDO::PARAM_INT);
-$pre->bindParam(":company_id" . $revisionedCompany, PDO::PARAM_STR);
+$pre->bindParam(":company_id", $revisionedCompany, PDO::PARAM_INT);
 $pre->bindParam(":data", $revisionDate, PDO::PARAM_STR);
 
 $pre->execute();
