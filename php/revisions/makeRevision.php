@@ -1,10 +1,14 @@
 <?php
 require_once("../connessione.php");
 
-# FIXME: Ritorna un messaggio di errore al frontend in modo che possa avvisare l'utente in modo appropriato
-$revisionedProduct = isset($_POST["product"]) ? $_POST["product"] : exit();
-$revisionedCompany = isset($_POST["company"]) ? $_POST["company"] : exit();
-$revisionDate = isset($_POST["revisionDate"]) ? $_POST["revisionDate"] : exit();
+$revisionedProduct = isset($_POST["product"]) ? $_POST["product"] : "";
+$revisionedCompany = isset($_POST["company"]) ? $_POST["company"] : "";
+$revisionDate = isset($_POST["revisionDate"]) ? $_POST["revisionDate"] : "";
+
+if ($revisionedCompany == "" || $revisionedProduct == "" || $revisionDate == "") {
+    # FIXME: Ritorna un messaggio di errore al frontend in modo che possa avvisare l'utente in modo appropriato
+    die();
+}
 
 # FIXME: Controlla che l'utente sia autenticato come admin
 $query = "INSERT INTO Revisions(product_category_id, company_id, data) VALUES(:product_category_id, :company_id, :data)";
