@@ -19,4 +19,7 @@ $pre->bindParam(":company_id", $revisionedCompany, PDO::PARAM_INT);
 $pre->bindParam(":data", $revisionDate, PDO::PARAM_STR);
 
 $pre->execute();
+
+// FIXME: Seguire il metodo RESTful invece di ritornare lo stato dentro ad un 200 OK.
+echo ("OK");
 exit();
