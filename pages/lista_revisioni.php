@@ -134,7 +134,14 @@ if (isset($_SESSION['session_id'])) {
                 company: companyId,
                 revisionDate: revisionDate
             }, function(response) {
-                // TODO: Mostra conferma all'utente e ricarica la pagina;
+
+                // FIXME: Appena l'API diventa RESTful dobbiamo sistemare questo abominio
+                if (response == "OK") {
+                    // TODO: Mostra conferma all'utente prima di ricaricare la pagina
+                    window.location.reload();
+                } else {
+                    // TODO: Mostra messaggio di errore all'utente
+                }
             });
         }
 
