@@ -1,7 +1,7 @@
 <?php
 require_once("../connessione.php");
 
-# FIXME: Ritorna un messaggio di errore al fontend in modo che possa avvisare l'utente in modo appropriato
+# FIXME: Ritorna un messaggio di errore al frontend in modo che possa avvisare l'utente in modo appropriato
 $revisionedProduct = isset($_POST["product"]) ? $_POST["product"] : exit();
 $revisionedCompany = isset($_POST["company"]) ? $_POST["company"] : exit();
 $revisionDate = isset($_POST["revisionDate"]) ? $_POST["revisionDate"] : exit();
