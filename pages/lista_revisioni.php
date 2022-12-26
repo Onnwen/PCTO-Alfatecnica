@@ -125,10 +125,6 @@ if (isset($_SESSION['session_id'])) {
             let companyId = $("#companyId").val();
             let revisionDate = $("#revisionDate").val();
 
-            console.log("Azienda selezionata: " + companyId);
-            console.log("Prodotto selezionato: " + productId);
-            console.log("Data inserita: " + revisionDate);
-
             $.post("../php/revisions/makeRevision.php", {
                 product: productId,
                 company: companyId,
