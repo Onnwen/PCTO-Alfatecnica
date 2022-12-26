@@ -32,6 +32,20 @@ if (isset($_SESSION['session_id'])) {
                     </div>
                     <div class="modal-body">
                         <form>
+                            <label for="basic-url" class="form-label">Revisione</label>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="companyNameLabel">Azienda</span>
+                                        <input class="form-control" type="text" id="companyName" aria-describedby="companyNameLabel" disabled="">
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="productNameLabel">Prodotto</span>
+                                        <input class="form-control" type="text" id="productName" aria-describedby="productNameLabel" disabled="">
+                                    </div>
+                                </div>
+                            </div>
+
                             <label for="basic-url" class="form-label">Data Revisione</label>
                             <div class="row">
                                 <div class="col">
@@ -41,6 +55,10 @@ if (isset($_SESSION['session_id'])) {
                                     </div>
                                 </div>
                             </div>
+
+                            <input type="text" hidden id="companyId">
+                            <input type="text" hidden id="productId">
+
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -102,7 +120,15 @@ if (isset($_SESSION['session_id'])) {
         <?php require_once("footer.php"); ?>
     </body>
     <script>
-        function makeNewRevision(productId, companyId, revisionDate) {
+        function makeNewRevision() {
+            let productId = $("#productId").val();
+            let companyId = $("#companyId").val();
+            let revisionDate = $("#revisionDate").val();
+
+            console.log("Azienda selezionata: " + companyId);
+            console.log("Prodotto selezionato: " + productId);
+            console.log("Data inserita: " + revisionDate);
+
             $.post("../php/revisions/makeRevision.php", {
                 product: productId,
                 company: companyId,
@@ -110,6 +136,13 @@ if (isset($_SESSION['session_id'])) {
             }, function(response) {
                 // TODO: Mostra conferma all'utente e ricarica la pagina;
             });
+        }
+
+        function setRevisionData(companyName, companyId, productName, productId) {
+            $("#companyName").val(companyName);
+            $("#productName").val(productName);
+            $("#companyId").val(companyId);
+            $("#productId").val(productId);
         }
 
         $(document).ready(function() {
@@ -141,8 +174,8 @@ if (isset($_SESSION['session_id'])) {
 
                     tableString += "<tr style='text-align: center; color: " + statusColor + "'>";
                     tableString += ("<td scope='col'>" + revision.CompanyName + "</td>" + "<td scope='col'>" + revision.ProductCategoryName + "</td>" + "<td scope='col'>" + revision.LastRevision + "</td>" + "<td scope='col'>" + revision.Deadline + "</td>");
-                    // TODO: Far selezionare una data all'utente e passala a makeNewRevision()
-                    tableString += "<td scope='col'><a href='#' data-bs-toggle='modal' data-bs-target='#revisionModal' data-bs-whatever=''>Revisiona</a></td>";
+                    // FIXME: Trovare un modo migliore per passare i dati al modal; per adesso setRevisionData funziona, ma non è molto elegante
+                    tableString += "<td scope='col'><a href='#' data-bs-toggle='modal' data-bs-target='#revisionModal' data-bs-whatever='' onclick='setRevisionData(\"" + revision.CompanyName + "\"," + revision.CompanyID + ",\"" + revision.ProductCategoryName + "\"," + revision.ProductCategoryID + ")'>Revisiona</a></td>";
                     tableString += "</tr>";
                 }
 
