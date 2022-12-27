@@ -103,6 +103,9 @@ if (isset($_SESSION['session_id'])) {
                                         Data Scadenza Revisione
                                     </th>
                                     <th scope="col">
+                                        Stato
+                                    </th>
+                                    <th scope="col">
                                         Azioni
                                     </th>
                                 </tr>
@@ -196,6 +199,7 @@ if (isset($_SESSION['session_id'])) {
                     revision = response[i];
 
                     let statusColor = "";
+                    let statusText = "";
 
                     let DeadlineDate = new Date(revision.Deadline);
                     let today = new Date();
@@ -206,15 +210,18 @@ if (isset($_SESSION['session_id'])) {
                     if (monthDifference <= 0) {
                         // Revisione scaduta
                         statusColor = "red";
+                        statusText = "Scaduta";
                     } else if (monthDifference <= 1) { // TODO: Definire precisamente cosa vuol dire "sta per scadere"
                         // Manca circa un mese; considero come "Poco"
                         statusColor = "orange";
+                        statusText = "In Scadenza";
                     } else {
                         statusColor = "green";
+                        statusText = "Regolare";
                     }
 
-                    tableString += "<tr style='text-align: center; color: " + statusColor + "'>";
-                    tableString += ("<td scope='col'>" + revision.CompanyName + "</td>" + "<td scope='col'>" + revision.ProductCategoryName + "</td>" + "<td scope='col'>" + revision.LastRevision + "</td>" + "<td scope='col'>" + revision.Deadline + "</td>");
+                    tableString += "<tr style='text-align: center;'>";
+                    tableString += ("<td scope='col'>" + revision.CompanyName + "</td>" + "<td scope='col'>" + revision.ProductCategoryName + "</td>" + "<td scope='col'>" + revision.LastRevision + "</td>" + "<td scope='col'>" + revision.Deadline + "</td><td style='color:" + statusColor + "'>" + statusText + "</td>");
                     // FIXME: Trovare un modo migliore per passare i dati al modal; per adesso setRevisionData funziona, ma non è molto elegante
                     tableString += "<td scope='col'><button class='btn btn-sm btn-outline-success' data-bs-toggle='modal' data-bs-target='#revisionModal' onclick='setRevisionData(" + revision.CompanyID + "," + revision.ProductCategoryID + ")'>Revisione Rapida</button></td>";
                     tableString += "</tr>";
