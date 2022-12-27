@@ -110,6 +110,9 @@ if (isset($_SESSION['session_id'])) {
                             <tbody id="ToFill">
                             </tbody>
                         </table>
+                        <div class="justify-content-center" style="display: flex;">
+                            <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#revisionModal">Registra revisione</button>
+                        </div>
                     </div>
                 </div>
             </div>
