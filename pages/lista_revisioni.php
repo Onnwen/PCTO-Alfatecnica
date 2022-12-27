@@ -37,16 +37,20 @@ if (isset($_SESSION['session_id'])) {
                                 <div class="col">
                                     <div class="input-group mb-3">
                                         <span class="input-group-text" id="companyNameLabel">Azienda</span>
-                                        <input class="form-control" type="text" id="companyName" aria-describedby="companyNameLabel" disabled="">
+                                        <select class="form-control" id="companyName" aria-describedby="companyNameLabel">
+                                            <option disabled selected value="">Seleziona Azienda</option>
+                                        </select>
                                     </div>
                                     <div class="input-group mb-3">
                                         <span class="input-group-text" id="productNameLabel">Prodotto</span>
-                                        <input class="form-control" type="text" id="productName" aria-describedby="productNameLabel" disabled="">
+                                        <select class="form-control" id="productName" aria-describedby="productNameLabel">
+                                            <option disabled selected value="">Seleziona Prodotto</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
 
-                            <label for="basic-url" class="form-label">Data Revisione</label>
+                            <label for=" basic-url" class="form-label">Data Revisione</label>
                             <div class="row">
                                 <div class="col">
                                     <div class="input-group mb-3">
@@ -55,10 +59,6 @@ if (isset($_SESSION['session_id'])) {
                                     </div>
                                 </div>
                             </div>
-
-                            <input type="text" hidden id="companyId">
-                            <input type="text" hidden id="productId">
-
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -111,7 +111,7 @@ if (isset($_SESSION['session_id'])) {
                             </tbody>
                         </table>
                         <div class="justify-content-center" style="display: flex;">
-                            <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#revisionModal">Registra revisione</button>
+                            <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#revisionModal" onclick="clearDataFromModal()">Registra revisione</button>
                         </div>
                     </div>
                 </div>
@@ -123,9 +123,11 @@ if (isset($_SESSION['session_id'])) {
         <?php require_once("footer.php"); ?>
     </body>
     <script>
+        let preselectedProduct = null;
+
         function makeNewRevision() {
-            let productId = $("#productId").val();
-            let companyId = $("#companyId").val();
+            let productId = $("#productName").val();
+            let companyId = $("#companyName").val();
             let revisionDate = $("#revisionDate").val();
 
             $.post("../php/revisions/makeRevision.php", {
@@ -144,15 +146,48 @@ if (isset($_SESSION['session_id'])) {
             });
         }
 
-        function setRevisionData(companyName, companyId, productName, productId) {
-            $("#companyName").val(companyName);
-            $("#productName").val(productName);
-            $("#companyId").val(companyId);
-            $("#productId").val(productId);
+        function setRevisionData(companyId, productId) {
+            preselectedProduct = productId;
+
+            $("#companyName").val(companyId);
+            $("#companyName").change();
+        }
+
+        function clearDataFromModal() {
+            $("#companyName").val("");
+            $("#productName").val("");
+
+            preselectedProduct = null;
+        }
+
+        function changeSelectedCompany() {
+            // Fai in modo che quando seleziono un'azienda vengono automaticamente aggiornate le opzioni per i prodotti
+            let selectedCompany = $("#companyName").val();
+
+            $.post("../php/viewCategories.php", {
+                idAnag: selectedCompany
+            }, function(response) {
+                let receivedProducts = JSON.parse(response);
+
+                let generatedOptions = "<option disabled selected value=''>Seleziona Prodotto</option>";
+
+                receivedProducts.forEach(product => {
+                    generatedOptions += ("<option value='" + product.idCategoria + "'>" + product.nomeCategoria + "</option>");
+                });
+
+                $("#productName").html(generatedOptions);
+
+                // Per fare in modo che il bottone "revisione rapida" possa richiedere di settare un prodotto in anticipo
+                if (preselectedProduct !== null) {
+                    $("#productName").val(preselectedProduct);
+                }
+            });
         }
 
         $(document).ready(function() {
-            $.get("../php/revisions/getRevisions.php", function(response) {
+
+            $("#companyName").change(changeSelectedCompany);
+            $.getJSON("../php/revisions/getRevisions.php", function(response) {
                 // Stampa le revisioni nella tabella
 
                 let tableString = "";
@@ -181,12 +216,22 @@ if (isset($_SESSION['session_id'])) {
                     tableString += "<tr style='text-align: center; color: " + statusColor + "'>";
                     tableString += ("<td scope='col'>" + revision.CompanyName + "</td>" + "<td scope='col'>" + revision.ProductCategoryName + "</td>" + "<td scope='col'>" + revision.LastRevision + "</td>" + "<td scope='col'>" + revision.Deadline + "</td>");
                     // FIXME: Trovare un modo migliore per passare i dati al modal; per adesso setRevisionData funziona, ma non è molto elegante
-                    tableString += "<td scope='col'><a href='#' data-bs-toggle='modal' data-bs-target='#revisionModal' data-bs-whatever='' onclick='setRevisionData(\"" + revision.CompanyName + "\"," + revision.CompanyID + ",\"" + revision.ProductCategoryName + "\"," + revision.ProductCategoryID + ")'>Revisiona</a></td>";
+                    tableString += "<td scope='col'><a href='#' data-bs-toggle='modal' data-bs-target='#revisionModal' data-bs-whatever='' onclick='setRevisionData(" + revision.CompanyID + "," + revision.ProductCategoryID + ")'>Revisiona</a></td>";
                     tableString += "</tr>";
                 }
 
                 $("#ToFill").html(tableString);
-            }, "json");
+            });
+
+            $.getJSON("../php/viewAnagr.php", function(response) {
+                let generatedCompanyOptions = "<option disabled selected value=''>Seleziona Azienda</option>";
+
+                response.forEach(company => {
+                    generatedCompanyOptions += ("<option value='" + company.id + "'>" + company.nome + "</option>");
+                });
+
+                $("#companyName").html(generatedCompanyOptions);
+            });
         });
     </script>
 
