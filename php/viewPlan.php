@@ -29,7 +29,7 @@ if (!$idAnag == 0) {
     $result = $pdo->query($select);
     $arr = array();
     $i = 0;
-    if ($result && $result->count > 0) {
+    if ($result && $result->rowCount() > 0) {
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
             $arr[$i] = array(
                 'id_prod' => $row['id'],
