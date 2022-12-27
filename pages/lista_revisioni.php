@@ -160,6 +160,8 @@ if (isset($_SESSION['session_id'])) {
             $("#companyName").val("");
             $("#productName").val("");
 
+            changeSelectedCompany();
+
             preselectedProduct = null;
         }
 
@@ -167,24 +169,30 @@ if (isset($_SESSION['session_id'])) {
             // Fai in modo che quando seleziono un'azienda vengono automaticamente aggiornate le opzioni per i prodotti
             let selectedCompany = $("#companyName").val();
 
-            $.post("../php/viewCategories.php", {
-                idAnag: selectedCompany
-            }, function(response) {
-                let receivedProducts = JSON.parse(response);
+            let generatedOptions = "<option disabled selected value=''>Seleziona Prodotto</option>";
 
-                let generatedOptions = "<option disabled selected value=''>Seleziona Prodotto</option>";
-
-                receivedProducts.forEach(product => {
-                    generatedOptions += ("<option value='" + product.idCategoria + "'>" + product.nomeCategoria + "</option>");
-                });
-
+            if (selectedCompany === null) {
+                // Non è necessario fare una chiamata se stiamo deselezionando l'azienda
                 $("#productName").html(generatedOptions);
+            } else {
+                $.post("../php/viewCategories.php", {
+                    idAnag: selectedCompany
+                }, function(response) {
+                    let receivedProducts = JSON.parse(response);
 
-                // Per fare in modo che il bottone "revisione rapida" possa richiedere di settare un prodotto in anticipo
-                if (preselectedProduct !== null) {
-                    $("#productName").val(preselectedProduct);
-                }
-            });
+                    receivedProducts.forEach(product => {
+                        generatedOptions += ("<option value='" + product.idCategoria + "'>" + product.nomeCategoria + "</option>");
+                    });
+
+                    $("#productName").html(generatedOptions);
+
+                    // Per fare in modo che il bottone "revisione rapida" possa richiedere di settare un prodotto in anticipo
+                    if (preselectedProduct !== null) {
+                        $("#productName").val(preselectedProduct);
+                    }
+                });
+            }
+
         }
 
         $(document).ready(function() {
