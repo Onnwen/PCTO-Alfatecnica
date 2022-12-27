@@ -31,5 +31,3 @@ if(!$check){
     echo 'passwordWrong';
     exit;
 }
-
-
