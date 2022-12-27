@@ -216,7 +216,7 @@ if (isset($_SESSION['session_id'])) {
                     tableString += "<tr style='text-align: center; color: " + statusColor + "'>";
                     tableString += ("<td scope='col'>" + revision.CompanyName + "</td>" + "<td scope='col'>" + revision.ProductCategoryName + "</td>" + "<td scope='col'>" + revision.LastRevision + "</td>" + "<td scope='col'>" + revision.Deadline + "</td>");
                     // FIXME: Trovare un modo migliore per passare i dati al modal; per adesso setRevisionData funziona, ma non è molto elegante
-                    tableString += "<td scope='col'><a href='#' data-bs-toggle='modal' data-bs-target='#revisionModal' data-bs-whatever='' onclick='setRevisionData(" + revision.CompanyID + "," + revision.ProductCategoryID + ")'>Revisiona</a></td>";
+                    tableString += "<td scope='col'><button class='btn btn-sm btn-outline-success' data-bs-toggle='modal' data-bs-target='#revisionModal' onclick='setRevisionData(" + revision.CompanyID + "," + revision.ProductCategoryID + ")'>Revisione Rapida</button></td>";
                     tableString += "</tr>";
                 }
 
