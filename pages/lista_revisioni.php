@@ -113,9 +113,30 @@ if (isset($_SESSION['session_id'])) {
                             <tbody id="ToFill">
                             </tbody>
                         </table>
-                        <div class="justify-content-center" style="display: flex;">
-                            <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#revisionModal" onclick="clearDataFromModal()">Registra revisione</button>
-                        </div>
+                        <nav>
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination justify-content-center ">
+                                    <li class="page-item">
+                                        <button class="page-link" id="previousPageButton" aria-label="Previous " disabled onclick="previousPage();">
+                                            <span aria-hidden="true">«</span>
+
+                                        </button>
+                                    </li>
+                                    <li class="page-item">
+                                        <div class="page-link" aria-label="Pagina corrente">
+                                            <span id="pageNumber">1</span>
+                                        </div>
+                                    </li>
+                                    <li class="page-item">
+                                        <button class="page-link" id="nextPageButton" aria-label="Next " onclick="nextPage();">
+                                            <span aria-hidden="true">»</span>
+                                        </button>
+                                    </li>
+                                </ul>
+                            </nav>
+                            <div class="justify-content-center" style="display: flex;">
+                                <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#revisionModal" onclick="clearDataFromModal()">Registra revisione</button>
+                            </div>
                     </div>
                 </div>
             </div>
@@ -127,6 +148,10 @@ if (isset($_SESSION['session_id'])) {
     </body>
     <script>
         let preselectedProduct = null;
+        let revisionsPerPage = 5; // TODO: Trovare il valore ottimale in base alla dimensione dello schermo
+        let maxPageNumber = 0;
+        let currentPage = 0;
+        let allRevisions = [];
 
         function makeNewRevision() {
             let productId = $("#productName").val();
@@ -195,47 +220,81 @@ if (isset($_SESSION['session_id'])) {
 
         }
 
+        function loadRevisions(pageNumber) {
+            // Stampa le revisioni nella tabella
+
+            let tableString = "";
+
+            for (let i = revisionsPerPage * pageNumber; i < revisionsPerPage * (pageNumber + 1) && i < allRevisions.length; i++) {
+                revision = allRevisions[i];
+
+                let statusColor = "";
+                let statusText = "";
+
+                let DeadlineDate = new Date(revision.Deadline);
+                let today = new Date();
+
+                let millisecondDifference = DeadlineDate - today;
+                let monthDifference = millisecondDifference / 2592000000;
+
+                if (monthDifference <= 0) {
+                    // Revisione scaduta
+                    statusColor = "red";
+                    statusText = "Scaduta";
+                } else if (monthDifference <= 1) { // TODO: Definire precisamente cosa vuol dire "sta per scadere"
+                    // Manca circa un mese; considero come "Poco"
+                    statusColor = "orange";
+                    statusText = "In Scadenza";
+                } else {
+                    statusColor = "green";
+                    statusText = "Regolare";
+                }
+
+                tableString += "<tr style='text-align: center;'>";
+                tableString += ("<td scope='col'>" + revision.CompanyName + "</td>" + "<td scope='col'>" + revision.ProductCategoryName + "</td>" + "<td scope='col'>" + revision.LastRevision + "</td>" + "<td scope='col'>" + revision.Deadline + "</td><td style='color:" + statusColor + "'>" + statusText + "</td>");
+                // FIXME: Trovare un modo migliore per passare i dati al modal; per adesso setRevisionData funziona, ma non è molto elegante
+                tableString += "<td scope='col'><button class='btn btn-sm btn-outline-success' data-bs-toggle='modal' data-bs-target='#revisionModal' onclick='setRevisionData(" + revision.CompanyID + "," + revision.ProductCategoryID + ")'>Revisione Rapida</button></td>";
+                tableString += "</tr>";
+            }
+
+            $("#ToFill").html(tableString);
+        }
+
+        function nextPage() {
+            if (currentPage + 1 < maxPageNumber) {
+                currentPage++;
+                loadPage();
+            }
+        }
+
+        function previousPage() {
+            if (currentPage > 0) {
+                currentPage--;
+                loadPage();
+            }
+        }
+
+        function loadPage() {
+            let shouldDisablePreviousPageButton = currentPage == 0;
+            let shouldDisableNextPageButton = currentPage + 1 == maxPageNumber;
+
+            $("#previousPageButton").prop("disabled", shouldDisablePreviousPageButton);
+            $("#nextPageButton").prop("disabled", shouldDisableNextPageButton);
+
+            $("#pageNumber").html(currentPage + 1);
+            loadRevisions(currentPage);
+        }
+
         $(document).ready(function() {
 
             $("#companyName").change(changeSelectedCompany);
+
             $.getJSON("../php/revisions/getRevisions.php", function(response) {
-                // Stampa le revisioni nella tabella
+                allRevisions = response;
 
-                let tableString = "";
+                maxPageNumber = response.length / revisionsPerPage;
 
-                for (let i = 0; i < response.length; i++) { // TODO: Fare paginatore? 
-                    revision = response[i];
-
-                    let statusColor = "";
-                    let statusText = "";
-
-                    let DeadlineDate = new Date(revision.Deadline);
-                    let today = new Date();
-
-                    let millisecondDifference = DeadlineDate - today;
-                    let monthDifference = millisecondDifference / 2592000000;
-
-                    if (monthDifference <= 0) {
-                        // Revisione scaduta
-                        statusColor = "red";
-                        statusText = "Scaduta";
-                    } else if (monthDifference <= 1) { // TODO: Definire precisamente cosa vuol dire "sta per scadere"
-                        // Manca circa un mese; considero come "Poco"
-                        statusColor = "orange";
-                        statusText = "In Scadenza";
-                    } else {
-                        statusColor = "green";
-                        statusText = "Regolare";
-                    }
-
-                    tableString += "<tr style='text-align: center;'>";
-                    tableString += ("<td scope='col'>" + revision.CompanyName + "</td>" + "<td scope='col'>" + revision.ProductCategoryName + "</td>" + "<td scope='col'>" + revision.LastRevision + "</td>" + "<td scope='col'>" + revision.Deadline + "</td><td style='color:" + statusColor + "'>" + statusText + "</td>");
-                    // FIXME: Trovare un modo migliore per passare i dati al modal; per adesso setRevisionData funziona, ma non è molto elegante
-                    tableString += "<td scope='col'><button class='btn btn-sm btn-outline-success' data-bs-toggle='modal' data-bs-target='#revisionModal' onclick='setRevisionData(" + revision.CompanyID + "," + revision.ProductCategoryID + ")'>Revisione Rapida</button></td>";
-                    tableString += "</tr>";
-                }
-
-                $("#ToFill").html(tableString);
+                loadRevisions(currentPage);
             });
 
             $.getJSON("../php/viewAnagr.php", function(response) {
