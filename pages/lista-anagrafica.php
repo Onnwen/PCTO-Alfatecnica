@@ -556,7 +556,17 @@ if (isset($_SESSION['session_id'])) {
             let siteQueryString = inputSite !== "" ? "sede=" + inputSite + "&" : "";
             let dateQueryString = inputDate !== "" ? "data=" + inputDate + "&" : "";
 
-            window.location.href = 'lista-anagrafica.php?' + companyQueryString + siteQueryString + dateQueryString + "pagina=0";
+            let finalQueryString = companyQueryString + siteQueryString + dateQueryString;
+
+            if (finalQueryString !== "") {
+                finalQueryString = "?" + finalQueryString;
+            }
+
+            if (finalQueryString.charAt(finalQueryString.length - 1) === "&") {
+                finalQueryString = finalQueryString.substr(0, finalQueryString.length - 1);
+            }
+
+            window.location.href = 'lista-anagrafica.php' + finalQueryString;
         }
 
         function nextPage() {
