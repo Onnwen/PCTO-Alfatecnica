@@ -69,6 +69,24 @@ if (isset($_SESSION['session_id'])) {
             </div>
         </div>
 
+        <div class="modal fade" id="errorModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-x1 modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="errorModalLabel">Errore registrazione!</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>La registrazione di questa revisione è andata in errore!</p>
+                        <p>Codice errore: </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="errorModalCloseButton" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Tabella -->
         <div class="container">
             <div class="row">
@@ -163,14 +181,13 @@ if (isset($_SESSION['session_id'])) {
                 company: companyId,
                 revisionDate: revisionDate
             }, function(response) {
-
-                // FIXME: Appena l'API diventa RESTful dobbiamo sistemare questo abominio
-                if (response == "OK") {
-                    // TODO: Mostra conferma all'utente prima di ricaricare la pagina
-                    window.location.reload();
-                } else {
-                    // TODO: Mostra messaggio di errore all'utente
-                }
+                // TODO: Mostra conferma all'utente prima di ricaricare la pagina
+                window.location.reload();
+            }).fail(function(response) {
+                console.log("Failed request!");
+                console.log(response);
+                $("#revisionModal").modal("hide");
+                $("#errorModal").modal('show');
             });
         }
 
