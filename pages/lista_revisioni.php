@@ -22,7 +22,7 @@ if (isset($_SESSION['session_id'])) {
     <body>
         <?php require_once("navbar.php"); ?>
 
-        <!-- Modal -->
+        <!-- Modal Revisioni-->
         <div class="modal fade" id="revisionModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="revisionModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-scrollable">
                 <div class="modal-content">
@@ -68,7 +68,7 @@ if (isset($_SESSION['session_id'])) {
                 </div>
             </div>
         </div>
-
+        <!-- Modal Errori -->
         <div class="modal fade" id="errorModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-x1 modal-dialog-scrollable">
                 <div class="modal-content">
