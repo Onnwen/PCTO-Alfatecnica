@@ -347,7 +347,6 @@ if (isset($_SESSION['session_id'])) {
 
                 maxPageNumber = response.length / revisionsPerPage;
 
-                loadRevisions(currentPage);
                 loadCurrentPage();
             });
 
