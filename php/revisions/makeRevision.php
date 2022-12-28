@@ -6,7 +6,7 @@ $revisionedCompany = isset($_POST["company"]) ? $_POST["company"] : "";
 $revisionDate = isset($_POST["revisionDate"]) ? $_POST["revisionDate"] : "";
 
 if ($revisionedCompany == "" || $revisionedProduct == "" || $revisionDate == "") {
-    # FIXME: Ritorna un messaggio di errore al frontend in modo che possa avvisare l'utente in modo appropriato
+    http_response_code(400);
     die();
 }
 
@@ -20,6 +20,4 @@ $pre->bindParam(":data", $revisionDate, PDO::PARAM_STR);
 
 $pre->execute();
 
-// FIXME: Seguire il metodo RESTful invece di ritornare lo stato dentro ad un 200 OK.
-echo ("OK");
 exit();
