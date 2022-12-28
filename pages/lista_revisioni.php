@@ -174,7 +174,7 @@ if (isset($_SESSION['session_id'])) {
                                 </ul>
                             </nav>
                             <div class="justify-content-center" style="display: flex;">
-                                <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#revisionModal" onclick="clearDataFromModal()">Registra revisione</button>
+                                <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#revisionModal" onclick="clearDataFromModal()">Registra Revisione</button>
                             </div>
                     </div>
                 </div>
