@@ -161,7 +161,7 @@ if (isset($_SESSION['session_id'])) {
                                     </li>
                                     <li class="page-item">
                                         <div class="page-link" aria-label="Pagina corrente">
-                                            <span id="pageNumber">1</span>
+                                            <span id="pageNumber"></span>
                                         </div>
                                     </li>
                                     <li class="page-item">
@@ -317,12 +317,11 @@ if (isset($_SESSION['session_id'])) {
             $("#previousPageButton").prop("disabled", shouldDisablePreviousPageButton);
             $("#nextPageButton").prop("disabled", shouldDisableNextPageButton);
 
-            $("#pageNumber").html(currentPage + 1);
+            $("#pageNumber").html((currentPage + 1) + "/" + Math.ceil(maxPageNumber));
             loadRevisions(currentPage);
         }
 
         $(document).ready(function() {
-
             $("#companyName").change(changeSelectedCompany);
 
             $.getJSON("../php/revisions/getRevisions.php", function(response) {
@@ -331,6 +330,7 @@ if (isset($_SESSION['session_id'])) {
                 maxPageNumber = response.length / revisionsPerPage;
 
                 loadRevisions(currentPage);
+                loadPage();
             });
 
             $.getJSON("../php/viewAnagr.php", function(response) {
