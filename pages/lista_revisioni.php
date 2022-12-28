@@ -297,18 +297,18 @@ if (isset($_SESSION['session_id'])) {
         function nextPage() {
             if (currentPage + 1 < maxPageNumber) {
                 currentPage++;
-                loadPage();
+                loadCurrentPage();
             }
         }
 
         function previousPage() {
             if (currentPage > 0) {
                 currentPage--;
-                loadPage();
+                loadCurrentPage();
             }
         }
 
-        function loadPage() {
+        function loadCurrentPage() {
             let shouldDisablePreviousPageButton = currentPage == 0;
             let shouldDisableNextPageButton = currentPage + 1 == maxPageNumber;
 
@@ -328,7 +328,7 @@ if (isset($_SESSION['session_id'])) {
                 maxPageNumber = response.length / revisionsPerPage;
 
                 loadRevisions(currentPage);
-                loadPage();
+                loadCurrentPage();
             });
 
             $.getJSON("../php/viewAnagr.php", function(response) {
