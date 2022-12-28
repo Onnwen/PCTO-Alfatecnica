@@ -3,7 +3,7 @@ session_start();
 require_once("../php/connessione.php");
 if (isset($_SESSION['session_id'])) {
 ?>
-
+    <!DOCTYPE html>
     <html>
 
     <head>
