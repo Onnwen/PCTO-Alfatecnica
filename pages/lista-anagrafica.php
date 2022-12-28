@@ -361,10 +361,8 @@ if (isset($_SESSION['session_id'])) {
             };
 
             if (requestedCompany === "" && requestedSite === "" && requestedDate === "") { //TODO: Controllare se la query string è vuota
-                console.log("No query string: renderizzo tutto");
                 requestDestination = "../php/viewAnagr.php";
             } else { // Renderizza i risultati del motore di ricerca
-                console.log("Rilevata query string: avviando il motore di ricerca");
                 requestDestination = "../php/searchEngine.php";
                 searchedQuery.nome_azienda = requestedCompany;
                 searchedQuery.sede = requestedSite;
@@ -590,8 +588,6 @@ if (isset($_SESSION['session_id'])) {
             currentMode = newMode;
 
             if (newMode === "tabella") {
-                console.log("Visualizzazione Tabella");
-
                 $(".anagrafiche").css("display", "none");
                 $(".anagrafiche_cards").css("display", "none");
                 $(".table_anagrafiche").css("display", "block");
@@ -599,8 +595,6 @@ if (isset($_SESSION['session_id'])) {
                 $("#cards").addClass("selected");
                 $("#table").removeClass("selected");
             } else if (newMode === "griglia") {
-                console.log("Visualizzazione Griglia");
-
                 $(".anagrafiche").css("display", "block");
                 $(".anagrafiche_cards").css("display", "block");
                 $(".table_anagrafiche").css("display", "none");
@@ -608,8 +602,6 @@ if (isset($_SESSION['session_id'])) {
                 $("#cards").removeClass("selected");
                 $("#table").addClass("selected");
             } else {
-                console.log("ERRORE: Modalità di visualizzazione invalida! Resetto a Tabella");
-
                 changeMode("tabella");
             }
         }
