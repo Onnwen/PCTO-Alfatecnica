@@ -203,8 +203,6 @@ if (isset($_SESSION['session_id'])) {
                 $("#revisionModal").modal("hide");
                 $("#successModal").modal("show");
             }).fail(function(response) {
-                console.log("Failed request!");
-                console.log(response);
                 $("#revisionModal").modal("hide");
                 $("#errorModal").modal('show');
             });
