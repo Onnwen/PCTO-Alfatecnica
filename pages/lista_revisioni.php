@@ -87,6 +87,25 @@ if (isset($_SESSION['session_id'])) {
             </div>
         </div>
 
+        <!-- Modal Successo -->
+        <div class="modal fade" id="successModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-x1 modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="successModalLabel">Revisione registrata con successo!</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>La registrazione di questa revisione è andata a buon fine!</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="successModalCloseButton" type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="window.location.reload()">Chiudi</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         <!-- Tabella -->
         <div class="container">
             <div class="row">
@@ -181,8 +200,8 @@ if (isset($_SESSION['session_id'])) {
                 company: companyId,
                 revisionDate: revisionDate
             }, function(response) {
-                // TODO: Mostra conferma all'utente prima di ricaricare la pagina
-                window.location.reload();
+                $("#revisionModal").modal("hide");
+                $("#successModal").modal("show");
             }).fail(function(response) {
                 console.log("Failed request!");
                 console.log(response);
