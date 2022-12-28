@@ -68,6 +68,7 @@ if (isset($_SESSION['session_id'])) {
                 </div>
             </div>
         </div>
+
         <!-- Modal Errori -->
         <div class="modal fade" id="errorModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-x1 modal-dialog-scrollable">
@@ -78,7 +79,7 @@ if (isset($_SESSION['session_id'])) {
                     </div>
                     <div class="modal-body">
                         <p>La registrazione di questa revisione è andata in errore!</p>
-                        <p>Codice errore: </p>
+                        <p>Codice errore: <span id="revisionErrorCode"></span></p>
                     </div>
                     <div class="modal-footer">
                         <button id="errorModalCloseButton" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
@@ -203,6 +204,8 @@ if (isset($_SESSION['session_id'])) {
                 $("#revisionModal").modal("hide");
                 $("#successModal").modal("show");
             }).fail(function(response) {
+
+                $("#revisionErrorCode").html(response.status);
                 $("#revisionModal").modal("hide");
                 $("#errorModal").modal('show');
             });
