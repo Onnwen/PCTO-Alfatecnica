@@ -79,6 +79,7 @@ if (isset($_SESSION['session_id'])) {
                     </div>
                     <div class="modal-body">
                         <p>La registrazione di questa revisione è andata in errore!</p>
+                        <p id="revisionErrorDescription"></p>
                         <p>Codice errore: <span id="revisionErrorCode"></span></p>
                     </div>
                     <div class="modal-footer">
@@ -206,6 +207,22 @@ if (isset($_SESSION['session_id'])) {
             }).fail(function(response) {
 
                 $("#revisionErrorCode").html(response.status);
+                let errorDescriptionString = "";
+
+                switch (response.status) {
+                    case 400:
+                        errorDescriptionString = "Il modulo della registrazione non è stato compilato correttamente!";
+                        break;
+                    case 500:
+                        errorDescriptionString = "Il server ha un problema tecnico!";
+                        break;
+                    default:
+                        errorDescriptionString = "Errore non riconosciuto; Comunicare il codice errore qua sotto agli sviluppatori!";
+                        break;
+                }
+
+                $("#revisionErrorDescription").html(errorDescriptionString);
+
                 $("#revisionModal").modal("hide");
                 $("#errorModal").modal('show');
             });
