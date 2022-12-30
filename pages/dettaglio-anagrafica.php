@@ -432,6 +432,9 @@ if (isset($_SESSION['session_id'])) {
             </div>
         </div>
 
+        <br>
+        <br>
+
         <!-- Footer -->
         <?php require_once("footer.php"); ?>
         <!-- Fine -->
