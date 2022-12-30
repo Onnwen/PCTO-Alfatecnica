@@ -22,6 +22,10 @@ if (isset($_SESSION['session_id'])) {
         <script src="https://kit.fontawesome.com/c0c3eed4d9.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <title>Alfatecnica - Lista Utenti</title>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
         <link rel="icon" href="img/logo.png">
     </head>
 
@@ -60,22 +64,169 @@ if (isset($_SESSION['session_id'])) {
     <br>
     <hr>
     <br>
-    <div class="container">
+    <div id=listTable" class="container" hidden>
         <div class="row row-tabella">
             <div class="col-sm-12">
                 <div class="table-responsive">
                     <table class="table table-bordered">
                         <thead>
                         <tr style="text-align: center;">
-                            <th scope="col">Nome</th>
+                            <th scope="col">Nome e Cognome</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Azienda</th>
                             <th scope="col">Tipologia</th>
-                            <th scope="col" style="width: 200px">Gestione</th>
+                            <th scope="col" style="width: 125px"></th>
                         </tr>
                         </thead>
-                        <tbody>
-                        </tr>
+                        <tbody >
+                        <tr>
+                            <td>Nome Cognome</td>
+                            <td>
+                                <a href="mailto:">email</a>
+                            </td>
+                            <td>Nome Azienda</td>
+                            <td>Tipologia</td>
+                            <td style="text-align: center;">
+                                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#productModal" data-bs-whatever="addProduct" id="openProductModal">
+                                    <i class="bi bi-person-check-fill"></i></button>
+                                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#productModal" data-bs-whatever="addProduct" id="openProductModal">
+                                    <i class="bi bi-person-x-fill"></i></button>
+                            </td>
                         </tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id=listCollapse" class="container">
+        <div class="row">
+            <div id="accordion">
+                <div class="card">
+                    <div class="card-header" id="headingOne">
+                        <h5 class="mb-0">
+                            AMINISTRATORI
+                            <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                <i class="bi bi-chevron-down"></i>
+                            </button>
+                        </h5>
+                    </div>
+
+                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr style="text-align: center;">
+                                        <th scope="col">Nome e Cognome</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col">Azienda</th>
+                                        <th scope="col">Tipologia</th>
+                                        <th scope="col" style="width: 125px"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody >
+                                    <tr>
+                                        <td>Nome Cognome</td>
+                                        <td>
+                                            <a href="mailto:">email</a>
+                                        </td>
+                                        <td>Nome Azienda</td>
+                                        <td>Tipologia</td>
+                                        <td style="text-align: center;">
+                                            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#productModal" data-bs-whatever="addProduct" id="openProductModal">
+                                                <i class="bi bi-person-check-fill"></i></button>
+                                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#productModal" data-bs-whatever="addProduct" id="openProductModal">
+                                                <i class="bi bi-person-x-fill"></i></button>
+                                        </td>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header" id="headingTwo">
+                        <h5 class="mb-0">
+                            TECNICI
+                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                <i class="bi bi-chevron-down"></i>
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr style="text-align: center;">
+                                        <th scope="col">Nome e Cognome</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col">Azienda</th>
+                                        <th scope="col">Tipologia</th>
+                                        <th scope="col" style="width: 125px"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody >
+                                    <tr>
+                                        <td>Nome Cognome</td>
+                                        <td>
+                                            <a href="mailto:">email</a>
+                                        </td>
+                                        <td>Nome Azienda</td>
+                                        <td>Tipologia</td>
+                                        <td style="text-align: center;">
+                                            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#productModal" data-bs-whatever="addProduct" id="openProductModal">
+                                                <i class="bi bi-person-check-fill"></i></button>
+                                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#productModal" data-bs-whatever="addProduct" id="openProductModal">
+                                                <i class="bi bi-person-x-fill"></i></button>
+                                        </td>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header" id="headingThree">
+                        <h5 class="mb-0">
+                            DALLARA
+                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                <i class="bi bi-chevron-down"></i>
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr style="text-align: center;">
+                                        <th scope="col">Nome e Cognome</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col">Azienda</th>
+                                        <th scope="col">Tipologia</th>
+                                        <th scope="col" style="width: 125px"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody >
+                                    <tr>
+                                        <td>Nome Cognome</td>
+                                        <td>
+                                            <a href="mailto:">email</a>
+                                        </td>
+                                        <td>Nome Azienda</td>
+                                        <td>Tipologia</td>
+                                        <td style="text-align: center;">
+                                            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#productModal" data-bs-whatever="addProduct" id="openProductModal">
+                                                <i class="bi bi-person-check-fill"></i></button>
+                                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#productModal" data-bs-whatever="addProduct" id="openProductModal">
+                                                <i class="bi bi-person-x-fill"></i></button>
+                                        </td>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -87,6 +238,11 @@ if (isset($_SESSION['session_id'])) {
     <!-- Footer -->
     <?php require_once("footer.php"); ?>
     <!-- Fine -->
+    <script>
+        $(document).ready(function () {
+            $("#listTable").atts;
+        });
+    </script>
     </body>
 
     </html>
