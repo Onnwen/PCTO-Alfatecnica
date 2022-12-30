@@ -588,7 +588,7 @@ if (isset($_SESSION['session_id'])) {
             let shouldDisableNextPageButton = currentPage + 1 == maxPageNumber;
 
             $("#previousPageButton").prop("disabled", shouldDisablePreviousPageButton);
-            $("#nextPageButton", shouldDisableNextPageButton);
+            $("#nextPageButton").prop("disabled", shouldDisableNextPageButton);
 
             $("#pageNumber").html((currentPage + 1) + "/" + Math.ceil(maxPageNumber));
             loadCompanies(currentPage);
