@@ -275,16 +275,20 @@ if (isset($_SESSION['session_id'])) {
         <!-- PAGINATOR -->
         <nav aria-label="Page navigation example ">
             <ul class="pagination justify-content-center ">
-                <li class="page-item" id="previousPageButton">
-                    <a class="page-link " href="#" aria-label="Previous " onClick="previousPage();">
+                <li class="page-item">
+                    <button class="page-link" id="previousPageButton" aria-label="Previous" onClick="previousPage();">
                         <span aria-hidden="true">&laquo;</span>
-
-                    </a>
+                    </button>
                 </li>
-                <li class="page-item" id="nextPageButton">
-                    <a class="page-link " href="#" aria-label="Next " onClick="nextPage();">
+                <li class="page-item">
+                    <div class="page-link" aria-label="Pagina corrente">
+                        <span id="pageNumber"></span>
+                    </div>
+                </li>
+                <li class="page-item">
+                    <button class="page-link" id="nextPageButton" aria-label="Next" onClick="nextPage();">
                         <span aria-hidden="true">&raquo;</span>
-                    </a>
+                    </button>
                 </li>
             </ul>
         </nav>
@@ -294,17 +298,51 @@ if (isset($_SESSION['session_id'])) {
         <?php require_once("footer.php"); ?>
     </body>
     <script>
+        const cards = document.getElementById("cardContainer"); //prendere l'elemento con quel determinato id
+        const tabella = document.getElementById('tabella-ajax');
+
         let currentMode = "<?php echo isset($_GET['visuale']) ? $_GET['visuale'] : "tabella" ?>";
+        let allCompanies = [];
 
         changeMode(currentMode);
 
-        let currentPage = <?php echo (!(filter_var($_GET['pagina'], FILTER_VALIDATE_INT) === false) ? $_GET['pagina'] : 0) ?>;
+        let currentPage = 0;
 
         let requestedCompany = "<?php echo (isset($_GET['nome_azienda']) ? $_GET['nome_azienda'] : '') ?>";
         let requestedSite = "<?php echo (isset($_GET['sede']) ? $_GET['sede'] : '') ?>";
         let requestedDate = "<?php echo (isset($_GET['data']) ? $_GET['data'] : '') ?>";
         let maxCardsPerPage = 5;
         let maxPageNumber = 0;
+
+        function loadCompanies(pageNumber) {
+            // Stampa le aziende nella tabella
+            tabella.innerHTML = "";
+            cards.innerHTML = "";
+
+            for (let i = maxCardsPerPage * pageNumber; i < allCompanies.length && i < maxCardsPerPage * (pageNumber + 1); i++) {
+                cards.innerHTML += '<div class="col">' +
+                    '<div class="card text-center">' +
+                    '<img src="../' + allCompanies[i].path_logo + '" class="card-img-top">' +
+                    '<div class="card-body">' +
+                    '<h4 class="card-title">' + allCompanies[i].nome + '</h4>' +
+                    '<p class="card-text">' + allCompanies[i].sede + '</p>' +
+                    '<a href="javascript:deleteCompany(' + allCompanies[i].id + ')"><i class="fa-solid fa-trash-can trash" style="float: left;"></i></a>' +
+                    '<button type="button" class="btn btn-outline-dark" onclick="window.location.href=\'dettaglio-anagrafica.php?id_ana=' + allCompanies[i].id + '\'">Guarda</button>' +
+                    '<a href="#" data-bs-toggle="modal" data-bs-target="#companyModal" data-bs-whatever="' + allCompanies[i].id + '"><i class="fa-solid fa-pen-to-square edit"' +
+                    'style="float: right; vertical-align: middle;"></i></a>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>';
+                tabella.innerHTML += '<tr>' +
+                    '<th style="text-align: center;">' + allCompanies[i].nome + '</th>' +
+                    '<td style="text-align: center;">' +
+                    '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#companyModal" data-bs-whatever="' + allCompanies[i].id + '"><i class="fa-solid fa-pen"></i></button>' +
+                    '<button class="btn btn-outline-info" onclick="window.location.href=\'dettaglio-anagrafica.php?id_ana=' + allCompanies[i].id + '\'"><i class="fa-solid fa-circle-info"></i></button>' +
+                    '<button class="btn btn-outline-danger" onclick="deleteCompany(' + allCompanies[i].id + ')"><i class="fa-solid fa-trash-can"></i></button>' +
+                    '</td>' +
+                    '</tr>';
+            }
+        }
 
         $(document).ready(function() {
             $(".change_cards").click(function() {
@@ -323,10 +361,8 @@ if (isset($_SESSION['session_id'])) {
             };
 
             if (requestedCompany === "" && requestedSite === "" && requestedDate === "") { //TODO: Controllare se la query string è vuota
-                console.log("No query string: renderizzo tutto");
                 requestDestination = "../php/viewAnagr.php";
             } else { // Renderizza i risultati del motore di ricerca
-                console.log("Rilevata query string: avviando il motore di ricerca");
                 requestDestination = "../php/searchEngine.php";
                 searchedQuery.nome_azienda = requestedCompany;
                 searchedQuery.sede = requestedSite;
@@ -334,50 +370,11 @@ if (isset($_SESSION['session_id'])) {
             }
 
             $.post(requestDestination, searchedQuery, function(resp) {
-                const cards = document.getElementById("cardContainer"); //prendere l'elemento con quel determinato id
-                const tabella = document.getElementById('tabella-ajax');
-                maxPageNumber = Math.ceil(resp.length / maxCardsPerPage) - 1;
+                allCompanies = resp;
 
-                // Redirect se l'utente immette un numero di pagina troppo grande nel link
-                // FIXME: La pagina si carica due volte, ma non c'è molto che possa fare a riguardo, visto che il numero di pagina massimo lo conosco solo dopo aver finito il caricamento della pagina
+                maxPageNumber = Math.ceil(resp.length / maxCardsPerPage);
 
-                if (currentPage > maxPageNumber) {
-                    paginatore(maxPageNumber);
-                }
-
-                // Nascondi bottoni del paginatore se sono inutili
-                if (currentPage === maxPageNumber) {
-                    $("#nextPageButton").hide();
-                } else if (currentPage === 0) {
-                    $("#previousPageButton").hide();
-                }
-
-
-
-                for (let i = (maxCardsPerPage * currentPage <= resp.length ? maxCardsPerPage * currentPage : maxCardsPerPage * Math.floor(resp.length / maxCardsPerPage)); i < resp.length && i < maxCardsPerPage * (currentPage + 1); i++) {
-                    console.log("Pagina = " + currentPage + " ; " + i);
-                    cards.innerHTML += '<div class="col">' +
-                        '<div class="card text-center">' +
-                        '<img src="../' + resp[i].path_logo + '" class="card-img-top">' +
-                        '<div class="card-body">' +
-                        '<h4 class="card-title">' + resp[i].nome + '</h4>' +
-                        '<p class="card-text">' + resp[i].sede + '</p>' +
-                        '<a href="javascript:deleteCompany(' + resp[i].id + ')"><i class="fa-solid fa-trash-can trash" style="float: left;"></i></a>' +
-                        '<button type="button" class="btn btn-outline-dark" onclick="window.location.href=\'dettaglio-anagrafica.php?id_ana=' + resp[i].id + '\'">Guarda</button>' +
-                        '<a href="#" data-bs-toggle="modal" data-bs-target="#companyModal" data-bs-whatever="' + resp[i].id + '"><i class="fa-solid fa-pen-to-square edit"' +
-                        'style="float: right; vertical-align: middle;"></i></a>' +
-                        '</div>' +
-                        '</div>' +
-                        '</div>';
-                    tabella.innerHTML += '<tr>' +
-                        '<th style="text-align: center;">' + resp[i].nome + '</th>' +
-                        '<td style="text-align: center;">' +
-                        '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#companyModal" data-bs-whatever="' + resp[i].id + '"><i class="fa-solid fa-pen"></i></button>' +
-                        '<button class="btn btn-outline-info" onclick="window.location.href=\'dettaglio-anagrafica.php?id_ana=' + resp[i].id + '\'"><i class="fa-solid fa-circle-info"></i></button>' +
-                        '<button class="btn btn-outline-danger" onclick="deleteCompany(' + resp[i].id + ')"><i class="fa-solid fa-trash-can"></i></button>' +
-                        '</td>' +
-                        '</tr>';
-                }
+                loadCurrentPage();
             }, "json");
 
 
@@ -559,37 +556,48 @@ if (isset($_SESSION['session_id'])) {
             let siteQueryString = inputSite !== "" ? "sede=" + inputSite + "&" : "";
             let dateQueryString = inputDate !== "" ? "data=" + inputDate + "&" : "";
 
-            window.location.href = 'lista-anagrafica.php?' + companyQueryString + siteQueryString + dateQueryString + "pagina=0";
+            let finalQueryString = companyQueryString + siteQueryString + dateQueryString;
+
+            if (finalQueryString !== "") {
+                finalQueryString = "?" + finalQueryString;
+            }
+
+            if (finalQueryString.charAt(finalQueryString.length - 1) === "&") {
+                finalQueryString = finalQueryString.substr(0, finalQueryString.length - 1);
+            }
+
+            window.location.href = 'lista-anagrafica.php' + finalQueryString;
         }
 
         function nextPage() {
-            if (currentPage < maxPageNumber) {
-                paginatore(currentPage + 1);
+            if (currentPage + 1 < maxPageNumber) {
+                currentPage++;
+                loadCurrentPage();
             }
         }
 
         function previousPage() {
-            let previousPageNumber = currentPage - 1;
-            if (previousPageNumber >= 0) {
-                paginatore(previousPageNumber);
+            if (currentPage > 0) {
+                currentPage--;
+                loadCurrentPage();
             }
         }
 
-        function paginatore(pagina) {
-            let companyQueryString = requestedCompany !== "" ? "nome_azienda=" + requestedCompany + "&" : "";
-            let siteQueryString = requestedSite !== "" ? "sede=" + requestedSite + "&" : "";
-            let dateQueryString = requestedDate !== "" ? "data=" + requestedDate + "&" : "";
-            let modeQueryString = currentMode !== "tabella" ? "visuale=" + currentMode + "&" : "";
+        function loadCurrentPage() {
+            let shouldDisablePreviousPageButton = currentPage == 0;
+            let shouldDisableNextPageButton = currentPage + 1 == maxPageNumber;
 
-            window.location.href = 'lista-anagrafica.php?' + companyQueryString + siteQueryString + dateQueryString + modeQueryString + "pagina=" + pagina;
+            $("#previousPageButton").prop("disabled", shouldDisablePreviousPageButton);
+            $("#nextPageButton").prop("disabled", shouldDisableNextPageButton);
+
+            $("#pageNumber").html((currentPage + 1) + "/" + Math.ceil(maxPageNumber));
+            loadCompanies(currentPage);
         }
 
         function changeMode(newMode) {
             currentMode = newMode;
 
             if (newMode === "tabella") {
-                console.log("Visualizzazione Tabella");
-
                 $(".anagrafiche").css("display", "none");
                 $(".anagrafiche_cards").css("display", "none");
                 $(".table_anagrafiche").css("display", "block");
@@ -597,8 +605,6 @@ if (isset($_SESSION['session_id'])) {
                 $("#cards").addClass("selected");
                 $("#table").removeClass("selected");
             } else if (newMode === "griglia") {
-                console.log("Visualizzazione Griglia");
-
                 $(".anagrafiche").css("display", "block");
                 $(".anagrafiche_cards").css("display", "block");
                 $(".table_anagrafiche").css("display", "none");
@@ -606,8 +612,6 @@ if (isset($_SESSION['session_id'])) {
                 $("#cards").removeClass("selected");
                 $("#table").addClass("selected");
             } else {
-                console.log("ERRORE: Modalità di visualizzazione invalida! Resetto a Tabella");
-
                 changeMode("tabella");
             }
         }
