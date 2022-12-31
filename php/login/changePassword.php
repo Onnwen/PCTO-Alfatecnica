@@ -16,7 +16,7 @@ if ((isset($oldPassword) || $oldPassword !== null)&&(isset($newPassword) || $new
     $pre->execute();
     $check = $pre->fetch(PDO::FETCH_ASSOC);
     if (password_verify($oldPassword,$check['password'])){
-        $update = "UPDATE Users SET hashed_password = '$newPassword'";
+        $update = "UPDATE Users SET hashed_password = '$newPassword' WHERE user_id = '". $idUser ."'";
         $res1 = $pdo->query($update);
         $query = "UPDATE Users
                 SET stringRetrievePassword = null
@@ -32,7 +32,7 @@ if ((isset($oldPassword) || $oldPassword !== null)&&(isset($newPassword) || $new
     exit;
 } else if (isset($newPassword) || $newPassword !== ''){
     $newPassword = password_hash($newPassword,PASSWORD_DEFAULT);
-    $update = "UPDATE Users SET hashed_password = '$newPassword'";
+    $update = "UPDATE Users SET hashed_password = '$newPassword' WHERE user_id = '". $idUser ."'";
     $res1 = $pdo->query($update);
     $query = "UPDATE Users
                 SET stringRetrievePassword = null
