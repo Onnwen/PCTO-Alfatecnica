@@ -20,9 +20,8 @@ if (isset($_SESSION['session_id'])) {
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
         <script src="https://kit.fontawesome.com/c0c3eed4d9.js" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <title>Alfatecnica - Lista Utenti</title>
-
+        <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 
@@ -52,8 +51,8 @@ if (isset($_SESSION['session_id'])) {
             </div>
             <div class="col-2 text-center">
                 <button type="button" class="btn btn-outline-success w-50" onclick="search();"><i class="fa-solid fa-magnifying-glass"></i>Cerca</button>
-                <button type="button" class="btn btn-outline-success selected change_cards verde" id="cards"><i class="fa-solid fa-table-list bianco"></i></button>
-                <button type="button" class="btn btn-outline-success change_table verde" id="table"><i class="bi bi-view-list bianco"></i></i></button>
+                <button id="table" type="button" class="btn btn-outline-success selected change_cards verde" id="cards"><i class="fa-solid fa-table-list bianco"></i></button>
+                <button id="collapse" type="button" class="btn btn-outline-success change_table verde" id="table"><i class="bi bi-view-list bianco"></i></i></button>
             </div>
             <div class="col-2">
                 <button type="button" class="btn btn-outline-warning w-100" data-bs-toggle="modal" data-bs-target="#productModal" data-bs-whatever="addProduct" id="openProductModal">
@@ -64,7 +63,7 @@ if (isset($_SESSION['session_id'])) {
     <br>
     <hr>
     <br>
-    <div id=listTable" class="container" hidden>
+    <div class="container" id="listTable">
         <div class="row row-tabella">
             <div class="col-sm-12">
                 <div class="table-responsive">
@@ -98,7 +97,7 @@ if (isset($_SESSION['session_id'])) {
             </div>
         </div>
     </div>
-    <div id=listCollapse" class="container">
+    <div class="container" id="listCollapse">
         <div class="row">
             <div id="accordion">
                 <div class="card">
@@ -240,7 +239,16 @@ if (isset($_SESSION['session_id'])) {
     <!-- Fine -->
     <script>
         $(document).ready(function () {
-            $("#listTable").atts;
+            $("#listCollapse").attr("hidden", true );
+        });
+        $("#table").click(function () {
+            $("#listCollapse").attr("hidden", true);
+            $("#listTable").removeAttr("hidden");
+        });
+        $("#collapse").click(function () {
+            console.log("ciao");
+            $("#listTable").attr("hidden", true);
+            $("#listCollapse").removeAttr("hidden");
         });
     </script>
     </body>

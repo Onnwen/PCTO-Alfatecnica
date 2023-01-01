@@ -294,7 +294,6 @@ if (isset($_SESSION['session_id'])) {
         };
 
         $('#signIn').on('click', function () {
-            debugger;
             let email = $('#emailInput');
             let password = $('#passwordInput');
             let errorMessage = $('#errorLabel');
