@@ -825,104 +825,102 @@ if ($isAuthenticated && $isUser) {
                         $('#addProductButton').attr("value", idCategoria);
                         let risposta;
                         let nomeCategoria;
-                        $.post('../php/getProductIcon.php', {
-                            idCategoria: idCategoria,
-                            idCompagnia: idAnag
-                        }, function(resp) {
-                            if (resp.length === 1) {
-                                risposta = resp[0];
-                            }
-                            nomeCategoria = risposta.categoryName;
-                            document.getElementById('addTitle').innerHTML = nomeCategoria;
-                            //fill the layer and the stage with the planimetry
-                            let sfondo = new Image();
-                            let div = document.getElementById('planimetry-addProduct');
-                            let stage = new Konva.Stage({
-                                container: 'planimetry-addProduct',
-                                width: div.clientWidth,
-                                height: div.clientHeight
-                            });
-                            let layerSfondo = new Konva.Layer({
-                                scaleX: 1,
-                                scaleY: 1,
-                                draggable: true
-                            });
-                            stage.add(layerSfondo);
-                            let layer = new Konva.Layer({
-                                scaleX: 1,
-                                scaleY: 1,
-                                draggable: false
-                            });
-                            stage.add(layer);
-                            let groupSfondo = new Konva.Group({
-                                scaleX: 1
-                            });
-                            layer.add(groupSfondo);
-                            let group = new Konva.Group({
-                                scaleX: 1
-                            });
-                            layer.add(group);
-                            let widthRatio = (div.clientWidth) / risposta.w;
-                            let heightRatio = (div.clientHeight) / risposta.h;
-                            let bestRatio = Math.min(widthRatio, heightRatio);
-                            let newWidth = risposta.w * bestRatio;
-                            let newHeight = risposta.h * bestRatio;
-                            let sfondoImg = new Konva.Image({
-                                image: sfondo,
-                                width: newWidth,
-                                height: newHeight,
-                                y: (div.clientHeight - newHeight) / 2,
-                                draggable: false
-                            });
-                            groupSfondo.add(sfondoImg);
-
-                            //canvas to move on the stage
-                            let nome_prod = nomeCategoria;
-                            let imageObj = new Image();
-                            imageObj.src = "../" + risposta.productIcon;
-                            nuovoProdotto = new Konva.Image({
-                                y: (div.clientHeight - newHeight) / 2,
-                                image: imageObj,
-                                width: (20 * sfondoImg.attrs.width) / risposta.w,
-                                height: (25 * sfondoImg.attrs.height) / risposta.h,
-                                draggable: true,
-                                name: nome_prod
-                            });
-                            group.add(nuovoProdotto);
-
-                            //responsive map
-                            sfondo.src = "../" + srcSfondo;
-                            let scaleBy = 1.05;
-                            stage.on('wheel', (e) => {
-                                e.evt.preventDefault();
-                                let oldScale = stage.scaleX();
-                                let center = {
-                                    x: stage.width() / 2,
-                                    y: stage.height() / 2,
-                                };
-                                let relatedTo = {
-                                    x: (center.x - stage.x()) / oldScale,
-                                    y: (center.y - stage.y()) / oldScale,
-                                };
-                                let newScale =
-                                    e.evt.deltaY > 0 ? oldScale * scaleBy : oldScale / scaleBy;
-                                stage.scale({
-                                    x: newScale,
-                                    y: newScale
+                        $.getJSON('../php/getProductIcon.php?idCategoria=' + idCategoria + "&idCompagnia=" + idAnag,
+                            function(resp) {
+                                if (resp.length === 1) {
+                                    risposta = resp[0];
+                                }
+                                nomeCategoria = risposta.categoryName;
+                                document.getElementById('addTitle').innerHTML = nomeCategoria;
+                                //fill the layer and the stage with the planimetry
+                                let sfondo = new Image();
+                                let div = document.getElementById('planimetry-addProduct');
+                                let stage = new Konva.Stage({
+                                    container: 'planimetry-addProduct',
+                                    width: div.clientWidth,
+                                    height: div.clientHeight
                                 });
-                                let newPos = {
-                                    x: center.x - relatedTo.x * newScale,
-                                    y: center.y - relatedTo.y * newScale,
-                                };
-                                stage.position(newPos);
-                                stage.batchDraw();
+                                let layerSfondo = new Konva.Layer({
+                                    scaleX: 1,
+                                    scaleY: 1,
+                                    draggable: true
+                                });
+                                stage.add(layerSfondo);
+                                let layer = new Konva.Layer({
+                                    scaleX: 1,
+                                    scaleY: 1,
+                                    draggable: false
+                                });
+                                stage.add(layer);
+                                let groupSfondo = new Konva.Group({
+                                    scaleX: 1
+                                });
+                                layer.add(groupSfondo);
+                                let group = new Konva.Group({
+                                    scaleX: 1
+                                });
+                                layer.add(group);
+                                let widthRatio = (div.clientWidth) / risposta.w;
+                                let heightRatio = (div.clientHeight) / risposta.h;
+                                let bestRatio = Math.min(widthRatio, heightRatio);
+                                let newWidth = risposta.w * bestRatio;
+                                let newHeight = risposta.h * bestRatio;
+                                let sfondoImg = new Konva.Image({
+                                    image: sfondo,
+                                    width: newWidth,
+                                    height: newHeight,
+                                    y: (div.clientHeight - newHeight) / 2,
+                                    draggable: false
+                                });
+                                groupSfondo.add(sfondoImg);
+
+                                //canvas to move on the stage
+                                let nome_prod = nomeCategoria;
+                                let imageObj = new Image();
+                                imageObj.src = "../" + risposta.productIcon;
+                                nuovoProdotto = new Konva.Image({
+                                    y: (div.clientHeight - newHeight) / 2,
+                                    image: imageObj,
+                                    width: (20 * sfondoImg.attrs.width) / risposta.w,
+                                    height: (25 * sfondoImg.attrs.height) / risposta.h,
+                                    draggable: true,
+                                    name: nome_prod
+                                });
+                                group.add(nuovoProdotto);
+
+                                //responsive map
+                                sfondo.src = "../" + srcSfondo;
+                                let scaleBy = 1.05;
+                                stage.on('wheel', (e) => {
+                                    e.evt.preventDefault();
+                                    let oldScale = stage.scaleX();
+                                    let center = {
+                                        x: stage.width() / 2,
+                                        y: stage.height() / 2,
+                                    };
+                                    let relatedTo = {
+                                        x: (center.x - stage.x()) / oldScale,
+                                        y: (center.y - stage.y()) / oldScale,
+                                    };
+                                    let newScale =
+                                        e.evt.deltaY > 0 ? oldScale * scaleBy : oldScale / scaleBy;
+                                    stage.scale({
+                                        x: newScale,
+                                        y: newScale
+                                    });
+                                    let newPos = {
+                                        x: center.x - relatedTo.x * newScale,
+                                        y: center.y - relatedTo.y * newScale,
+                                    };
+                                    stage.position(newPos);
+                                    stage.batchDraw();
+                                });
+                                stage.addEventListener('dragend', function() {
+                                    debugger;
+                                    document.getElementById("cX").value = parseInt(((nuovoProdotto.getX() * risposta.w) / sfondoImg.attrs.width).toPrecision(10));
+                                    document.getElementById("cY").value = parseInt(((nuovoProdotto.getY() * risposta.h) / sfondoImg.attrs.height) - ((div.clientHeight - newHeight) / 2) + (((25 * sfondoImg.attrs.height) / risposta.h) / 2));
+                                });
                             });
-                            stage.addEventListener('dragend', function() {
-                                debugger;
-                                document.getElementById("cX").value = parseInt(((nuovoProdotto.getX() * risposta.w) / sfondoImg.attrs.width).toPrecision(10));
-                                document.getElementById("cY").value = parseInt(((nuovoProdotto.getY() * risposta.h) / sfondoImg.attrs.height) - ((div.clientHeight - newHeight) / 2) + (((25 * sfondoImg.attrs.height) / risposta.h) / 2));
-                            });
-                        }, "json");
 
                     } else {
                         clearInterval(myInterval);
