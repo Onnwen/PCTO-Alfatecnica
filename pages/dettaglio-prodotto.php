@@ -1,7 +1,8 @@
 <?php
-session_start();
 require_once('../php/connessione.php');
-if(isset($_SESSION['session_id'])){
+require_once("../php/authentication/authentication.php");
+
+if ($isAuthenticated && $isTechnician) {
  ?>
 <!DOCTYPE html>
 <body lang="en">
@@ -477,6 +478,7 @@ if(isset($_SESSION['session_id'])){
 </html>
     <?php
 } else {
+    # TODO: Mostrare messaggio di errore
     echo "<script>window.location.replace('../index.php');</script>";
 }
 ?>
