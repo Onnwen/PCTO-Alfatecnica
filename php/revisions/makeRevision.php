@@ -12,11 +12,11 @@ if (!$isTechnician) {
     exit();
 }
 
-$revisionedProduct = isset($_POST["product"]) ? $_POST["product"] : "";
-$revisionedCompany = isset($_POST["company"]) ? $_POST["company"] : "";
-$revisionDate = isset($_POST["revisionDate"]) ? $_POST["revisionDate"] : "";
+$revisionedProduct = isset($_POST["product"]) ? $_POST["product"] : null;
+$revisionedCompany = isset($_POST["company"]) ? $_POST["company"] : null;
+$revisionDate = isset($_POST["revisionDate"]) ? $_POST["revisionDate"] : null;
 
-if ($revisionedCompany == "" || $revisionedProduct == "" || $revisionDate == "") {
+if (is_null($revisionedCompany) || is_null($revisionedProduct) || is_null($revisionDate)) {
     http_response_code(400);
     exit();
 }
