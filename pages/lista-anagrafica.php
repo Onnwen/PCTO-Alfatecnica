@@ -2,7 +2,7 @@
 require_once("../php/connessione.php");
 require_once("../php/authentication/authentication.php");
 
-if ($isAuthenticated) {
+if ($isAuthenticated && $isUser) {
 ?>
     <!DOCTYPE html>
     <html lang="en">
