@@ -46,8 +46,8 @@ if (isset($_SESSION['session_id'])) {
                     <i class="bi bi-person-plus-fill"></i></button>
             </div>
             <div class="col-7 d-inline-flex">
-                <input style="margin-right: 5px" type="text" id="companyName" class="form-control w-50" placeholder="Nome e/o cognome utente" aria-label="Nome azienda">
-                <input type="text" id="companyName" class="form-control w-50" placeholder="Nome azienda" aria-label="Nome azienda">
+                <input id="searchUser" style="margin-right: 5px" type="text" id="companyName" class="form-control w-50" placeholder="Nome e/o cognome utente" aria-label="Nome azienda">
+                <input id="searchCompany" type="text" id="companyName" class="form-control w-50" placeholder="Nome azienda" aria-label="Nome azienda">
             </div>
             <div class="col-2 text-center">
                 <button type="button" class="btn btn-outline-success w-50" onclick="search();"><i class="fa-solid fa-magnifying-glass"></i>Cerca</button>
@@ -238,18 +238,30 @@ if (isset($_SESSION['session_id'])) {
     <?php require_once("footer.php"); ?>
     <!-- Fine -->
     <script>
+        var statusPage;
         $(document).ready(function () {
             $("#listCollapse").attr("hidden", true );
+            statusPage = "list";
         });
         $("#table").click(function () {
             $("#listCollapse").attr("hidden", true);
             $("#listTable").removeAttr("hidden");
+            statusPage = "list";
         });
         $("#collapse").click(function () {
-            console.log("ciao");
             $("#listTable").attr("hidden", true);
             $("#listCollapse").removeAttr("hidden");
+            statusPage = "collapse";
         });
+        function loadData() {
+            $.post("getUsers.php", function (data) {
+                if (statusPage === "list") {
+                    $("#listTable").html(data);
+                } else {
+                    $("#listCollapse").html(data);
+                }
+            });
+        }
     </script>
     </body>
 
