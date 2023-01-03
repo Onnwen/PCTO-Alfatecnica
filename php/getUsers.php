@@ -1,5 +1,11 @@
 <?php
-    require_once('connessione.php');
+require_once('connessione.php');
+require_once("authentication/authentication.php");
+
+if (!$isAuthenticated) {
+    http_response_code(401);
+    exit();
+}
 
     $userNameSurname = isset($_POST['userNameSurname']) ? $_POST['userNameSurname'] : '';
     $company = isset($_POST['company']) ? $_POST['company'] : '';
