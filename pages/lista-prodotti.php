@@ -1,8 +1,9 @@
 <?php
 session_start();
 require_once('../php/connessione.php');
+require_once("../php/authentication/authentication.php");
 
-if (isset($_SESSION['session_id'])) {
+if ($isAuthenticated && $isTechnician) {
     $productsCategorySql = "select product_category_id, name, type from Product_Category;";
     $productsCategory = array();
     $pre = $pdo->prepare($productsCategorySql);
@@ -609,6 +610,7 @@ if (isset($_SESSION['session_id'])) {
 
 <?php
 } else {
+    # TODO: Mostrare errore all'utente
     echo "<script>window.location.replace('../index.php');</script>";
 }
 ?>
