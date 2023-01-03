@@ -617,12 +617,12 @@ if ($isAuthenticated && $isUser) {
                 }
 
                 $(window).on('load', function() {
-                    $.post('../php/viewPlan.php', {
-                        idAnag: idAnag
-                    }, function(resp) {
-                        productsToShow = resp;
-                        loadPlanimetry(resp);
-                    }, 'json');
+                    $.getJSON('../php/viewPlan.php=idAnag=' + idAnag,
+                        function(resp) {
+                            productsToShow = resp;
+                            loadPlanimetry(resp);
+                        }
+                    );
                 });
 
                 function onResize() {
