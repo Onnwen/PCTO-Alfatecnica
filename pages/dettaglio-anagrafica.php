@@ -738,13 +738,13 @@ if ($isAuthenticated && $isUser) {
                 selectCategoryModal.addEventListener('show.bs.modal', function(event) {
                     fillSelectProductModal();
 
-                    $.get('../php/getProductsCategories.php')
+                    $.getJSON('../php/getProductsCategories.php')
                         .always(function() {
                             //modalLoading
                         })
                         .done(function(response) {
-                            const companyInformations = JSON.parse(response);
-                            fillSelectProductModal(companyInformations);
+                            const companyInformation = response;
+                            fillSelectProductModal(companyInformation);
                         })
                         .fail(function() {
                             //modalError;
