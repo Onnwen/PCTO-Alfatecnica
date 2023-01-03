@@ -769,7 +769,7 @@ if ($isAuthenticated && $isUser) {
 
                 //Aggiunta del prodotto
 
-                const addPrdocuctModal = document.getElementById("addProduct");
+                const addProductModal = document.getElementById("addProduct");
                 var myInterval;
 
                 function fillAddProductModal(attributesNames) {
@@ -926,25 +926,23 @@ if ($isAuthenticated && $isUser) {
 
                     } else {
                         clearInterval(myInterval);
-                        addPrdocuctModal.querySelector('form').reset();
+                        addProductModal.querySelector('form').reset();
                         document.getElementById('addProductButton').setAttribute("disabled", ""); //reset button aggiungi
                     }
                 }
 
-                addPrdocuctModal.addEventListener('show.bs.modal', function(event) {
+                addProductModal.addEventListener('show.bs.modal', function(event) {
                     debugger;
                     idCategoria = document.getElementById('chooseCategory').value;
                     if (idCategoria != null && idCategoria !== 0) {
                         fillAddProductModal();
 
-                        $.post('../php/getProductFields.php', {
-                                idCategoria: idCategoria
-                            })
+                        $.getJSON('../php/getProductFields.php?idCategoria=' + idCategoria)
                             .always(function() {
                                 modalLoading();
                             })
                             .done(function(response) {
-                                const categoryAttributes = JSON.parse(response);
+                                const categoryAttributes = response;
                                 fillAddProductModal(categoryAttributes);
                             })
                             .fail(function() {
