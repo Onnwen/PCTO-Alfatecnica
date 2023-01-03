@@ -1,8 +1,8 @@
 <?php
-session_start();
 require_once("../php/connessione.php");
-if (isset($_SESSION['session_id'])) {
+require_once("../php/authentication/authentication.php");
 
+if ($isAuthenticated) {
 ?>
     <!DOCTYPE html>
     <html lang="en">
