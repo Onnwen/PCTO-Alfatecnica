@@ -12,12 +12,12 @@ if (!$isTechnician) {
     exit();
 }
 
-$name = isset($_POST['name']) ? $_POST['name'] : '';
-$site = isset($_POST['site']) ? $_POST['site'] : '';
-$address = isset($_POST['address']) ? $_POST['address'] : '';
-$CAP = isset($_POST['CAP']) ? $_POST['CAP'] : 0;
-$city = isset($_POST['city']) ? $_POST['city'] : '';
-$province = isset($_POST['province']) ? $_POST['province'] : '';
+$name = isset($_POST['name']) ? $_POST['name'] : null;
+$site = isset($_POST['site']) ? $_POST['site'] : null;
+$address = isset($_POST['address']) ? $_POST['address'] : null;
+$CAP = isset($_POST['CAP']) ? $_POST['CAP'] : null;
+$city = isset($_POST['city']) ? $_POST['city'] : null;
+$province = isset($_POST['province']) ? $_POST['province'] : null;
 $phoneNumber = isset($_POST['phoneNumber']) ? $_POST['phoneNumber'] : '';
 $emailAddress = isset($_POST['emailAddress']) ? $_POST['emailAddress'] : '';
 $personalReference = isset($_POST['personalReference']) ? $_POST['personalReference'] : '';
@@ -31,7 +31,16 @@ $planimetry_image = isset($_FILES["planimetry_image"]) ? $_FILES["planimetry_ima
 $logo = isset($_FILES["logo"]) ? $_FILES["logo"] : null;
 
 # Qua mi sono basato sui dati non annullabili nel db e i dati che causano eccezioni se assenti
-if ($planimetry_image == null || $logo == null || $name == "" || $CAP == 0 || $city == "" || $province == "" || $address == "" || $site == "") {
+if (
+    is_null($planimetry_image)  ||
+    is_null($logo)              ||
+    is_null($name)              ||
+    is_null($CAP)               ||
+    is_null($city)              ||
+    is_null($province)          ||
+    is_null($address)           ||
+    is_null($site)
+) {
     http_response_code(400);
     exit();
 }
