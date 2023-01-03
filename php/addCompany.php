@@ -1,6 +1,16 @@
 <?php
-session_start();
 require_once('connessione.php');
+require_once("authentication/authentication.php");
+
+if (!$isAuthenticated) {
+    http_response_code(401);
+    exit();
+}
+
+if (!$isTechnician) {
+    http_response_code(403);
+    exit();
+}
 
 $name = isset($_POST['name']) ? $_POST['name'] : '';
 $site = isset($_POST['site']) ? $_POST['site'] : '';
@@ -17,8 +27,14 @@ $emailAddress2 = isset($_POST['emailAddress2']) ? $_POST['emailAddress2'] : '';
 $companyNotes = isset($_POST['companyNotes']) ? $_POST['companyNotes'] : '';
 $clientNotes = isset($_POST['clientNotes']) ? $_POST['clientNotes'] : '';
 
-$planimetry_image = $_FILES["planimetry_image"];
-$logo = $_FILES["logo"];
+$planimetry_image = isset($_FILES["planimetry_image"]) ? $_FILES["planimetry_image"] : null;
+$logo = isset($_FILES["logo"]) ? $_FILES["logo"] : null;
+
+# Qua mi sono basato sui dati non annullabili nel db e i dati che causano eccezioni se assenti
+if ($planimetry_image == null || $logo == null || $name == "" || $CAP == 0 || $city == "" || $province == "" || $address == "" || $site == "") {
+    http_response_code(400);
+    exit();
+}
 
 $target_dir_logo = "img/loghi/";
 $target_dir_planimetry = "img/planimetrie/";
@@ -36,12 +52,8 @@ move_uploaded_file($planimetry_image["tmp_name"], getcwd() . "/../" . $target_fi
 
 $Query = "INSERT INTO Companies(name, site, path_logo, address, CAP, city, province, phoneNumber1, emailAddress1, personalReference, phoneNumber2, cellPhoneNumber, emailAddress2, companyNotes, clientNotes, planimetry_image_url, planimetry_image_width, planimetry_image_height, unique_Code) 
     VALUES (:name, :site, :path_logo, :address, :CAP, :city, :province, :phoneNumber, :emailAddress, :personalReference, :phoneNumber2, :cellPhoneNumber, :emailAddress2, :companyNotes, :clientNotes, :planimetry_image_url, :planimetry_image_width, :planimetry_image_height, :unique_Code)";
-try {
-    $pre = $pdo->prepare($Query);
-} catch (Exception $e) {
-    echo $e->getMessage();
-    exit;
-}
+
+$pre = $pdo->prepare($Query);
 
 # Generazione di Codice Unico random; cosa molto temporanea; TODO: sistemare/trovare approccio migliore
 $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
