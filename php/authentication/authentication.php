@@ -1,0 +1,15 @@
+
+<?php
+
+$isRoleValid = isset($_SESSION['role']);
+$isEmailValid = isset($_SESSION['session_email']);
+$isSessionValid = isset($_SESSION['session_id']);
+
+$isAuthenticated = $isRoleValid && $isEmailValid && $isSessionValid;
+
+$isAdmin = $isRoleValid ? $_SESSION['role'] == 1 : false;
+$isUser = $isRoleValid ? $_SESSION['role'] == 0 : false;
+
+$userEmail = $isEmailValid ? $_SESSION['session_email'] : "";
+
+?>
