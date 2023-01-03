@@ -1,7 +1,8 @@
 <?php
-session_start();
 require_once("../php/connessione.php");
-if (isset($_SESSION['session_id'])) {
+require_once("../php/authentication/authentication.php");
+
+if ($isAuthenticated && $isUser) {
     $idAnagrafica = isset($_GET['id_ana']) ? $_GET['id_ana'] : '';
     if ($idAnagrafica !== '' || $idAnagrafica !== "undefined") {
         $selectAna = "SELECT name, address, CAP, city, province, phoneNumber1, emailAddress1, personalReference, phoneNumber2, cellPhoneNumber, emailAddress2, companyNotes, clientNotes
@@ -1098,6 +1099,7 @@ if (isset($_SESSION['session_id'])) {
         <?php
     }
 } else {
+    # TODO: Mostrare messaggio di errore
     include_once('404.html');
 }
 ?>
