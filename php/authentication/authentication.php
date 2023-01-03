@@ -1,6 +1,8 @@
 
 <?php
 
+session_start();
+
 $isRoleValid = isset($_SESSION['role']);
 $isEmailValid = isset($_SESSION['session_email']);
 $isSessionValid = isset($_SESSION['session_id']);
