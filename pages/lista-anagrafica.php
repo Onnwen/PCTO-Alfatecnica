@@ -355,28 +355,20 @@ if ($isAuthenticated && $isUser) {
             });
 
             let requestDestination = "";
-            let searchedQuery = {
-                nome_azienda: "",
-                sede: "",
-                data: ""
-            };
 
-            if (requestedCompany === "" && requestedSite === "" && requestedDate === "") { //TODO: Controllare se la query string è vuota
+            if (requestedCompany === "" && requestedSite === "" && requestedDate === "") {
                 requestDestination = "../php/viewAnagr.php";
             } else { // Renderizza i risultati del motore di ricerca
-                requestDestination = "../php/searchEngine.php";
-                searchedQuery.nome_azienda = requestedCompany;
-                searchedQuery.sede = requestedSite;
-                searchedQuery.data = requestedDate;
+                requestDestination = "../php/searchEngine.php?nome_azienda=" + requestedCompany + "&sede=" + requestedSite + "&data=" + requestedDate;
             }
 
-            $.post(requestDestination, searchedQuery, function(resp) {
+            $.getJSON(requestDestination, function(resp) {
                 allCompanies = resp;
 
                 maxPageNumber = Math.ceil(resp.length / maxCardsPerPage);
 
                 loadCurrentPage();
-            }, "json");
+            });
 
 
             $("#table").click(function() {
