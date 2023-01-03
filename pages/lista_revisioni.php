@@ -215,6 +215,12 @@ if ($isAuthenticated && $isTechnician) {
                     case 400:
                         errorDescriptionString = "Il modulo della registrazione non è stato compilato correttamente!";
                         break;
+                    case 401:
+                        errorDescriptionString = "Non sei autenticato: devi rifare il login!";
+                        break;
+                    case 403:
+                        errorDescriptionString = "Non hai il permesso per effettuare questa operazione!";
+                        break;
                     case 500:
                         errorDescriptionString = "Il server ha un problema tecnico!";
                         break;
