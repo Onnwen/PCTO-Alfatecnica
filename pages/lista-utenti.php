@@ -1,9 +1,12 @@
 <?php
 session_start();
 require_once('../php/connessione.php');
+require_once("../php/authentication/authentication.php");
 
-if (isset($_SESSION['session_id'])) {
-?>
+if ($isAuthenticated && $isAdmin) {
+
+
+    ?>
 
     <!DOCTYPE html>
     <html lang="it">
@@ -560,6 +563,7 @@ if (isset($_SESSION['session_id'])) {
 
     <?php
 } else {
+    # TODO: Mostrare messaggio di errore
     echo "<script>window.location.replace('../index.php');</script>";
 }
 ?>
