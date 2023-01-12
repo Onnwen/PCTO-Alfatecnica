@@ -14,9 +14,8 @@ if (isset($_POST["user_id"]) && isset($_POST["confirmed"])) {
     $userId = $_POST["user_id"];
     $confirmed = $_POST["confirmed"];
     if ($confirmed) {
-        $pdo->query("UPDATE Users SET active = " . $confirmed . " WHERE user_id = " . $userId . ";");
-
-        $user = $pdo->query("SELECT email FROM Users WHERE user_id = " . $userId . ";")->fetch();
+        $pdo->query("UPDATE Users SET activedByCompany = " . $confirmed . " WHERE user_id = " . $userId . ";");
+        $user = $pdo->query("SELECT * FROM Users WHERE user_id = " . $userId . ";")->fetch();
         $userEmail = $user["email"];
 
         $mailer = new PHPMailer;
@@ -275,7 +274,7 @@ if (isset($_POST["user_id"]) && isset($_POST["confirmed"])) {
     <center>
         <img class="center" src="https://thecouriernv.tplinkdns.com/PCTO-Alfatecnica-Staging/img/logo.png" height="200" alt="Alfatecnica">
     </center>
-    <p>Buongiorno,</p>
+    <p>Buongiorno,' .  $user["first_name"] . '</p>
     <p>La tua registrazione ad Alfatecnica è stata ultimata e conferma da un ammistratore.</p>
 </div>
 
