@@ -1,4 +1,13 @@
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+require '../../vendor/phpmailer/phpmailer/src/Exception.php';
+require '../../vendor/phpmailer/phpmailer/src/PHPMailer.php';
+require '../../vendor/phpmailer/phpmailer/src/SMTP.php';
+require '../../vendor/autoload.php';
+
+require_once('connessione.php');
+
 if (isset($_POST["user_id"]) && isset($_POST["confirmed"])) {
     $userId = $_POST["user_id"];
     $confirmed = $_POST["confirmed"];
