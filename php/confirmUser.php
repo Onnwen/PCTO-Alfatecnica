@@ -283,12 +283,15 @@ if (isset($_POST["user_id"]) && isset($_POST["confirmed"])) {
 </center>
 </body>
 </html>';
+        echo 1;
     }
     else {
         include 'deleteUser.php';
+        echo 1;
     }
 }
 else {
     http_response_code(400);
+    echo 0;
     exit;
 }
