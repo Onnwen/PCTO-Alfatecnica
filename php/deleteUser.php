@@ -10,7 +10,6 @@ require_once('connessione.php');
 
 if ($_POST["user_id"]) {
     $userId = $_POST["user_id"];
-    // Select user email
     $user = $pdo->query("SELECT email FROM Users WHERE user_id = " . $userId . ";")->fetch();
     $userEmail = $user["email"];
 
