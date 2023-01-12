@@ -277,9 +277,6 @@ if (isset($_POST["user_id"]) && isset($_POST["confirmed"])) {
     </center>
     <p>Buongiorno,</p>
     <p>La tua registrazione ad Alfatecnica è stata ultimata e conferma da un ammistratore.</p>
-    <center>
-        <a class="center" href="https://thecouriernv.tplinkdns.com/PCTO-Alfatecnica-PrivateLogin/pages/registrationConfirm.php?email=' . $check['email'] . '" target="_blank">Cambia password</a>
-    </center>
 </div>
 
 <center>
