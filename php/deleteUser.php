@@ -272,7 +272,7 @@ if ($_POST["user_id"]) {
         <img class="center" src="https://thecouriernv.tplinkdns.com/PCTO-Alfatecnica-Staging/img/logo.png" height="200" alt="Alfatecnica">
     </center>
     <p>Buongiorno ' . $user["first_name"] . ',</p>
-    <p>Ricevi questa mail perché il tuo account è stato cancellato dai nostri sistemi.</p>
+    <p>Ricevi questa mail perch&egrave; il tuo account &eacute; stato cancellato dai nostri sistemi.</p>
 </div>
 
 <center>

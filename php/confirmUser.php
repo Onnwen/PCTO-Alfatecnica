@@ -272,8 +272,8 @@ if (isset($_POST["user_id"]) && isset($_POST["confirmed"])) {
     <center>
         <img class="center" src="https://thecouriernv.tplinkdns.com/PCTO-Alfatecnica-Staging/img/logo.png" height="200" alt="Alfatecnica">
     </center>
-    <p>Buongiorno,' .  $user["first_name"] . '</p>
-    <p>La tua registrazione ad Alfatecnica è stata ultimata e conferma da un ammistratore.</p>
+    <p>Buongiorno ' .  $user["first_name"] . ',</p>
+    <p>La tua registrazione ad Alfatecnica &eacute; stata ultimata e conferma da un ammistratore.</p>
 </div>
 
 <center>
