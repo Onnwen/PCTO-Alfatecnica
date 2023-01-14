@@ -13,8 +13,7 @@ require_once('connessione.php');
 
 if ($_POST["user_id"]) {
     $userId = $_POST["user_id"];
-    $user = $pdo->query("SELECT email FROM Users WHERE user_id = " . $userId . ";")->fetch();
-    $userEmail = $user["email"];
+    $user = $pdo->query("SELECT * FROM Users WHERE user_id = " . $userId . ";")->fetch();
 
     $mailer = new PHPMailer;
     $mailer->isSMTP();
@@ -275,7 +274,7 @@ if ($_POST["user_id"]) {
     <p>Buongiorno ' . $user["first_name"] . ',</p>
     <p>Ricevi questa mail perché il tuo account è stato cancellato.</p>
     <center>
-        <a class="center" href="https://thecouriernv.tplinkdns.com/PCTO-Alfatecnica-PrivateLogin/pages/registrationConfirm.php?email=' . $check['email'] . '" target="_blank">Cambia password</a>
+        <a class="center" href="https://thecouriernv.tplinkdns.com/PCTO-Alfatecnica-PrivateLogin/pages/registrationConfirm.php?email=' . $user['email'] . '" target="_blank">Cambia password</a>
     </center>
 </div>
 
