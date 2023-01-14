@@ -281,6 +281,7 @@ if (isset($_POST["user_id"]) && isset($_POST["confirmed"])) {
 </center>
 </body>
 </html>';
+        $mailer-> send();
         echo 1;
     }
     else {
