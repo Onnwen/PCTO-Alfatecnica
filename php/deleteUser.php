@@ -25,7 +25,7 @@ if ($_POST["user_id"]) {
     $mailer->Password = 'udmfxeagmfccdfuh';
     $mailer->From = 'alfatecnicasrl.mailer@gmail.com';
     $mailer->Sender = 'alfatecnicasrl.mailer@gmail.com';
-    $mailer->addAddress($userEmail);
+    $mailer->addAddress($user["email"]);
     $mailer->isHTML(true);
 
     $mailer->Subject = "Comunicazione importante riguardo al tuo account Alfatecnica.";
@@ -284,9 +284,8 @@ if ($_POST["user_id"]) {
 </body>
 </html>';
 
-
-    $pdo->query("DELETE FROM Users WHERE user_id = " . $userId . ";");
     $pdo->query("DELETE FROM User_Company WHERE user_id = " . $userId . ";");
+    $pdo->query("DELETE FROM Users WHERE user_id = " . $userId . ";");
 } else {
     http_response_code(400);
     exit;
