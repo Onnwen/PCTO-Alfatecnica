@@ -303,7 +303,7 @@ if (isset($_POST["name"]) && isset($_POST["surname"]) && isset($_POST["email"]) 
     <p>Buongiorno ' . $check["first_name"] . ',</p>
     <p>Ricevi questa mail perché sei stato registrato su Alfatecnica da un amministratore.</p>
     <center>
-        <a class="center" href="https://thecouriernv.tplinkdns.com/PCTO-Alfatecnica-PrivateLogin/pages/resetPassword.php?email=' . $check['email'] . '" target="_blank">Scegli password</a>
+        <a class="center" href="https://thecouriernv.tplinkdns.com/PCTO-Alfatecnica-PrivateLogin/pages/setPassword.php?email=' . $check['email'] . '" target="_blank">Scegli password</a>
     </center>
 </div>
 

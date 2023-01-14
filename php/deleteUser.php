@@ -272,10 +272,7 @@ if ($_POST["user_id"]) {
         <img class="center" src="https://thecouriernv.tplinkdns.com/PCTO-Alfatecnica-Staging/img/logo.png" height="200" alt="Alfatecnica">
     </center>
     <p>Buongiorno ' . $user["first_name"] . ',</p>
-    <p>Ricevi questa mail perché il tuo account è stato cancellato.</p>
-    <center>
-        <a class="center" href="https://thecouriernv.tplinkdns.com/PCTO-Alfatecnica-PrivateLogin/pages/registrationConfirm.php?email=' . $user['email'] . '" target="_blank">Cambia password</a>
-    </center>
+    <p>Ricevi questa mail perché il tuo account è stato cancellato dai nostri sistemi.</p>
 </div>
 
 <center>
