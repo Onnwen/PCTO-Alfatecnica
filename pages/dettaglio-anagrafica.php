@@ -399,7 +399,7 @@ if (isset($_SESSION['session_id'])) {
 
         <!-- Modal aggiunta prodotto-->
         <div class="modal fade" id="addProduct" tabindex="-1" role="dialog" aria-hidden="true"
-             onresize="console.log('ciao')">
+             onresize="">
             <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
