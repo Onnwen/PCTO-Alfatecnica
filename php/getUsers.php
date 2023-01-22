@@ -55,7 +55,8 @@
     } else {
         $select = "SELECT Users.user_id, first_name, last_name, email, role, active, activedByCompany, Companies.name AS company
                    FROM Users
-                        INNER JOIN User_Company ON User_Company.user_id = Users.user_id";
+                        INNER JOIN User_Company ON User_Company.user_id = Users.user_id
+                        INNER JOIN Companies ON Companies.id = User_Company.company_id";
         $pre = $pdo->prepare($select);
         $pre->bindParam(':company', $company, PDO::PARAM_STR);
         $pre->execute();
