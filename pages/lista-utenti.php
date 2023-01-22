@@ -270,7 +270,7 @@ if (isset($_SESSION['session_id'])) {
             console.log(datas);
             loadPrincipalTable(datas);
             loadBadgeHeader();
-            $.post("../php/getUsers.php", {userNameSurname: "Andrea"} ,function (response) {
+            $.post("../php/getUsers.php", {company: "Dallara"} ,function (response) {
                 if(response !== "error"){
                     console.log(response);
                 }
