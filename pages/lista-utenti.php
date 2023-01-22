@@ -5,8 +5,9 @@ require_once('../php/connessione.php');
 if (isset($_SESSION['session_id'])) {
     $select = "SELECT Users.user_id, first_name, last_name, email, role, active, activedByCompany, Companies.name AS company
                    FROM Users
-                        INNER JOIN User_Company ON User_Company.user_id = Users.user_id
-                        INNER JOIN Companies ON Companies.id = User_Company.company_id";
+                        LEFT JOIN User_Company ON User_Company.user_id = Users.user_id
+                        LEFT JOIN Companies ON Companies.id = User_Company.company_id
+                ORDER BY activedByCompany DESC,last_name,first_name,company_id";
     $pre = $pdo->prepare($select);
     $pre->execute();
     $check = $pre->fetchAll(PDO::FETCH_ASSOC);
@@ -61,13 +62,13 @@ if (isset($_SESSION['session_id'])) {
             </div>
             <div class="col-2 text-center">
                 <button type="button" class="btn btn-outline-success w-50" onclick="search();"><i class="fa-solid fa-magnifying-glass"></i>Cerca</button>
-                <button id="table" type="button" class="btn btn-outline-success selected change_cards verde" id="cards"><i class="fa-solid fa-table-list bianco"></i></button>
-                <button id="collapse" type="button" class="btn btn-outline-success change_table verde" id="table"><i class="bi bi-view-list bianco"></i></i></button>
+                <button disabled id="table" type="button" class="btn btn-outline-success selected change_cards verde" id="cards"><i class="fa-solid fa-table-list bianco"></i></button>
+                <button disabled id="collapse" type="button" class="btn btn-outline-success change_table verde" id="table"><i class="bi bi-view-list bianco"></i></i></button>
             </div>
             <div class="col-2">
-                <button type="button" class="btn btn-warning w-100 position-relative">
+                <button type="button" class="btn btn-warning w-100 position-relative" data-bs-toggle='modal' data-bs-target='#activationInfoModal' data-bs-whatever='activationInfoModal'>
                     <i class="bi bi-person-fill-exclamation"></i>&nbsp;&nbsp;Attiva utenti
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">5</span></span></button>
+                    <span id="badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span></span></button>
             </div>
         </div>
     </div>
@@ -106,7 +107,7 @@ if (isset($_SESSION['session_id'])) {
     <!-- DeleteUser Modal -->
     <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel"
          aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" style="color: darkred" id="deleteUserModalLabel">Elimina utente</h5>
@@ -119,9 +120,7 @@ if (isset($_SESSION['session_id'])) {
                     <button type="button" onclick="location.reload()" class="btn btn btn-secondary"
                             data-bs-dismiss="modal">Annulla
                     </button>
-                    <button type="button" onclick="location.reload()" class="btn btn-danger"
-                            <!--onclick="deleteUser()-->">Conferma
-                    </button>
+                    <button type="button" class="btn btn-danger" id="deleteModalButton">Conferma</button>
                 </div>
             </div>
         </div>
@@ -150,33 +149,39 @@ if (isset($_SESSION['session_id'])) {
                             <span class="input-group-text" id="addEmailLabel">Email</span>
                             <input class="form-control" type="email" id="email" aria-describedby="addEmailLabel">
                         </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="addCompanyLabel">Azienda</span>
-                            <select id="role" class="form-select" aria-label="addCompanyLabel">
-                                <!-- companies -->
-                            </select>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+                            <label class="form-check-label" for="inlineRadio1">1</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                            <label class="form-check-label" for="inlineRadio2">2</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3" disabled>
+                            <label class="form-check-label" for="inlineRadio3">3 (disabled)</label>
                         </div>
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="addRoleLabel">Ruolo</span>
                             <select id="role" class="form-select" aria-label="addRoleLabel">
-                                <option value="1">Amministratore</option>
+                                <option></option>
                                 <option value="0">Utente</option>
-                                <option value="2">Utente</option>
+                                <option value="1">Amministratore</option>
+                                <option value="2">Tecnico</option>
                             </select>
                         </div>
                         <div class="input-group mb-3">
-                            <span class="input-group-text" id="addActiveByCompanyLabel">Attivato</span>
-                            <input class="form-control" type="checkbox" id="activatedByCompany" aria-describedby="addActiveByCompanyLabel">
+                            <span class="input-group-text" id="addCompanyLabel">Azienda</span>
+                            <select id="selectCompany" class="form-select" aria-label="addCompanyLabel" onchange="selectionRoleChange()">
+                                <!-- companies -->
+                            </select>
                         </div>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" onclick="location.reload()" class="btn btn btn-secondary"
                             data-bs-dismiss="modal">Annulla
                     </button>
-                    <button type="button" onclick="location.reload()" class="btn btn-success"
-                    <!--onclick="addUser()-->">Aggiungi
-                    </button>
+                    <button id="addUserButton" type="button" onclick="addUser()" class="btn btn-success">Aggiungi</button>
                 </div>
             </div>
         </div>
@@ -187,26 +192,93 @@ if (isset($_SESSION['session_id'])) {
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Attivazione utente</h5>
+                    <h5 class="modal-title" id="activationModalLabel"></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    ...
+                <div class="modal-body" id="modalContent">
+
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Conferma</button>
+                <div class="modal-footer" id="confirmationFooter">
+
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Active or not INFO Modal -->
+    <div class="modal fade" id="activationInfoModal" tabindex="-1" aria-labelledby="activationInfoModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="activationModalInfoLabel">Attivazione utenti - Informazioni</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    All'interno della tabella utenti puoi osservare che sono presenti due varianti di riga, le prime dove in fondo c'è la possibilità
+                    di eliminare direttamente l'utente rappresentano tutte le credenziali già attivati e funzionanti. Il resto della tabella invece
+                    rappresenta tutti gli utenti che devono ancora essere attivati da lei. Nell'ultima colonna infatti è possibile confermare l'utente
+                    o rifiutare e di cnseguenza eliinare del tutto le credenziale dell'utente. Sul bottone che hai appena premuto è presente un badge che indica
+                    numero di credenziali ancora da attivare. Si ricordi che finchè l'account non è attivo l'utente associato non può utilizzare i servizi che forniamo.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Ho capito</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal successo -->
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="doneLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" style="color: darkgreen" id="doneLabel">Operazione eseguita con
+                        successo</h5>
+                </div>
+                <div class="modal-body">
+                    L'operazione è avvenuta con successo e tutte le comunicazioni del caso sono state inviate.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal" onclick="window.location.reload()">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal errore -->
+    <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" style="color: darkred" id="errorModalLabel">È stato riscontrato un
+                        problema</h5>
+                </div>
+                <div class="modal-body">
+                    L'operazione non è avvenuta con successo, ci scusiamo per l'inconveniente, contatti in supporto per risorvere il problema.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="window.location.reload()">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         var statusPage;
         $(document).ready(function () {
             var datas = <?php echo $datas; ?>;
             console.log(datas);
             loadPrincipalTable(datas);
+            loadBadgeHeader();
         });
+
+        function loadBadgeHeader(){
+            $.post("../php/getUserToBeActived.php", function (response) {
+                if(response !== "error"){
+                    $("#badge").html(response[0].countUsers);
+                }
+            }, "json")
+        }
 
         function loadPrincipalTable(datas) {
             var table = document.getElementById("listTable");
@@ -238,12 +310,18 @@ if (isset($_SESSION['session_id'])) {
                 var td = document.createElement("td");
                 td.style.textAlign = "center";
                 if(datas[i].activedByCompany === 1){
-                    td.innerHTML = "<button type='button' style='margin-right: 5px' class='btn btn-outline-danger' data-bs-toggle='modal' data-bs-target='#deleteUserModal' data-bs-whatever='deleteUser' id='openDeleteModal'>" +
+                    td.innerHTML = "<button type='button' style='margin-right: 5px' class='btn btn-outline-danger' onclick='deleteUser(" + datas[i].user_id + ")' id='openDeleteModal'>" +
                         "<i class='bi bi-trash3-fill'></i></i>&nbsp;Elimina</button>";
                 }else {
-                    td.innerHTML = "<button type='button' style='margin-right: 10px' class='btn btn-outline-success' data-bs-toggle='modal' data-bs-target='#activationModal' data-bs-whatever='activationModal' id='openActivationModal'>" +
-                        "<i class='bi bi-person-check-fill'></i></button><button type='button' class='btn btn-outline-danger' data-bs-toggle='modal' data-bs-target='#activationModal' data-bs-whatever='activationModal' id='openRefuseModal'>"+
-                        "<i class='bi bi-person-x-fill'></i></button>";
+                    tr.setAttribute("class", "toBeActived");
+                    tr.setAttribute("style","background-color: lightYellow;");
+                    td.innerHTML =
+                        "<button id='activationButton' type='button' style='margin-right: 10px' class='btn btn-outline-success' onclick='onActivationClick(" + datas[i].user_id + ")' id='openActivationModal'>" +
+                            "<i class='bi bi-person-check-fill'></i>" +
+                        "</button>" +
+                        "<button id='negationButton' type='button' class='btn btn-outline-danger' onclick='onNegationClick(" + datas[i].user_id + ")' id='openRefuseModal'>"+
+                            "<i class='bi bi-person-x-fill'>" +
+                        "</i></button>";
                 }
                 tr.appendChild(td);
                 tbody.appendChild(tr);
@@ -260,20 +338,177 @@ if (isset($_SESSION['session_id'])) {
                 return "Tecnico";
             }
         }
-        function activeUser(action, userId){
-            if (action) {
-                //attiva utente
-            } else {
-                //elimina utente
-            }
+
+        function onActivationClick(id) {
+            $.post("../php/getUserInfo.php", {user_id: id}, function (response) {
+                response = response[0];
+                $("#activationModalLabel").html("Attivazione utente");
+                $("#modalContent").html("Si desidera confermare l'attivazione dell'utente selezionato: <br>Nominativo: <strong>" + response.first_name + " " + response.last_name + "</strong><br>Mail: <strong>" + response.email + "</strong>");
+                $("#confirmationFooter").html('<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button><button id="confirmActivation" type="button" class="btn btn-success">Conferma</button>')
+                $('#activationModal').modal('show');
+                const confirmButton = $("#confirmActivation");
+                confirmButton.click(function () {
+                    confirmButton.prop('disabled', true);
+                    confirmButton.html('<div class="spinner-border spinner-border-sm" role="status"></div>');
+                    $.post("../php/confirmUser.php", {user_id: id,confirmed: 1})
+                        .done(function (resp) {
+                            if (resp === '1') {
+                                $('#activationModal').modal('hide');
+                                confirmButton.removeAttr('disabled');
+                                confirmButton.html('Conferma');
+                                $('#successModal').modal('show');
+                            } else if (resp === '0') {
+                                $('#activationModal').modal('hide');
+                                confirmButton.removeAttr('disabled');
+                                confirmButton.html('Conferma');
+                                $('#errorModal').modal('show');
+                            } else {
+                                $('#activationModal').modal('hide');
+                                confirmButton.removeAttr('disabled');
+                                confirmButton.html('Conferma');
+                                $("#errorModal").modal('show');
+                            }
+                        })
+                        .fail(function () {
+                            $('#activationModal').modal('hide');
+                            confirmButton.removeAttr('disabled');
+                            confirmButton.html('Recupera');
+                            $("#errorModal").modal('show');
+                        })
+                });
+            }, "json");
         }
+        function onNegationClick(id) {
+            $.post("../php/getUserInfo.php", {user_id: id}, function (response) {
+                response = response[0];
+                $("#activationModalLabel").html("Attivazione utente");
+                $("#modalContent").html("Si desidera <strong>non</strong> confermare l'attivazione dell'utente selezionato: <br>Nominativo: <strong>" + response.first_name + " " + response.last_name + "</strong><br>Mail: <strong>" + response.email + "</strong>");
+                $("#confirmationFooter").html('<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button><button id="confirmActivation" type="button" class="btn btn-danger">Conferma</button>')
+                $('#activationModal').modal('show');
+                const confirmButton = $("#confirmActivation");
+                confirmButton.click(function () {
+                confirmButton.prop('disabled', true);
+                confirmButton.html('<div class="spinner-border spinner-border-sm" role="status"></div>');
+                $.post("../php/confirmUser.php", {user_id: id,confirmed: 1})
+                    .done(function (resp) {
+                        if (resp === '1') {
+                            $('#activationModal').modal('hide');
+                            confirmButton.removeAttr('disabled');
+                            confirmButton.html('Conferma');
+                            $('#successModal').modal('show');
+                        } else if (resp === '0') {
+                            $('#activationModal').modal('hide');
+                            confirmButton.removeAttr('disabled');
+                            confirmButton.html('Conferma');
+                            $('#errorModal').modal('show');
+                        } else {
+                            $('#activationModal').modal('hide');
+                            confirmButton.removeAttr('disabled');
+                            confirmButton.html('Conferma');
+                            $("#errorModal").modal('show');
+                        }
+                    })
+                    .fail(function () {
+                        $('#activationModal').modal('hide');
+                        confirmButton.removeAttr('disabled');
+                        confirmButton.html('Conferma');
+                        $("#errorModal").modal('show');
+                    })
+                });
+            }, "json");
+        }
+
+        $("#addUserModal").on("show.bs.modal", function () {
+            $.post("../php/getCompanies.php", function (response) {
+                let toPrint = "<option></option>";
+                for (let company of response){
+                    toPrint += "<option value='" + company.id + "'>" + company.name +"</option>"
+                }
+                $("#selectCompany").html(toPrint);
+            }, "json");
+        })
+         function selectionRoleChange(){
+             debugger;
+             let val = $("#selectCompany").val();
+             if(val === "1" || val === "0"){
+                 $("#role").attr("disabled", true);
+             } else {
+                 $("#role").removeAttr("disabled");
+             }
+         }
+
+
         function addUser() {
+            const confirmButton = $("#addUserButton");
+            confirmButton.click(function () {
+                confirmButton.prop('disabled', true);
+                confirmButton.html('<div class="spinner-border spinner-border-sm" role="status"></div>');
+                $.post("../php/addUser.php", {})
+                    .done(function (resp) {
+                        if (resp === '1') {
+                            $('#activationModal').modal('hide');
+                            confirmButton.removeAttr('disabled');
+                            confirmButton.html('Aggiungi');
+                            $('#successModal').modal('show');
+                        } else if (resp === '0') {
+                            $('#activationModal').modal('hide');
+                            confirmButton.removeAttr('disabled');
+                            confirmButton.html('Aggiungi');
+                            $('#errorModal').modal('show');
+                        } else {
+                            $('#activationModal').modal('hide');
+                            confirmButton.removeAttr('disabled');
+                            confirmButton.html('Aggiungi');
+                            $("#errorModal").modal('show');
+                        }
+                    })
+                    .fail(function () {
+                        $('#activationModal').modal('hide');
+                        confirmButton.removeAttr('disabled');
+                        confirmButton.html('Aggiungi');
+                        $("#errorModal").modal('show');
+                    })
+            })
         }
 
         function searchUsers() {
         }
 
         function deleteUser(userId) {
+            $.post("../php/getUserInfo.php", {user_id: userId}, function (response) {
+                response = response[0];
+                $('#deleteUserModal').modal('show');
+                const deleteButton = $("#deleteModalButton");
+                deleteButton.click(function () {
+                deleteButton.prop('disabled', true);
+                deleteButton.html('<div class="spinner-border spinner-border-sm" role="status"></div>');
+                $.post("../php/deleteUser.php", {user_id: userId})
+                    .done(function (resp) {
+                        if (resp === '1') {
+                            $('#deleteUserModal').modal('hide');
+                            deleteButton.removeAttr('disabled');
+                            deleteButton.html('Elimina');
+                            $('#successModal').modal('show');
+                        } else if (resp === '0') {
+                            $('#deleteUserModal').modal('hide');
+                            deleteButton.removeAttr('disabled');
+                            deleteButton.html('Elimina');
+                            $('#errorModal').modal('show');
+                        } else {
+                            $('#deleteUserModal').modal('hide');
+                            deleteButton.removeAttr('disabled');
+                            deleteButton.html('Elimina');
+                            $("#errorModal").modal('show');
+                        }
+                    })
+                    .fail(function () {
+                        $('#deleteUserModal').modal('hide');
+                        deleteButton.removeAttr('disabled');
+                        deleteButton.html('Elimina');
+                        $("#errorModal").modal('show');
+                    })
+                });
+            }, "json");
         }
     </script>
     </body>

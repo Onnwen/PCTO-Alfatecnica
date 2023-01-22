@@ -305,7 +305,7 @@
                                 <p>Buongiorno ' . $check["name"] .',</p>
                                 <p>Ricevi questa mail perch&eacute hai segnalato di aver dimenticato la tua password. Utilizza il tasto sottostante per cambiare credenziali di accesso.</p>
                                 <center>
-                                    <a class="center" href="https://thecouriernv.tplinkdns.com/PCTO-Alfatecnica-PrivateLogin/pages/resetPassword.php?stringpasswordretriever='.$stringToInsert.'" target="_blank">Cambia password</a>
+                                    <a class="center" href="https://thecouriernv.tplinkdns.com/PCTO-Alfatecnica-Staging/pages/resetPassword.php?stringpasswordretriever='.$stringToInsert.'" target="_blank">Cambia password</a>
                                 </center>
                             </div>
                             

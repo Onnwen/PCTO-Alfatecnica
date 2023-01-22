@@ -5,7 +5,7 @@
     $company = isset($_POST['company']) ? $_POST['company'] : '';
 
     if($userNameSurname !== '' && $company !== ''){
-        $select = "SELECT Users.user_id, first_name, last_name, email, role, active, activedByCompany, Companies.name AS company
+        $select = "SELECT Users.user_id as id, first_name, last_name, email, role, active, activedByCompany, Companies.name AS company
                    FROM Users
                         INNER JOIN User_Company ON User_Company.user_id = Users.user_id
                         INNER JOIN Companies ON Companies.id = User_Company.company_id
