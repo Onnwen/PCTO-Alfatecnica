@@ -53,7 +53,7 @@
             exit;
         }
     } else {
-        $select = "SELECT Users.user_id, name, surname, email, role, active, activedByCompany, company
+        $select = "SELECT Users.user_id, first_name, last_name, email, role, active, activedByCompany, company
                    FROM Users
                         INNER JOIN User_Company ON User_Company.user_id = Users.user_id";
         $pre = $pdo->prepare($select);
