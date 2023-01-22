@@ -58,7 +58,6 @@
                         LEFT JOIN User_Company ON User_Company.user_id = Users.user_id
                         LEFT JOIN Companies ON Companies.id = User_Company.company_id";
         $pre = $pdo->prepare($select);
-        $pre->bindParam(':company', $company, PDO::PARAM_STR);
         $pre->execute();
         $check = $pre->fetchAll(PDO::FETCH_ASSOC);
         if(!$check){
