@@ -9,7 +9,7 @@
                    FROM Users
                         INNER JOIN User_Company ON User_Company.user_id = Users.user_id
                         INNER JOIN Companies ON Companies.id = User_Company.company_id
-                   WHERE first_name LIKE '%$userNameSurname%' OR last_name LIKE '%$userNameSurname%' AND Companies.name = '%$company%'";
+                   WHERE first_name LIKE '%$userNameSurname%' OR last_name LIKE '%$userNameSurname%' AND Companies.name LIKE '%$company%'";
         $pre = $pdo->prepare($select);
         $pre->execute();
         $check = $pre->fetchAll(PDO::FETCH_ASSOC);
