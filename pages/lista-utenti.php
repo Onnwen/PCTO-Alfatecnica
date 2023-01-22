@@ -270,6 +270,12 @@ if (isset($_SESSION['session_id'])) {
             console.log(datas);
             loadPrincipalTable(datas);
             loadBadgeHeader();
+            $.post("../php/getUsers.php", function (response) {
+                if(response !== "error"){
+                    console.log(response);
+                }
+            }, "json")
+
         });
 
         function loadBadgeHeader(){
