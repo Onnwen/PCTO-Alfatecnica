@@ -41,7 +41,7 @@
                    FROM Users
                         INNER JOIN User_Company ON User_Company.user_id = Users.user_id
                         INNER JOIN Companies ON Companies.id = User_Company.company_id
-                   WHERE Companies.name = '%$company%'";
+                   WHERE Companies.name LIKE '%$company%'";
         $pre = $pdo->prepare($select);
         $pre->execute();
         $check = $pre->fetchAll(PDO::FETCH_ASSOC);
