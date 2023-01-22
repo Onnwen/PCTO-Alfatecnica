@@ -3,20 +3,7 @@ session_start();
 require_once('../php/connessione.php');
 
 if (isset($_SESSION['session_id'])) {
-    $select = "SELECT Users.user_id, first_name, last_name, email, role, active, activedByCompany, Companies.name AS company
-                   FROM Users
-                        LEFT JOIN User_Company ON User_Company.user_id = Users.user_id
-                        LEFT JOIN Companies ON Companies.id = User_Company.company_id
-                ORDER BY activedByCompany DESC,last_name,first_name,company_id";
-    $pre = $pdo->prepare($select);
-    $pre->execute();
-    $check = $pre->fetchAll(PDO::FETCH_ASSOC);
-    if(!$check){
-        $datas = "error";
-    } else {
-        $datas = json_encode($check);
-    }
-    ?>
+?>
 
     <!DOCTYPE html>
     <html lang="it">
@@ -57,8 +44,8 @@ if (isset($_SESSION['session_id'])) {
                     <i class="bi bi-person-plus-fill"></i></button>
             </div>
             <div class="col-7 d-inline-flex">
-                <input id="searchUser" style="margin-right: 5px" type="text" id="companyName" class="form-control w-50" placeholder="Nome e/o cognome utente" aria-label="Nome azienda">
-                <input id="searchCompany" type="text" id="companyName" class="form-control w-50" placeholder="Nome azienda" aria-label="Nome azienda">
+                <input id="searchUser" style="margin-right: 5px" type="text" class="form-control w-50" placeholder="Nome e/o cognome utente" aria-label="Nome e/o cognome utente">
+                <input id="searchCompany" type="text" class="form-control w-50" placeholder="Nome azienda" aria-label="Nome azienda">
             </div>
             <div class="col-2 text-center">
                 <button type="button" class="btn btn-outline-success w-50" onclick="search();"><i class="fa-solid fa-magnifying-glass"></i>Cerca</button>
@@ -266,17 +253,53 @@ if (isset($_SESSION['session_id'])) {
     <script>
         var statusPage;
         $(document).ready(function () {
-            var datas = <?php echo $datas; ?>;
-            console.log(datas);
-            loadPrincipalTable(datas);
-            loadBadgeHeader();
-            $.post("../php/getUsers.php", {company: "Dallara"} ,function (response) {
-                if(response !== "error"){
-                    console.log(response);
-                }
-            }, "json")
-
+            loadDatas();
         });
+
+        function loadDatas(company, userNameSurname){
+            if((company)&&(userNameSurname)){
+                $.post("../php/getUsers.php", {company: company, userNameSurname: userNameSurname} ,function (response) {
+                    if(response.length !== 0){
+                        datas = response;
+                        loadPrincipalTable(datas);
+                        loadBadgeHeader();
+                    } else {
+                        loadPrincipalTable();
+                    }
+                }, "json")
+            } else if(company && !userNameSurname){
+                $.post("../php/getUsers.php", {company: company} ,function (response) {
+                    if(response.length !== 0){
+                        datas = response;
+                        loadPrincipalTable(datas);
+                        loadBadgeHeader();
+                    } else {
+                        loadPrincipalTable();
+                    }
+                }, "json")
+            } else if(userNameSurname && !company){
+                $.post("../php/getUsers.php", {userNameSurname: userNameSurname} ,function (response) {
+                    if(response.length !== 0){
+                        datas = response;
+                        loadPrincipalTable(datas);
+                        loadBadgeHeader();
+                    } else {
+                        loadPrincipalTable();
+                    }
+                }, "json")
+            } else {
+                $.post("../php/getUsers.php", function (response) {
+                    if(response.length !== 0){
+                        datas = response;
+                        loadPrincipalTable(datas);
+                        loadBadgeHeader();
+                    } else {
+                        loadPrincipalTable();
+                    }
+                }, "json")
+            }
+
+        }
 
         function loadBadgeHeader(){
             $.post("../php/getUserToBeActived.php", function (response) {
@@ -289,50 +312,61 @@ if (isset($_SESSION['session_id'])) {
         function loadPrincipalTable(datas) {
             var table = document.getElementById("listTable");
             var tbody = table.getElementsByTagName("tbody")[0];
-            for( var i= 0; i < datas.length; i++){
-                var tr = document.createElement("tr");
-                var td = document.createElement("td");
-                td.innerHTML = datas[i].first_name + " " + datas[i].last_name;
-                tr.appendChild(td);
-                var td = document.createElement("td");
-                if(datas[i].active === 1){
-                    td.innerHTML = "Confermato";
-                }else {
-                    td.innerHTML = "Non confermato";
-                }
-                tr.appendChild(td);
-                var td = document.createElement("td");
-                var a = document.createElement("a");
-                a.href = "mailto:" + datas[i].email;
-                a.innerHTML = datas[i].email;
-                td.appendChild(a);
-                tr.appendChild(td);
-                var td = document.createElement("td");
-                td.innerHTML = datas[i].company;
-                tr.appendChild(td);
-                var td = document.createElement("td");
-                td.innerHTML = getUserType(datas[i].role);
-                tr.appendChild(td);
-                var td = document.createElement("td");
-                td.style.textAlign = "center";
-                if(datas[i].activedByCompany === 1){
-                    td.innerHTML = "<button type='button' style='margin-right: 5px' class='btn btn-outline-danger' onclick='deleteUser(" + datas[i].user_id + ")' id='openDeleteModal'>" +
-                        "<i class='bi bi-trash3-fill'></i></i>&nbsp;Elimina</button>";
-                }else {
-                    tr.setAttribute("class", "toBeActived");
-                    tr.setAttribute("style","background-color: lightYellow;");
-                    td.innerHTML =
-                        "<button id='activationButton' type='button' style='margin-right: 10px' class='btn btn-outline-success' onclick='onActivationClick(" + datas[i].user_id + ")' id='openActivationModal'>" +
+            if (datas) {
+                tbody.innerHTML = "";
+                for( var i= 0; i < datas.length; i++){
+                    var tr = document.createElement("tr");
+                    var td = document.createElement("td");
+                    td.innerHTML = datas[i].first_name + " " + datas[i].last_name;
+                    tr.appendChild(td);
+                    var td = document.createElement("td");
+                    if(datas[i].active === 1){
+                        td.innerHTML = "Confermato";
+                    }else {
+                        td.innerHTML = "Non confermato";
+                    }
+                    tr.appendChild(td);
+                    var td = document.createElement("td");
+                    var a = document.createElement("a");
+                    a.href = "mailto:" + datas[i].email;
+                    a.innerHTML = datas[i].email;
+                    td.appendChild(a);
+                    tr.appendChild(td);
+                    var td = document.createElement("td");
+                    td.innerHTML = datas[i].company;
+                    tr.appendChild(td);
+                    var td = document.createElement("td");
+                    td.innerHTML = getUserType(datas[i].role);
+                    tr.appendChild(td);
+                    var td = document.createElement("td");
+                    td.style.textAlign = "center";
+                    if(datas[i].activedByCompany === 1){
+                        td.innerHTML = "<button type='button' style='margin-right: 5px' class='btn btn-outline-danger' onclick='deleteUser(" + datas[i].user_id + ")' id='openDeleteModal'>" +
+                            "<i class='bi bi-trash3-fill'></i></i>&nbsp;Elimina</button>";
+                    }else {
+                        tr.setAttribute("class", "toBeActived");
+                        tr.setAttribute("style","background-color: lightYellow;");
+                        td.innerHTML =
+                            "<button id='activationButton' type='button' style='margin-right: 10px' class='btn btn-outline-success' onclick='onActivationClick(" + datas[i].user_id + ")' id='openActivationModal'>" +
                             "<i class='bi bi-person-check-fill'></i>" +
-                        "</button>" +
-                        "<button id='negationButton' type='button' class='btn btn-outline-danger' onclick='onNegationClick(" + datas[i].user_id + ")' id='openRefuseModal'>"+
+                            "</button>" +
+                            "<button id='negationButton' type='button' class='btn btn-outline-danger' onclick='onNegationClick(" + datas[i].user_id + ")' id='openRefuseModal'>"+
                             "<i class='bi bi-person-x-fill'>" +
-                        "</i></button>";
+                            "</i></button>";
+                    }
+                    tr.appendChild(td);
+                    tbody.appendChild(tr);
                 }
-                tr.appendChild(td);
-                tbody.appendChild(tr);
+                table.appendChild(tbody);
+            } else {
+                tbody.innerHTML = "";
+                tbody.innerHTML +=
+                    '<tr style="height: 40px;text-align: center">' +
+                    '<td colspan="6"><b>Nessun dato trovato</b></td>' +
+                    '</tr>'
             }
-            table.appendChild(tbody);
+
+
         }
 
         function getUserType(role){
@@ -477,7 +511,10 @@ if (isset($_SESSION['session_id'])) {
             })
         }
 
-        function searchUsers() {
+        function search() {
+            let user = $("#searchUser").val();
+            let company = $("#searchCompany").val();
+            loadDatas(company, user);
         }
 
         function deleteUser(userId) {
