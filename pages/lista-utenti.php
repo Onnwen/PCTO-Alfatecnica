@@ -123,7 +123,7 @@ if (isset($_SESSION['session_id'])) {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form id="addUserForm">
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="addNameLabel">Nome</span>
                             <input class="form-control" type="text" id="name" aria-describedby="addNameLabel">
@@ -136,38 +136,24 @@ if (isset($_SESSION['session_id'])) {
                             <span class="input-group-text" id="addEmailLabel">Email</span>
                             <input class="form-control" type="email" id="email" aria-describedby="addEmailLabel">
                         </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-                            <label class="form-check-label" for="inlineRadio1">1</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                            <label class="form-check-label" for="inlineRadio2">2</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3" disabled>
-                            <label class="form-check-label" for="inlineRadio3">3 (disabled)</label>
-                        </div>
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="addRoleLabel">Ruolo</span>
-                            <select id="role" class="form-select" aria-label="addRoleLabel">
+                            <select id="role" class="form-select" aria-label="addRoleLabel" onchange="selectionRoleChange()">
                                 <option></option>
                                 <option value="0">Utente</option>
                                 <option value="1">Amministratore</option>
                                 <option value="2">Tecnico</option>
                             </select>
                         </div>
-                        <div class="input-group mb-3">
+                        <div class="input-group mb-3" id="selectionCompany" hidden>
                             <span class="input-group-text" id="addCompanyLabel">Azienda</span>
-                            <select id="selectCompany" class="form-select" aria-label="addCompanyLabel" onchange="selectionRoleChange()">
+                            <select id="selectCompany" class="form-select" aria-label="addCompanyLabel">
                                 <!-- companies -->
                             </select>
                         </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" onclick="location.reload()" class="btn btn btn-secondary"
-                            data-bs-dismiss="modal">Annulla
-                    </button>
+                    <button type="button"  class="btn btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
                     <button id="addUserButton" type="button" onclick="addUser()" class="btn btn-success">Aggiungi</button>
                 </div>
             </div>
@@ -460,55 +446,61 @@ if (isset($_SESSION['session_id'])) {
 
         $("#addUserModal").on("show.bs.modal", function () {
             $.post("../php/getCompanies.php", function (response) {
-                let toPrint = "<option></option>";
+                let toPrint = "<option value='-1'></option>";
                 for (let company of response){
                     toPrint += "<option value='" + company.id + "'>" + company.name +"</option>"
                 }
                 $("#selectCompany").html(toPrint);
             }, "json");
         })
+
+        $("#addUserModal").on("hide.bs.modal", function () {
+            $("#addUserForm").trigger("reset");
+        })
          function selectionRoleChange(){
              debugger;
-             let val = $("#selectCompany").val();
-             if(val === "1" || val === "0"){
-                 $("#role").attr("disabled", true);
+             let val = $("#role").val();
+             if(val === "1" || val === "2"){
+                 $("#selectionCompany").attr("hidden", true);
              } else {
-                 $("#role").removeAttr("disabled");
+                 $("#selectionCompany").removeAttr("hidden");
              }
          }
-
-
         function addUser() {
+            let name = $("#name").val();
+            let surname = $("#surname").val();
+            let email = $("#email").val();
+            let role = $("#role").val();
+            let companyId = $("#selectCompany").val();
+
             const confirmButton = $("#addUserButton");
-            confirmButton.click(function () {
-                confirmButton.prop('disabled', true);
-                confirmButton.html('<div class="spinner-border spinner-border-sm" role="status"></div>');
-                $.post("../php/addUser.php", {})
-                    .done(function (resp) {
-                        if (resp === '1') {
-                            $('#activationModal').modal('hide');
-                            confirmButton.removeAttr('disabled');
-                            confirmButton.html('Aggiungi');
-                            $('#successModal').modal('show');
-                        } else if (resp === '0') {
-                            $('#activationModal').modal('hide');
-                            confirmButton.removeAttr('disabled');
-                            confirmButton.html('Aggiungi');
-                            $('#errorModal').modal('show');
-                        } else {
-                            $('#activationModal').modal('hide');
-                            confirmButton.removeAttr('disabled');
-                            confirmButton.html('Aggiungi');
-                            $("#errorModal").modal('show');
-                        }
-                    })
-                    .fail(function () {
-                        $('#activationModal').modal('hide');
+            confirmButton.prop('disabled', true);
+            confirmButton.html('<div class="spinner-border spinner-border-sm" role="status"></div>');
+            $.post("../php/addUser.php", {name:name,surname:surname,email:email,company_id:companyId,role:role})
+                .done(function (resp) {
+                    if (resp === '1') {
+                        $('#addUserModal').modal('hide');
+                        confirmButton.removeAttr('disabled');
+                        confirmButton.html('Aggiungi');
+                        $('#successModal').modal('show');
+                    } else if (resp === '0') {
+                        $('#addUserModal').modal('hide');
+                        confirmButton.removeAttr('disabled');
+                        confirmButton.html('Aggiungi');
+                        $('#errorModal').modal('show');
+                    } else {
+                        $('#addUserModal').modal('hide');
                         confirmButton.removeAttr('disabled');
                         confirmButton.html('Aggiungi');
                         $("#errorModal").modal('show');
-                    })
-            })
+                    }
+                })
+                .fail(function () {
+                    $('#addUserModal').modal('hide');
+                    confirmButton.removeAttr('disabled');
+                    confirmButton.html('Aggiungi');
+                    $("#errorModal").modal('show');
+                })
         }
 
         function search() {

@@ -11,27 +11,20 @@ require '../vendor/autoload.php';
 
 require_once('connessione.php');
 
-if (isset($_POST["name"]) && isset($_POST["surname"]) && isset($_POST["email"]) && isset($_POST["company_id"]) && isset($_POST["activedByCompany"])) {
+$name = isset($_POST['name']) ? $_POST['name'] : '';
+$surname = isset($_POST['surname']) ? $_POST['surname'] : '';
+$email = isset($_POST['email']) ? $_POST['email'] : '';
+$companyId = isset($_POST['company_id']) ? $_POST['company_id'] : '';
+$role = isset($_POST['role']) ? $_POST['role'] : '';
 
-
-    $name = isset($_POST['name']) ? $_POST['name'] : '';
-    $surname = isset($_POST['surname']) ? $_POST['surname'] : '';
-    $email = isset($_POST['email']) ? $_POST['email'] : '';
-    $companyId = isset($_POST['company_id']) ? $_POST['company_id'] : '';
-    $activedByCompany = isset($_POST['$activedByCompany']) ? $_POST['$activedByCompany'] : '';
-
-    $insertUser =
-        "INSERT INTO Users (`email`,`hashed_password`,`first_name`,`last_name`,`role`,`active`, `activedByCompany`)
-        values ('" . $email . "' , '' , '" . $name . "' , '" . $surname . "' , 0 , 0, 0)"; //after everyone must be only user and not admin(1)
-    $insertUser_Company =
-        "INSERT INTO User_Company (`user_id`,`company_id`)
-        VALUES ((SELECT Users.user_id FROM Users WHERE Users.email = '" . $email . "'), (SELECT id FROM Companies WHERE Companies.unique_Code = '" . $companyCode . "'))";
+if (isset($_POST["name"]) && isset($_POST["surname"]) && isset($_POST["email"]) && isset($_POST["company_id"])) {
+    $insertUser = "INSERT INTO Users (`email`,`hashed_password`,`first_name`,`last_name`,`role`,`active`, `activedByCompany`)
+        values ('" . $email . "' , '' , '" . $name . "' , '" . $surname . "' , '" . $role . "' , 0, 1)";
+    $insertUser_Company =  "INSERT INTO User_Company (`user_id`,`company_id`)
+        VALUES ((SELECT Users.user_id FROM Users WHERE Users.email = '" . $email . "'), $companyId)";
     $select = "SELECT email, first_name
            FROM Users
            WHERE email = '" . $email . "';";
-    $getMailOfAdmins = "SELECT email
-                   FROM Users
-                   WHERE role = 1";
 
     $pre = $pdo->prepare($select);
     $pre->execute();
@@ -40,8 +33,10 @@ if (isset($_POST["name"]) && isset($_POST["surname"]) && isset($_POST["email"]) 
         try {
             $pre = $pdo->prepare($insertUser);
             $pre->execute();
-            $pre = $pdo->prepare($insertUser_Company);
-            $pre->execute();
+            if($companyId != -1){
+                $pre = $pdo->prepare($insertUser_Company);
+                $pre->execute();
+            }
 
             //mail to user
             $mailer = new PHPMailer;
