@@ -54,7 +54,7 @@
             $mailer->Port = 465;
             $mailer->Username = 'alfatecnicasrl.mailer@gmail.com';
             $mailer->Password = 'udmfxeagmfccdfuh';
-            $mailer->From = 'alfatecnicasrl.mailer@gmail.com';
+            $mailer->SetFrom('alfatecnicasrl.mailer@gmail.com', 'Alfatecnica Srl');
             $mailer->Sender = 'alfatecnicasrl.mailer@gmail.com';
             $mailer->addAddress($mail);
             $mailer->isHTML(true);

@@ -22,8 +22,8 @@ if ($_POST["user_id"]) {
     $mailer->SMTPSecure = 'ssl';
     $mailer->Port = 465;
     $mailer->Username = 'alfatecnicasrl.mailer@gmail.com';
+    $mailer->SetFrom('alfatecnicasrl.mailer@gmail.com', 'Alfatecnica Srl');
     $mailer->Password = 'udmfxeagmfccdfuh';
-    $mailer->From = 'alfatecnicasrl.mailer@gmail.com';
     $mailer->Sender = 'alfatecnicasrl.mailer@gmail.com';
     $mailer->addAddress($user["email"]);
     $mailer->isHTML(true);
