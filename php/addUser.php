@@ -298,7 +298,7 @@ if (isset($_POST["name"]) && isset($_POST["surname"]) && isset($_POST["email"]) 
     <p>Buongiorno ' . $name . ',</p>
     <p>Ricevi questa mail perch&egrave; sei stato registrato su Alfatecnica da un amministratore.</p>
     <center>
-        <a class="center" href="http://localhost/pages/setPassword.php?email=' . $email . '" target="_blank">Scegli password</a>
+        <a class="center" href="http://localhost/PCTO-Alfatecnica/pages/setPassword.php?email=' . $email . '" target="_blank">Scegli password</a>
     </center>
 </div>
 

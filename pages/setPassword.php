@@ -12,6 +12,7 @@ if (isset($_SESSION['session_id'])) {
         $check = $pre->fetch(PDO::FETCH_ASSOC);
         $idUser = $check['idUser'];
         $active = $check['active'];
+        echo "<script>console.log($active);</script>";
         if ($active == "1"){
             header('location: ../index.php');
         }
@@ -89,10 +90,12 @@ if (isset($_SESSION['session_id'])) {
                         $.post('../php/login/changePassword.php', {idUser: idUser, newPassword: newPassword.val()})
                             .done(function (response){
                                 if(response === "correctModify"){
-                                    $.post('../php/login/confirmRegistration.php', {email : <?php echo $email?>})
+                                    $.post('../php/login/confirmRegistration.php',  {email : "<?php echo $email?>"})
                                         .done(function (response){
                                             if(response === "1"){
                                                 $('#justChanged').modal('show');
+                                            } else {
+                                                $('#error').modal('show');
                                             }
                                         });
                                 } else {
