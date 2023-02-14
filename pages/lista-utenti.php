@@ -478,16 +478,11 @@ if (isset($_SESSION['session_id'])) {
             confirmButton.html('<div class="spinner-border spinner-border-sm" role="status"></div>');
             $.post("../php/addUser.php", {name:name,surname:surname,email:email,company_id:companyId,role:role})
                 .done(function (resp) {
-                    if (resp === '1') {
+                    if (resp === 'mailDone') {
                         $('#addUserModal').modal('hide');
                         confirmButton.removeAttr('disabled');
                         confirmButton.html('Aggiungi');
                         $('#successModal').modal('show');
-                    } else if (resp === '0') {
-                        $('#addUserModal').modal('hide');
-                        confirmButton.removeAttr('disabled');
-                        confirmButton.html('Aggiungi');
-                        $('#errorModal').modal('show');
                     } else {
                         $('#addUserModal').modal('hide');
                         confirmButton.removeAttr('disabled');

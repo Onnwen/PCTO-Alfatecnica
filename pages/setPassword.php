@@ -6,16 +6,20 @@ if (isset($_SESSION['session_id'])) {
 } else {
     $email = $_GET['email'];
     if (isset($email)) {
-        $query = "SELECT user_id as idUser FROM Users WHERE email = '$email'";
+        $query = "SELECT user_id as idUser, active FROM Users WHERE email = '$email'";
         $pre = $pdo->prepare($query);
         $pre->execute();
         $check = $pre->fetch(PDO::FETCH_ASSOC);
         $idUser = $check['idUser'];
+        $active = $check['active'];
+        if ($active == "1"){
+            header('location: ../index.php');
+        }
         ?>
         <html>
 
         <head>
-            <title>Recupera password</title>
+            <title>Imposta password</title>
             <meta charset="UTF-8">
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -85,7 +89,12 @@ if (isset($_SESSION['session_id'])) {
                         $.post('../php/login/changePassword.php', {idUser: idUser, newPassword: newPassword.val()})
                             .done(function (response){
                                 if(response === "correctModify"){
-                                    $('#justChanged').modal('show');
+                                    $.post('../php/login/confirmRegistration.php', {email : <?php echo $email?>})
+                                        .done(function (response){
+                                            if(response === "1"){
+                                                $('#justChanged').modal('show');
+                                            }
+                                        });
                                 } else {
                                     $('#errorModal').modal('show');
                                 }
