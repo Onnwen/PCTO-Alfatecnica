@@ -337,10 +337,16 @@ if ($isAuthenticated && $isUser) {
                 tabella.innerHTML += '<tr>' +
                     '<th style="text-align: center;">' + allCompanies[i].nome + '</th>' +
                     '<td style="text-align: center;">' +
-                    '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#companyModal" data-bs-whatever="' + allCompanies[i].id + '"><i class="fa-solid fa-pen"></i></button>' +
-                    '<button class="btn btn-outline-info" onclick="window.location.href=\'dettaglio-anagrafica.php?id_ana=' + allCompanies[i].id + '\'"><i class="fa-solid fa-circle-info"></i></button>' +
-                    '<button class="btn btn-outline-danger" onclick="deleteCompany(' + allCompanies[i].id + ')"><i class="fa-solid fa-trash-can"></i></button>' +
-                    '</td>' +
+                    <?php
+                    if ($isTechnician) {
+                        echo '\'<button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#companyModal" data-bs-whatever="\' + allCompanies[i].id + \'"><i class="fa-solid fa-pen"></i></button>\' + ';
+                    }
+                    ?> '<button class="btn btn-outline-info" onclick="window.location.href=\'dettaglio-anagrafica.php?id_ana=' + allCompanies[i].id + '\'"><i class="fa-solid fa-circle-info"></i></button>' +
+                    <?php
+                    if ($isTechnician) {
+                        echo '\'<button class="btn btn-outline-danger" onclick="deleteCompany(\' + allCompanies[i].id + \')"><i class="fa-solid fa-trash-can"></i></button>\' +';
+                    }
+                    ?> '</td>' +
                     '</tr>';
             }
         }
