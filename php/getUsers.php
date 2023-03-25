@@ -7,10 +7,10 @@ if (!$isAuthenticated) {
     exit();
 }
 
-    $userNameSurname = isset($_POST['userNameSurname']) ? $_POST['userNameSurname'] : '';
-    $company = isset($_POST['company']) ? $_POST['company'] : '';
+    $userNameSurname = isset($_POST['userNameSurname']) ? $_POST['userNameSurname'] : null;
+    $company = isset($_POST['company']) ? $_POST['company'] : null;
 
-    if($userNameSurname !== '' && $company !== ''){
+    if(is_null($userNameSurname) && is_null($company)){
         $select = "SELECT Users.user_id as id, first_name, last_name, email, role, active, activedByCompany, Companies.name AS company
                    FROM Users
                         LEFT JOIN User_Company ON User_Company.user_id = Users.user_id
@@ -21,7 +21,7 @@ if (!$isAuthenticated) {
         $check = $pre->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($check);
         exit;
-    } else if ($userNameSurname !== ''){
+    } else if (is_null($userNameSurname)){
         $select = "SELECT Users.user_id, first_name, last_name, email, role, active, activedByCompany, Companies.name AS company
                    FROM Users
                         LEFT JOIN User_Company ON User_Company.user_id = Users.user_id
@@ -32,7 +32,7 @@ if (!$isAuthenticated) {
         $check = $pre->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($check);
         exit;
-    } else if ($company !== ''){
+    } else if (is_null($company)){
         $select = "SELECT Users.user_id, first_name, last_name, email, role, active, activedByCompany, Companies.name AS company
                    FROM Users
                         INNER JOIN User_Company ON User_Company.user_id = Users.user_id
