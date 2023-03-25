@@ -9,9 +9,9 @@ $isSessionValid = isset($_SESSION['session_id']);
 
 $isAuthenticated = $isRoleValid && $isEmailValid && $isSessionValid;
 
-$isTechnician = $isRoleValid ? $_SESSION['role'] >= 1 && $_SESSION['role'] <= 2 : false;
-$isAdmin = $isRoleValid ? $_SESSION['role'] == 1 : false;
-$isUser = $isRoleValid ? $_SESSION['role'] >= 0 : false;
+$isTechnician = $_SESSION['role'] >= 1 && $_SESSION['role'] <= 2 && $isRoleValid;
+$isAdmin = $_SESSION['role'] == 1 && $isRoleValid;
+$isUser = $_SESSION['role'] >= 0 && $isRoleValid;
 
 $userEmail = $isEmailValid ? $_SESSION['session_email'] : "";
 
