@@ -26,6 +26,7 @@ if (!$check) {
     $_SESSION['session_id'] = session_id();
     $_SESSION['session_email'] = $check['email'];
     $_SESSION['role'] = $check['role'];
+    $_SESSION['user_id'] = $check['user_id'];
     echo 'login';
     exit;
 } else {
