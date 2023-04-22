@@ -375,12 +375,15 @@ if (isset($_SESSION['session_id'])) {
                     </div>
                     <div class="modal-body">
                         <div class="container-fluid">
-                            <div class="row">
+                            <div class="row" id="rowChooseProduct">
                                 <form>
-                                    <select style="width: 100%" onchange="onSelectCategoriesChange()"
-                                            id="chooseCategory"></select>
+                                    <select style="width: 100%" onchange="onSelectCategoriesChange()" id="chooseCategory">
+                                        <option selected value=-1>Seleziona una categoria</option>
+                                        <option value=0>Prodotto</option>
+                                        <option value=1>Impianto</option>
+                                    </select>
                                 </form>
-
+                                <form id="chooseSpecificProcuct"></form>
                             </div>
                         </div>
 
@@ -662,12 +665,10 @@ if (isset($_SESSION['session_id'])) {
 
             function printData(startDate) {
                 var convertedStartDate = new Date(startDate);
-                var minutes = convertedStartDate.getMinutes();
-                var hours = convertedStartDate.getHours();
                 var day = convertedStartDate.getDate();
                 var month = convertedStartDate.getMonth() + 1;
                 var year = convertedStartDate.getFullYear();
-                return day + "/" + month + "/" + year + " " + hours + ":" + minutes;
+                return day + " / " + month + " / " + year;
             }
 
             $(window).on('load', function () {
@@ -741,56 +742,52 @@ if (isset($_SESSION['session_id'])) {
             //SCELTA CATEGORIA PRODOTTO
             const selectCategoryModal = document.getElementById('modalSelectCategory');
             var idCategoria = null;
-
-            function fillSelectProductModal(categoriesName) {
-                if (categoriesName) {
-                    const select = document.getElementById('chooseCategory');
-                    select.innerHTML =
-                        '<div class="form-group">' +
-                        '<label>Categoria:</label>' +
-                        '<select class="form-select">' +
-                        '<option selected value=0>Seleziona una categoria</option>';
-                    for (var category of categoriesName) {
-                        select.innerHTML += '<option value=' + category.idCategory + '>' + category.productCategoryName + '</option>'
-                    }
-                    select.innerHTML +=
-                        '</select>' +
-                        '</div>';
-                } else {
-                    selectCategoryModal.querySelector('form').reset();
-                    document.getElementById('selectCategory').setAttribute("disabled", ""); //reset button seleziona
-                }
-            }
+            var idType=null;
 
             selectCategoryModal.addEventListener('show.bs.modal', function (event) {
-                fillSelectProductModal();
-
-                $.get('../php/getProductsCategories.php')
-                    .always(function () {
-                        //modalLoading
-                    })
-                    .done(function (response) {
-                        const companyInformations = JSON.parse(response);
-                        fillSelectProductModal(companyInformations);
-                    })
-                    .fail(function () {
-                        //modalError;
-                    })
+                selectCategoryModal.querySelector('form').reset();
+                document.getElementById('chooseSpecificProcuct').innerHTML = '';
+                document.getElementById('selectCategory').setAttribute("disabled", ""); //reset button seleziona
             })
 
+            function selectProcutGenerator(idType){
+                const selectSpecificProductForm = document.getElementById('chooseSpecificProcuct');
+                var toPrint = "";
+                $.post('../php/getProductsCategories.php', {idType : idType})
+                    .done(function (response) {
+                        const productsAndSystem = JSON.parse(response);
+                        toPrint = "<select id='chooseProduct' style='width: 100%' onchange='onSelectProcuctChange()'>" +
+                            "<option value='-1'>Seleziona un prodotto</option>";
+                        for (let product of productsAndSystem) {
+                            toPrint += "<option value='" + product.idCategory + "'>" + product.productCategoryName + "</option>";
+                        }
+                        toPrint += "</select>";
+                        selectSpecificProductForm.innerHTML = toPrint;
+                    })
+                    .fail(function () {
+                        $("modalSelectCategory").modal('hide');
+                        $("#errorModal").modal('show');
+                    })
+            }
+
             function onSelectCategoriesChange() {
-                const select = document.getElementById('chooseCategory');
-                if (select.value === 0) {
-                    document.getElementById('selectCategory').setAttribute("disabled", "");
-                } else {
+                const category = document.getElementById('chooseCategory');
+                selectProcutGenerator(category.value)
+            }
+
+            function onSelectProcuctChange() {
+                const product = document.getElementById('chooseProduct');
+                if (product.value !== '-1') {
                     document.getElementById('selectCategory').removeAttribute("disabled");
+                    idCategoria = product.value;
+                    idType = document.getElementById('chooseCategory').value;
+                } else {
+                    document.getElementById('selectCategory').setAttribute("disabled", "");
                 }
             }
 
             $('#selectCategory').on('click', function () {
-                debugger;
-                idCategoria = document.getElementById('chooseCategory').value;
-                console.log(idCategoria);
+                console.log(idType);
             })
 
 
@@ -960,10 +957,8 @@ if (isset($_SESSION['session_id'])) {
 
             addPrdocuctModal.addEventListener('show.bs.modal', function (event) {
                 debugger;
-                idCategoria = document.getElementById('chooseCategory').value;
-                if (idCategoria != null && idCategoria !== 0) {
+                if (idCategoria != null && idCategoria !== 0 && idType === "0") {
                     fillAddProductModal();
-
                     $.post('../php/getProductFields.php', {
                         idCategoria: idCategoria
                     })
@@ -977,6 +972,9 @@ if (isset($_SESSION['session_id'])) {
                         .fail(function () {
                             modalError();
                         })
+                } else if (idCategoria != null && idCategoria !== 0 && idType === "1"){
+                    alert("Implementazione in corso degli impianti");
+                    $("#addProduct").modal('hide');
                 }
             })
 
