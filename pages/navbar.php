@@ -16,10 +16,10 @@ echo '<nav class="navbar navbar-expand-lg navbar-light" style="background-color:
                     <a class="nav-link" href="lista_revisioni.php">Revisioni</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" style="color: red">Prodotti</a>
+                    <a class="nav-link" href="lista-prodotti.php">Prodotti</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" style="color: red">Utenti</a>
+                    <a class="nav-link" href="lista-utenti.php">Utenti</a>
                 </li>
                 </li>
             </ul>

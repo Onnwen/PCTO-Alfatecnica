@@ -304,7 +304,8 @@ if (isset($_SESSION['session_id'])) {
                 errorMessage.html('Password non inserita');
             } else {
                 $.post('php/login/login.php', {email: email.val(), pw: password.val()}, function (resp) {
-                    if (resp === 'userWrong') {
+                    debugger;
+                    if ((resp === 'userWrong')||(resp === 'passwordWrong')) {
                         errorMessage.html('Credenziali errate');
                         $('#passwordInput, #emailInput').addClass('is-invalid');
                         password.attr('for', 'floatingInputInvalid');
