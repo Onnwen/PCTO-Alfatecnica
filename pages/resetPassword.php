@@ -30,7 +30,6 @@ if (isset($_SESSION['session_id'])) {
         <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
         <script>
             $(document).ready(function() {
-                console.log('ready');
                 $("#show_hide_password a").on('click', function(event) {
                     event.preventDefault();
                     if($('#show_hide_password input').attr("type") == "text"){
