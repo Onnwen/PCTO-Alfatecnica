@@ -23,3 +23,4 @@ if (count($categoriesName) != 0){
     echo $json;
 }
 exit();
+

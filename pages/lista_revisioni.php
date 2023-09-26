@@ -227,7 +227,6 @@ if ($isAuthenticated && $isTechnician) {
                         errorDescriptionString = "Errore non riconosciuto; Comunicare il codice errore qua sotto agli sviluppatori!";
                         break;
                 }
-
                 $("#revisionErrorDescription").html(errorDescriptionString);
 
                 $("#revisionModal").modal("hide");
@@ -256,6 +255,7 @@ if ($isAuthenticated && $isTechnician) {
             let selectedCompany = $("#companyName").val();
 
             let generatedOptions = "<option disabled selected value=''>Seleziona Prodotto</option>";
+
 
             if (selectedCompany === null) {
                 // Non è necessario fare una chiamata se stiamo deselezionando l'azienda

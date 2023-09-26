@@ -18,7 +18,6 @@ $Query = "SELECT Companies.id as CompanyID, Companies.name as CompanyName, Produ
 $Result = $pdo->query(($Query));
 
 $array = array();
-
 # FIXME: È un tantino brutto
 if ($Result) {
     for ($i = 0; $row = $Result->fetch(PDO::FETCH_ASSOC); $i++) {

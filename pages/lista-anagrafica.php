@@ -3,6 +3,7 @@ require_once("../php/connessione.php");
 require_once("../php/authentication/authentication.php");
 
 if ($isAuthenticated && $isUser) {
+
 ?>
     <!DOCTYPE html>
     <html lang="en">
@@ -369,6 +370,7 @@ if ($isAuthenticated && $isUser) {
             }
 
             $.getJSON(requestDestination, function(resp) {
+
                 allCompanies = resp;
 
                 maxPageNumber = Math.ceil(resp.length / maxCardsPerPage);

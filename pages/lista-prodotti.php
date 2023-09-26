@@ -610,6 +610,7 @@ if ($isAuthenticated && $isTechnician) {
 <?php
 } else {
     # TODO: Mostrare errore all'utente
+
     echo "<script>window.location.replace('../index.php');</script>";
 }
 ?>

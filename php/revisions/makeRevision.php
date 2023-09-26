@@ -20,7 +20,6 @@ if (is_null($revisionedCompany) || is_null($revisionedProduct) || is_null($revis
     http_response_code(400);
     exit();
 }
-
 $query = "INSERT INTO Revisions(product_category_id, company_id, data) VALUES(:product_category_id, :company_id, :data)";
 $pre = $pdo->prepare($query);
 

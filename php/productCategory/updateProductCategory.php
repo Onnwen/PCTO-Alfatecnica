@@ -82,3 +82,4 @@ if ($productCategoryType == 0) {
 
 $pdo->commit();
 exit();
+

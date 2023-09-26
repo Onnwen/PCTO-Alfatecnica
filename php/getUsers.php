@@ -27,3 +27,4 @@ $pre = $pdo->prepare($select);
 $pre->execute();
 $check = $pre->fetchAll(PDO::FETCH_ASSOC);
 echo json_encode($check);
+
