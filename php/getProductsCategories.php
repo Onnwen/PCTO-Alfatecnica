@@ -1,17 +1,7 @@
 <?php
 require_once('connessione.php');
-require_once("authentication/authentication.php");
-if (!$isAuthenticated) {
-    http_response_code(401);
-    exit();
-}
-
-if (!$isUser) {
-    http_response_code(403);
-    exit();
-}
-
-$query = "SELECT name as productCategoryName, product_category_id as idCategory FROM Product_Category order by product_category_id ASC";
+$type= isset($_POST['idType']) ? $_POST['idType'] : 3;
+$query = "SELECT name as productCategoryName, product_category_id as idCategory FROM Product_Category WHERE type = $type order by product_category_id ASC";
 $categoriesName = array();
 $res = $pdo->prepare($query);
 $res->execute();
@@ -22,5 +12,4 @@ if (count($categoriesName) != 0){
     $json = json_encode($categoriesName);
     echo $json;
 }
-exit();
-
+?>

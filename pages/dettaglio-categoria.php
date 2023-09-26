@@ -1,8 +1,7 @@
 <?php
+session_start();
 require_once("../php/connessione.php");
-require_once("../php/authentication/authentication.php");
-
-if ($isAuthenticated && $isUser) {
+if(isset($_SESSION['session_id'])) {
     $productCategoryID = $_GET['product_category_id'];
     $companyID = $_GET['company_id'];
     $categoryNameSql = "SELECT `name` FROM `Product_Category` WHERE `product_category_id` = :productId;";
@@ -124,7 +123,6 @@ if ($isAuthenticated && $isUser) {
 
     <?php
 } else {
-    # TODO: Mostrare messaggio di errore
     echo "<script>window.location.replace('../index.php');</script>";
 }
 ?>

@@ -1,23 +1,13 @@
 <?php
+session_start();
 require_once('connessione.php');
-require_once("authentication/authentication.php");
 
-if (!$isAuthenticated) {
-    http_response_code(401);
-    exit();
-}
-
-if (!$isTechnician) {
-    http_response_code(403);
-    exit();
-}
-
-$name = isset($_POST['name']) ? $_POST['name'] : null;
-$site = isset($_POST['site']) ? $_POST['site'] : null;
-$address = isset($_POST['address']) ? $_POST['address'] : null;
-$CAP = isset($_POST['CAP']) ? $_POST['CAP'] : null;
-$city = isset($_POST['city']) ? $_POST['city'] : null;
-$province = isset($_POST['province']) ? $_POST['province'] : null;
+$name = isset($_POST['name']) ? $_POST['name'] : '';
+$site = isset($_POST['site']) ? $_POST['site'] : '';
+$address = isset($_POST['address']) ? $_POST['address'] : '';
+$CAP = isset($_POST['CAP']) ? $_POST['CAP'] : 0;
+$city = isset($_POST['city']) ? $_POST['city'] : '';
+$province = isset($_POST['province']) ? $_POST['province'] : '';
 $phoneNumber = isset($_POST['phoneNumber']) ? $_POST['phoneNumber'] : '';
 $emailAddress = isset($_POST['emailAddress']) ? $_POST['emailAddress'] : '';
 $personalReference = isset($_POST['personalReference']) ? $_POST['personalReference'] : '';
@@ -27,23 +17,8 @@ $emailAddress2 = isset($_POST['emailAddress2']) ? $_POST['emailAddress2'] : '';
 $companyNotes = isset($_POST['companyNotes']) ? $_POST['companyNotes'] : '';
 $clientNotes = isset($_POST['clientNotes']) ? $_POST['clientNotes'] : '';
 
-$planimetry_image = isset($_FILES["planimetry_image"]) ? $_FILES["planimetry_image"] : null;
-$logo = isset($_FILES["logo"]) ? $_FILES["logo"] : null;
-
-# Qua mi sono basato sui dati non annullabili nel db e i dati che causano eccezioni se assenti
-if (
-    is_null($planimetry_image)  ||
-    is_null($logo)              ||
-    is_null($name)              ||
-    is_null($CAP)               ||
-    is_null($city)              ||
-    is_null($province)          ||
-    is_null($address)           ||
-    is_null($site)
-) {
-    http_response_code(400);
-    exit();
-}
+$planimetry_image = $_FILES["planimetry_image"];
+$logo = $_FILES["logo"];
 
 $target_dir_logo = "img/loghi/";
 $target_dir_planimetry = "img/planimetrie/";
@@ -61,8 +36,12 @@ move_uploaded_file($planimetry_image["tmp_name"], getcwd() . "/../" . $target_fi
 
 $Query = "INSERT INTO Companies(name, site, path_logo, address, CAP, city, province, phoneNumber1, emailAddress1, personalReference, phoneNumber2, cellPhoneNumber, emailAddress2, companyNotes, clientNotes, planimetry_image_url, planimetry_image_width, planimetry_image_height, unique_Code) 
     VALUES (:name, :site, :path_logo, :address, :CAP, :city, :province, :phoneNumber, :emailAddress, :personalReference, :phoneNumber2, :cellPhoneNumber, :emailAddress2, :companyNotes, :clientNotes, :planimetry_image_url, :planimetry_image_width, :planimetry_image_height, :unique_Code)";
-
-$pre = $pdo->prepare($Query);
+try {
+    $pre = $pdo->prepare($Query);
+} catch (Exception $e) {
+    echo $e->getMessage();
+    exit;
+}
 
 # Generazione di Codice Unico random; cosa molto temporanea; TODO: sistemare/trovare approccio migliore
 $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';

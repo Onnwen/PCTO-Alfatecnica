@@ -1,8 +1,7 @@
 <?php
+session_start();
 require_once("../php/connessione.php");
-require_once("../php/authentication/authentication.php");
-
-if ($isAuthenticated && $isTechnician) {
+if (isset($_SESSION['session_id'])) {
 ?>
     <!DOCTYPE html>
     <html>
@@ -214,12 +213,6 @@ if ($isAuthenticated && $isTechnician) {
                     case 400:
                         errorDescriptionString = "Il modulo della registrazione non è stato compilato correttamente!";
                         break;
-                    case 401:
-                        errorDescriptionString = "Non sei autenticato: devi rifare il login!";
-                        break;
-                    case 403:
-                        errorDescriptionString = "Non hai il permesso per effettuare questa operazione!";
-                        break;
                     case 500:
                         errorDescriptionString = "Il server ha un problema tecnico!";
                         break;
@@ -227,6 +220,7 @@ if ($isAuthenticated && $isTechnician) {
                         errorDescriptionString = "Errore non riconosciuto; Comunicare il codice errore qua sotto agli sviluppatori!";
                         break;
                 }
+
                 $("#revisionErrorDescription").html(errorDescriptionString);
 
                 $("#revisionModal").modal("hide");
@@ -255,7 +249,6 @@ if ($isAuthenticated && $isTechnician) {
             let selectedCompany = $("#companyName").val();
 
             let generatedOptions = "<option disabled selected value=''>Seleziona Prodotto</option>";
-
 
             if (selectedCompany === null) {
                 // Non è necessario fare una chiamata se stiamo deselezionando l'azienda
@@ -373,7 +366,6 @@ if ($isAuthenticated && $isTechnician) {
 
 <?php
 } else {
-    # TODO: Mostrare messaggio di errore all'utente
     echo "<script>window.location.replace('../index.php');</script>";
 }
 ?>

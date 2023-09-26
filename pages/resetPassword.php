@@ -1,8 +1,7 @@
 <?php
+session_start();
 require_once('../php/connessione.php');
-require_once("../php/authentication/authentication.php");
-
-if ($isAuthenticated) {
+if (isset($_SESSION['session_id'])) {
     header('location: pages/lista-anagrafica.php');
 } else {
     $stringPasswordRetriever = $_GET['stringpasswordretriever'];
@@ -273,5 +272,4 @@ if ($isAuthenticated) {
 <?php
     }
 }
-?>
-
+ ?>
