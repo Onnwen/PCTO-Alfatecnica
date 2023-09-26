@@ -121,7 +121,7 @@ if (isset($_SESSION['session_id'])) {
             <script>
                 function updateDB(){
                     $.post("../php/login/confirmRegistration.php", {email: "<?php echo $mail; ?>"}, function(response){
-                        if(response == "1"){
+                        if(response === "1"){
                             window.location.href = "pages/login.php";
                         } else {
                             alert("Errore nella conferma ci scusiamo per il disagio, riprova più tardi o chiama il supporto");
