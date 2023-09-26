@@ -1,8 +1,8 @@
--- MariaDB dump 10.19  Distrib 10.9.4-MariaDB, for Linux (x86_64)
+-- MariaDB dump 10.19  Distrib 10.5.18-MariaDB, for debian-linux-gnu (aarch64)
 --
 -- Host: localhost    Database: alfatecnica2
 -- ------------------------------------------------------
--- Server version	10.9.4-MariaDB
+-- Server version	10.5.18-MariaDB-0+deb11u1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -42,8 +42,10 @@ CREATE TABLE `Companies` (
   `planimetry_image_url` varchar(100) DEFAULT NULL,
   `planimetry_image_width` int(11) DEFAULT NULL,
   `planimetry_image_height` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `unique_Code` varchar(6) NOT NULL COMMENT 'Si tratta di un codice che serve in fase di registrazione del personale in modo da preservare l''id dell''azieda e preservarne i dati. Ogni azienda una volta registrata avrà il suo codice e sarà compito dell''azienda fare in modo che questo venga usato correttamente.',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `Companies_unique_Code_uindex` (`unique_Code`)
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -52,21 +54,7 @@ CREATE TABLE `Companies` (
 
 LOCK TABLES `Companies` WRITE;
 /*!40000 ALTER TABLE `Companies` DISABLE KEYS */;
-INSERT INTO `Companies` VALUES
-(1,'Dallara','Varano de Melegari','img/loghi/azienda1.png','Via Provinciale, 33',43040,'Varano de Melegari','PR','3408871542','dallarastradale@dallara.auto','','0521887265','6528716254','','','','img/planimetrie/download.png',532,392),
-(2,'Bercella','Varano de Melegari','img/loghi/azienda2.png','Via Enzo Ferrari, 10',43040,'Varano de Melegari','PR','3338765298','bercella@bercella.it','','0521829983','9992837625','','','','img/planimetrie/checojon-scaled.png',532,392),
-(3,'NonSoloTabacchi','Ozzano Taro','img/loghi/azienda3.png','Via Nazionale, 64',43044,'Ozzano Taro','PR','3762983625','nonsolotabacchi@gmail.com',NULL,'0521765287','7725276534','tabaccheriaozzano_64@nonsolotabacchi.it',NULL,NULL,'img/planimetrie/planimetrie-case.png',532,392),
-(6,'Pluto','Pluto','img/loghi/azienda1.png','Pluto',1337,'Pluto','Pluto','Pluto','Pluto','Pluto','Pluto','Pluto','Pluto','Cassitto non è capace','Scartazza è un apple fan',NULL,NULL,NULL),
-(21,'Test','tbest','img/loghi/azienda1.png','ste',65465,'sads','asdf','asdf','asd','asdf','asdf','asdf','asdf','dsaf','sadf',NULL,NULL,NULL),
-(22,'ABC','asd','img/loghi/azienda1.png','asd',654654,'asd','asdfasdf','fasdfas','fa','adsfsd','sadfsad','asdfsad','sda','asdfa','sadfasd',NULL,NULL,NULL),
-(23,'Per testare immagini','awdfds','img/loghi/azienda1.png','fasdfasda',698,'sdfasd','aa','asdkjfhlaks','adlkfsjaskdjf','asdfjasdjfl','aldskjflkasdf','dfjhasdkjfsa','sldkjflkasdjf','asdlkfjlkasdjf','sdlfkjalskdjf',NULL,NULL,NULL),
-(24,'Per testare le immagini parte 2','dafljsdklf','img/loghi/azienda1.png','alskflksdajf',465,'dslkfjasdl','alksdflka','asldfkjlask','asdlfkjaskldf','dfakljsdlkf','asdlkfjlask','asdlkfjlkasd','dslakfjsdlkf','asdlkfalskdf','afsdkljflajsd',NULL,NULL,NULL),
-(25,'Ultima Prova','Afghanistan','img/loghi/azienda1.png','Via dei Talebani, 2',1234,'Kabul','Kabul','NO','osama@binladen.com','Osama Bin Laden','NO','NO','osamabinladen@gmail.com','Terroristi','Attento alla dinamite',NULL,NULL,NULL),
-(27,'PLZ','aflksd','img/loghi/PLZ-MicrosoftTeams-image4.jpg','asdlkfj',6546,'asldkfj','alskdjflksadjf','asdlkfjlaskd','asdlkjlksadjf','sdalkfjalkd','alkwdjflaksd','asdkfjlksdaf','asdlkfjlaskdf','asdlkfjskldaf','falksdlkfjad',NULL,NULL,NULL),
-(28,'BNBBN','adfjlaskdfj','img/loghi/BNBBN-MicrosoftTeams-image.jpg','oqiurwohf',54,'asdkfja','asdkjfh','kjadfkjsd','adsfasdkjf','KLHFkjdshfk','lksadjflskdj','sdkjfhajkdf','dsalfsdlkfjsadlkjflasdkfjl','lkasdjfklasdf','lkasdfjlkasdjfl',NULL,NULL,NULL),
-(29,'dfgd','asdfs','img/loghi/dfgd-MicrosoftTeams-image2.jpg','asdf',324,'asdf','asdf','cvbdfgh','rty','asdf','asdfasf','asdf','asdfas','cgwear','vawret',NULL,NULL,NULL),
-(31,'asòàdljkflàaskj','asdfj','img/loghi/asòàdljkflàaskj','sduyiaasdy',23,'sdfyui','sdfs','asdfsdf','asdf','asdfsa','asdf','asdfasdf','sdaf','asdfasdfasdf','asdfasdfsdf','img/planimetrie/asòàdljkflàaskj',1500,2000),
-(32,'LKSKLSJL','wdjkf','img/loghi/LKSKLSJL','asduiosdafasd',23423,'asdfasdf','asdfsdf','asdfasdf','asdfas','anfòkasuy','sdfhdf','asdiufi','wetg','sdalfjkweuio','aweuibn8v','img/planimetrie/LKSKLSJL',1500,2000);
+INSERT INTO `Companies` VALUES (1,'Dallara','Varano de Melegari','img/loghi/azienda1.png','Via Provinciale, 33',43040,'Varano de Melegari','PR','3408871542','dallarastradale@dallara.auto','','0521887265','6528716254','','','','img/planimetrie/download.png',532,392,'123456'),(2,'Bercella','Varano de Melegari','img/loghi/azienda2.png','Via Enzo Ferrari, 10',43040,'Varano de Melegari','PR','3338765298','bercella@bercella.it','','0521829983','9992837625','','','','img/planimetrie/checojon-scaled.png',532,392,'234567'),(3,'NonSoloTabacchi','Ozzano Taro','img/loghi/azienda3.png','Via Nazionale, 64',43044,'Ozzano Taro','PR','3762983625','nonsolotabacchi@gmail.com',NULL,'0521765287','7725276534','tabaccheriaozzano_64@nonsolotabacchi.it',NULL,NULL,'img/planimetrie/planimetrie-case.png',532,392,'345678'),(6,'Pluto','Pluto','img/loghi/azienda1.png','Pluto',1337,'Pluto','Pluto','Pluto','Pluto','Pluto','Pluto','Pluto','Pluto','Cassitto non è capace','Scartazza è un apple fan',NULL,NULL,NULL,'456789'),(21,'Test','tbest','img/loghi/azienda1.png','ste',65465,'sads','asdf','asdf','asd','asdf','asdf','asdf','asdf','dsaf','sadf',NULL,NULL,NULL,'111111'),(22,'ABC','asd','img/loghi/azienda1.png','asd',654654,'asd','asdfasdf','fasdfas','fa','adsfsd','sadfsad','asdfsad','sda','asdfa','sadfasd',NULL,NULL,NULL,'222222'),(23,'Per testare immagini','awdfds','img/loghi/azienda1.png','fasdfasda',698,'sdfasd','aa','asdkjfhlaks','adlkfsjaskdjf','asdfjasdjfl','aldskjflkasdf','dfjhasdkjfsa','sldkjflkasdjf','asdlkfjlkasdjf','sdlfkjalskdjf',NULL,NULL,NULL,'333333'),(24,'Per testare le immagini parte 2','dafljsdklf','img/loghi/azienda1.png','alskflksdajf',465,'dslkfjasdl','alksdflka','asldfkjlask','asdlfkjaskldf','dfakljsdlkf','asdlkfjlask','asdlkfjlkasd','dslakfjsdlkf','asdlkfalskdf','afsdkljflajsd',NULL,NULL,NULL,'444444'),(25,'Ultima Prova','Afghanistan','img/loghi/azienda1.png','Via dei Talebani, 2',1234,'Kabul','Kabul','NO','osama@binladen.com','Osama Bin Laden','NO','NO','osamabinladen@gmail.com','Terroristi','Attento alla dinamite',NULL,NULL,NULL,'555555'),(31,'asòàdljkflàaskj','asdfj','img/loghi/asòàdljkflàaskj','sduyiaasdy',23,'sdfyui','sdfs','asdfsdf','asdf','asdfsa','asdf','asdfasdf','sdaf','asdfasdfasdf','asdfasdfsdf','img/planimetrie/asòàdljkflàaskj',1500,2000,'999999'),(32,'LKSKLSJL','wdjkf','img/loghi/LKSKLSJL','asduiosdafasd',23423,'asdfasdf','asdfsdf','asdfasdf','asdfas','anfòkasuy','sdfhdf','asdiufi','wetg','sdalfjkweuio','aweuibn8v','img/planimetrie/LKSKLSJL',1500,2000,'000000'),(33,'Pifferaio Magico','Terra delle fiabe','img/loghi/Pifferaio Magico','Via Principale',5,'Villaggio con i topi','MA','','','','','','','','','img/planimetrie/Pifferaio Magico',1500,2000,'ZGXQNJ');
 /*!40000 ALTER TABLE `Companies` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -114,7 +102,7 @@ CREATE TABLE `Form_Fields` (
   KEY `Form_Fields_Product_Category_product_category_id_fk` (`product_category_id`),
   CONSTRAINT `Form_Fields_Form_Sections_section_id_fk` FOREIGN KEY (`section_id`) REFERENCES `Form_Sections` (`section_id`) ON DELETE CASCADE,
   CONSTRAINT `Form_Fields_Product_Category_product_category_id_fk` FOREIGN KEY (`product_category_id`) REFERENCES `Product_Category` (`product_category_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -123,16 +111,7 @@ CREATE TABLE `Form_Fields` (
 
 LOCK TABLES `Form_Fields` WRITE;
 /*!40000 ALTER TABLE `Form_Fields` DISABLE KEYS */;
-INSERT INTO `Form_Fields` VALUES
-(10,43,'FORM_TEST_1_SECTION_1_QUESTION_1',10),
-(11,43,'FORM_TEST_1_SECTION_1_QUESTION_2',10),
-(12,43,'FORM_TEST_1_SECTION_1_QUESTION_3',10),
-(13,43,'FORM_TEST_1_SECTION_1_QUESTION_4',10),
-(14,43,'FORM_TEST_1_SECTION_2_QUESTION_1',11),
-(15,43,'FORM_TEST_1_SECTION_2_QUESTION_2',11),
-(16,43,'FORM_TEST_1_SECTION_3_QUESTION_1',12),
-(17,43,'FORM_TEST_1_SECTION_3_QUESTION_2',12),
-(18,43,'FORM_TEST_1_SECTION_3_QUESTION_3',12);
+INSERT INTO `Form_Fields` VALUES (10,43,'FORM_TEST_1_SECTION_1_QUESTION_1',10),(11,43,'FORM_TEST_1_SECTION_1_QUESTION_2',10),(12,43,'FORM_TEST_1_SECTION_1_QUESTION_3',10),(13,43,'FORM_TEST_1_SECTION_1_QUESTION_4',10),(14,43,'FORM_TEST_1_SECTION_2_QUESTION_1',11),(15,43,'FORM_TEST_1_SECTION_2_QUESTION_2',11),(16,43,'FORM_TEST_1_SECTION_3_QUESTION_1',12),(17,43,'FORM_TEST_1_SECTION_3_QUESTION_2',12),(18,43,'FORM_TEST_1_SECTION_3_QUESTION_3',12),(22,45,'qweqwe',15),(23,45,'qwe',15),(24,45,'new',15),(25,45,'eww',16);
 /*!40000 ALTER TABLE `Form_Fields` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -147,7 +126,7 @@ CREATE TABLE `Form_Sections` (
   `section_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`section_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -156,12 +135,7 @@ CREATE TABLE `Form_Sections` (
 
 LOCK TABLES `Form_Sections` WRITE;
 /*!40000 ALTER TABLE `Form_Sections` DISABLE KEYS */;
-INSERT INTO `Form_Sections` VALUES
-(10,'FORM_TEST_1_SECTION_1'),
-(11,'FORM_TEST_1_SECTION_2'),
-(12,'FORM_TEST_1_SECTION_3'),
-(13,'DELETE'),
-(14,'DELETE');
+INSERT INTO `Form_Sections` VALUES (10,'FORM_TEST_1_SECTION_1'),(11,'FORM_TEST_1_SECTION_2'),(12,'FORM_TEST_1_SECTION_3'),(13,'DELETE'),(14,'DELETE'),(15,'qwe'),(16,'qwe');
 /*!40000 ALTER TABLE `Form_Sections` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -179,7 +153,7 @@ CREATE TABLE `Product_Category` (
   `icon_image_path` varchar(100) DEFAULT NULL,
   `revisionMonthDuration` int(11) DEFAULT NULL,
   PRIMARY KEY (`product_category_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -188,13 +162,7 @@ CREATE TABLE `Product_Category` (
 
 LOCK TABLES `Product_Category` WRITE;
 /*!40000 ALTER TABLE `Product_Category` DISABLE KEYS */;
-INSERT INTO `Product_Category` VALUES
-(1,'Estintore',0,'img/prodotti/estintore.png',6),
-(2,'Idrante',0,'img/prodotti/idrante.png',6),
-(3,'Testing',0,NULL,6),
-(30,'TEST_PRODUCT_1',0,'',6),
-(31,'TEST_PRODUCT_2',0,'',6),
-(43,'FORM_TEST_1',1,'',NULL);
+INSERT INTO `Product_Category` VALUES (1,'Estintore',0,'img/prodotti/estintore.png',6),(2,'Idrante',0,'img/prodotti/idrante.png',6),(3,'Testing',0,NULL,6),(31,'TEST_PRODUCT_2',0,'',6),(43,'FORM_TEST_1',1,'',NULL),(45,'q2ewqe',1,'',NULL),(46,'Dinamite',0,'',NULL),(52,'Banana',0,'img/prodotti/Banana',NULL);
 /*!40000 ALTER TABLE `Product_Category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -222,51 +190,7 @@ CREATE TABLE `Product_Data` (
 
 LOCK TABLES `Product_Data` WRITE;
 /*!40000 ALTER TABLE `Product_Data` DISABLE KEYS */;
-INSERT INTO `Product_Data` VALUES
-(9,12,'1'),
-(9,13,'2'),
-(9,14,'3'),
-(9,15,'4'),
-(9,16,'CIAO'),
-(9,17,'6'),
-(9,18,'7'),
-(9,19,'HELLO'),
-(54,12,'yuiyui'),
-(54,13,'yuiyuiyu'),
-(54,14,'iyuiyu'),
-(54,15,'iyuiyu'),
-(54,16,'iyuiyu'),
-(54,17,'iyuiuy'),
-(54,18,'iyuiuy'),
-(54,19,'iyui'),
-(84,1,'uiyui'),
-(84,2,'uyiyui'),
-(84,3,'uyiyui'),
-(84,4,'uyiyu'),
-(84,5,'iuyiy'),
-(84,6,'iyuiy'),
-(84,7,'iyui'),
-(84,8,'uiyuiuy'),
-(84,9,'iyuiui'),
-(84,10,'uyiyuiuy'),
-(86,1,'fhgfh'),
-(86,2,'fghgfh'),
-(86,3,'gfhfgh'),
-(86,4,'fghgfh'),
-(86,5,'gfhghgf'),
-(86,6,'hfghfg'),
-(86,7,'hfghgf'),
-(86,8,'hfhgfhfg'),
-(86,9,'hgfhfg'),
-(86,10,'hgfhfghfg'),
-(87,12,'dfgh'),
-(87,13,'dfgh'),
-(87,14,'fghfg'),
-(87,15,'hfg'),
-(87,16,'hh'),
-(87,17,'dfh'),
-(87,18,'dfhh'),
-(87,19,'dfh');
+INSERT INTO `Product_Data` VALUES (9,12,'1'),(9,13,'2'),(9,14,'3'),(9,15,'4'),(9,16,'CIAO'),(9,17,'6'),(9,18,'7'),(9,19,'HELLO'),(54,12,'yuiyui'),(54,13,'yuiyuiyu'),(54,14,'iyuiyu'),(54,15,'iyuiyu'),(54,16,'iyuiyu'),(54,17,'iyuiuy'),(54,18,'iyuiuy'),(54,19,'iyui'),(84,1,'uiyui'),(84,2,'uyiyui'),(84,3,'uyiyui'),(84,4,'uyiyu'),(84,5,'iuyiy'),(84,6,'iyuiy'),(84,7,'iyui'),(84,8,'uiyuiuy'),(84,9,'iyuiui'),(84,10,'uyiyuiuy'),(86,1,'fhgfh'),(86,2,'fghgfh'),(86,3,'gfhfgh'),(86,4,'fghgfh'),(86,5,'gfhghgf'),(86,6,'hfghfg'),(86,7,'hfghgf'),(86,8,'hfhgfhfg'),(86,9,'hgfhfg'),(86,10,'hgfhfghfg'),(87,12,'dfgh'),(87,13,'dfgh'),(87,14,'fghfg'),(87,15,'hfg'),(87,16,'hh'),(87,17,'dfh'),(87,18,'dfhh'),(87,19,'dfh');
 /*!40000 ALTER TABLE `Product_Data` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -284,7 +208,7 @@ CREATE TABLE `Product_Fields` (
   PRIMARY KEY (`field_id`),
   KEY `Product_Fields_Product_Category_product_category_id_fk` (`product_category_id`),
   CONSTRAINT `Product_Fields_Product_Category_product_category_id_fk` FOREIGN KEY (`product_category_id`) REFERENCES `Product_Category` (`product_category_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1518 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1531 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -293,32 +217,7 @@ CREATE TABLE `Product_Fields` (
 
 LOCK TABLES `Product_Fields` WRITE;
 /*!40000 ALTER TABLE `Product_Fields` DISABLE KEYS */;
-INSERT INTO `Product_Fields` VALUES
-(1,1,'Numero aziendale'),
-(2,1,'Tipo estintore (Kg)'),
-(3,1,'Costruzione '),
-(4,1,'Anno'),
-(5,1,'Matricola'),
-(6,1,'Capacità estinguente'),
-(7,1,'Dislocazione'),
-(8,1,'Revisione'),
-(9,1,'Ricollaudo'),
-(10,1,'Tipo manutenzione'),
-(12,2,'Numero aziendale'),
-(13,2,'Diam. Ug. Lancia (mm)'),
-(14,2,'Pressione statica (bar)'),
-(15,2,'Pressione dinamica (bar)'),
-(16,2,'Collaudo'),
-(17,2,'Esercizio'),
-(18,2,'Dislocazione'),
-(19,2,'Tipo manutenzione'),
-(22,3,'TestingField1'),
-(1508,3,'TestingField2'),
-(1510,3,'TestingField3'),
-(1511,3,'TestingField4'),
-(1515,30,'TEST_PRODUCT_FIELD_1'),
-(1516,30,'TEST_PRODUCT_FIELD_2'),
-(1517,30,'TEST_PRODUCT_FIELD_3');
+INSERT INTO `Product_Fields` VALUES (1,1,'Numero aziendale'),(2,1,'Tipo estintore (Kg)'),(3,1,'Costruzione '),(4,1,'Anno'),(5,1,'Matricola'),(6,1,'Capacità estinguente'),(7,1,'Dislocazione'),(8,1,'Revisione'),(9,1,'Ricollaudo'),(10,1,'Tipo manutenzione'),(12,2,'Numero aziendale'),(13,2,'Diam. Ug. Lancia (mm)'),(14,2,'Pressione statica (bar)'),(15,2,'Pressione dinamica (bar)'),(16,2,'Collaudo'),(17,2,'Esercizio'),(18,2,'Dislocazione'),(19,2,'Tipo manutenzione'),(22,3,'TestingField1'),(1508,3,'TestingField2'),(1510,3,'TestingField3'),(1511,3,'TestingField4'),(1518,46,'Quantità tritolo'),(1519,46,'Temperatura massima'),(1520,46,'Filo da tagliare'),(1526,52,'Potassio');
 /*!40000 ALTER TABLE `Product_Fields` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -346,14 +245,7 @@ CREATE TABLE `Revisions` (
 
 LOCK TABLES `Revisions` WRITE;
 /*!40000 ALTER TABLE `Revisions` DISABLE KEYS */;
-INSERT INTO `Revisions` VALUES
-(1,1,'2022-11-08 00:00:00'),
-(1,1,'2022-11-17 18:48:00'),
-(1,2,'2022-10-08 00:00:00'),
-(2,1,'2022-11-24 11:11:00'),
-(2,2,'2022-10-07 00:00:00'),
-(2,2,'2022-10-26 00:00:00'),
-(3,2,'2022-10-15 00:00:00');
+INSERT INTO `Revisions` VALUES (1,1,'0527-05-14 00:00:00'),(1,1,'2019-01-08 00:00:00'),(1,1,'2021-11-18 00:00:00'),(1,1,'2022-01-13 00:00:00'),(1,1,'2022-11-08 00:00:00'),(1,1,'2022-11-17 18:48:00'),(1,1,'2022-12-29 00:00:00'),(1,1,'2022-12-30 00:00:00'),(1,1,'2023-01-04 00:00:00'),(2,1,'2022-11-24 11:11:00'),(2,1,'2023-06-14 00:00:00'),(2,2,'2022-10-07 00:00:00'),(2,2,'2022-10-26 00:00:00'),(2,2,'2023-04-12 00:00:00'),(3,2,'2022-10-15 00:00:00'),(3,2,'2022-12-31 00:00:00'),(3,2,'2024-06-13 00:00:00');
 /*!40000 ALTER TABLE `Revisions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -384,13 +276,7 @@ CREATE TABLE `Sold_Products` (
 
 LOCK TABLES `Sold_Products` WRITE;
 /*!40000 ALTER TABLE `Sold_Products` DISABLE KEYS */;
-INSERT INTO `Sold_Products` VALUES
-(9,2,2,180,300),
-(33,2,3,324,234),
-(54,2,2,202,202),
-(84,1,1,351,108),
-(86,1,1,184,253),
-(87,1,2,285,199);
+INSERT INTO `Sold_Products` VALUES (9,2,2,180,300),(33,2,3,324,234),(54,2,2,202,202),(84,1,1,197,39),(86,1,1,248,254),(87,1,2,285,199);
 /*!40000 ALTER TABLE `Sold_Products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -417,6 +303,7 @@ CREATE TABLE `User_Company` (
 
 LOCK TABLES `User_Company` WRITE;
 /*!40000 ALTER TABLE `User_Company` DISABLE KEYS */;
+INSERT INTO `User_Company` VALUES (23,21),(25,21),(40,21),(43,21),(58,21);
 /*!40000 ALTER TABLE `User_Company` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -429,13 +316,17 @@ DROP TABLE IF EXISTS `Users`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Users` (
   `user_id` int(11) NOT NULL AUTO_INCREMENT,
-  `email` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
-  `hashed_password` varchar(128) DEFAULT NULL,
+  `email` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `hashed_password` varchar(256) DEFAULT NULL,
   `first_name` varchar(50) DEFAULT NULL,
   `last_name` varchar(50) DEFAULT NULL,
   `role` int(11) DEFAULT NULL,
-  PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `stringRetrievePassword` varchar(20) DEFAULT NULL,
+  `active` int(11) DEFAULT NULL COMMENT 'This column has different values dipending on the staus of the account registration',
+  `activedByCompany` int(11) DEFAULT NULL,
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `Users_pk` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -444,9 +335,7 @@ CREATE TABLE `Users` (
 
 LOCK TABLES `Users` WRITE;
 /*!40000 ALTER TABLE `Users` DISABLE KEYS */;
-INSERT INTO `Users` VALUES
-(1,'onnwen.cassitto@icloud.com','a33356e9f35ec519b88dbbcf23147f0b','onnwen','cassitto',1),
-(2,'test@gmail.com','a33356e9f35ec519b88dbbcf23147f0b','Pippo','Pluto',1);
+INSERT INTO `Users` VALUES (23,'test@gmail.com','$2y$10$JJX7Ht1s32x7El7wh19RqOnjnXgB47M/kp4PXHzkbLIkTYj8uPO2S','Mario','Rossi',1,NULL,1,1),(25,'chrimalefico@gmail.com','$2y$10$Xnlcby3rvGMmXbUduJASnOU1r5sdD9WpgfBV.W8HtvshQKNIXZaM2','Christian','Canossa',1,NULL,1,1),(33,'andreascart04@gmail.com','$2y$10$JJX7Ht1s32x7El7wh19RqOnjnXgB47M/kp4PXHzkbLIkTYj8uPO2S','Andrea','Scartazza',1,NULL,1,1),(40,'ohniohnio@ihbi.com','$2y$10$JJX7Ht1s32x7El7wh19RqOnjnXgB47M/kp4PXHzkbLIkTYj8uPO2S','wdhoiuhdqiu','iuhiuhiuhi',0,NULL,1,1),(43,'onnwen.cassitto@icloud.com','$2y$10$JJX7Ht1s32x7El7wh19RqOnjnXgB47M/kp4PXHzkbLIkTYj8uPO2S','fdgfdgfd','dfgdfgf',0,NULL,1,1),(58,'christian.canossa04@gmail.com','$2y$10$1wfs5r8tltxEer6uPb5VZ.p6ofjpLJnl75YdSWUsJ0w0DQqzlYB7W','Christian','Canossa',0,NULL,0,1);
 /*!40000 ALTER TABLE `Users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -459,4 +348,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-11-20 21:53:43
+-- Dump completed on 2023-04-20 12:17:32

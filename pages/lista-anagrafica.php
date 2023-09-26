@@ -1,7 +1,8 @@
 <?php
-session_start();
 require_once("../php/connessione.php");
-if (isset($_SESSION['session_id'])) {
+require_once("../php/authentication/authentication.php");
+
+if ($isAuthenticated && $isUser) {
 
 ?>
     <!DOCTYPE html>
@@ -337,10 +338,16 @@ if (isset($_SESSION['session_id'])) {
                 tabella.innerHTML += '<tr>' +
                     '<th style="text-align: center;">' + allCompanies[i].nome + '</th>' +
                     '<td style="text-align: center;">' +
-                    '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#companyModal" data-bs-whatever="' + allCompanies[i].id + '"><i class="fa-solid fa-pen"></i></button>' +
-                    '<button class="btn btn-outline-info" onclick="window.location.href=\'dettaglio-anagrafica.php?id_ana=' + allCompanies[i].id + '\'"><i class="fa-solid fa-circle-info"></i></button>' +
-                    '<button class="btn btn-outline-danger" onclick="deleteCompany(' + allCompanies[i].id + ')"><i class="fa-solid fa-trash-can"></i></button>' +
-                    '</td>' +
+                    <?php
+                    if ($isTechnician) {
+                        echo '\'<button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#companyModal" data-bs-whatever="\' + allCompanies[i].id + \'"><i class="fa-solid fa-pen"></i></button>\' + ';
+                    }
+                    ?> '<button class="btn btn-outline-info" onclick="window.location.href=\'dettaglio-anagrafica.php?id_ana=' + allCompanies[i].id + '\'"><i class="fa-solid fa-circle-info"></i></button>' +
+                    <?php
+                    if ($isTechnician) {
+                        echo '\'<button class="btn btn-outline-danger" onclick="deleteCompany(\' + allCompanies[i].id + \')"><i class="fa-solid fa-trash-can"></i></button>\' +';
+                    }
+                    ?> '</td>' +
                     '</tr>';
             }
         }
@@ -355,28 +362,21 @@ if (isset($_SESSION['session_id'])) {
             });
 
             let requestDestination = "";
-            let searchedQuery = {
-                nome_azienda: "",
-                sede: "",
-                data: ""
-            };
 
-            if (requestedCompany === "" && requestedSite === "" && requestedDate === "") { //TODO: Controllare se la query string è vuota
+            if (requestedCompany === "" && requestedSite === "" && requestedDate === "") {
                 requestDestination = "../php/viewAnagr.php";
             } else { // Renderizza i risultati del motore di ricerca
-                requestDestination = "../php/searchEngine.php";
-                searchedQuery.nome_azienda = requestedCompany;
-                searchedQuery.sede = requestedSite;
-                searchedQuery.data = requestedDate;
+                requestDestination = "../php/searchEngine.php?nome_azienda=" + requestedCompany + "&sede=" + requestedSite + "&data=" + requestedDate;
             }
 
-            $.post(requestDestination, searchedQuery, function(resp) {
+            $.getJSON(requestDestination, function(resp) {
+
                 allCompanies = resp;
 
                 maxPageNumber = Math.ceil(resp.length / maxCardsPerPage);
 
                 loadCurrentPage();
-            }, "json");
+            });
 
 
             $("#table").click(function() {

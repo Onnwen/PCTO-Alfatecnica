@@ -1,7 +1,8 @@
 <?php
-session_start();
 require_once('../php/connessione.php');
-if (isset($_SESSION['session_id'])) {
+require_once("../php/authentication/authentication.php");
+
+if ($isAuthenticated) {
     header('location: pages/lista-anagrafica.php');
 } else {
     $mail = $_GET['email'];
@@ -121,7 +122,7 @@ if (isset($_SESSION['session_id'])) {
             <script>
                 function updateDB(){
                     $.post("../php/login/confirmRegistration.php", {email: "<?php echo $mail; ?>"}, function(response){
-                        if(response === "1"){
+                        if(response == "1"){
                             window.location.href = "pages/login.php";
                         } else {
                             alert("Errore nella conferma ci scusiamo per il disagio, riprova più tardi o chiama il supporto");
@@ -160,3 +161,4 @@ if (isset($_SESSION['session_id'])) {
     }
 }
 ?>
+
