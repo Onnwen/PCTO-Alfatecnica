@@ -3,8 +3,8 @@ require_once('connessione.php');
 
 $companyId = $_POST["company_id"];
 $productCategoryId = $_POST["product_category_id"];
-$x = $_POST["x"];
-$y = $_POST["y"];
+$x = $_POST["cX"];
+$y = $_POST["cY"];
 
 $date = $_POST["date"];
 
