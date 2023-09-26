@@ -6,7 +6,6 @@ $idCompany = isset($_POST['idCompany']) ? $_POST['idCompany'] : 0;
 
 if(!$idCategory == 0 && !$idCompany==0){
     $deleteRevisions = "DELETE FROM Revisions WHERE product_category_id = $idCategory AND company_id = ".$idCompany." ";
-
     $res = $pdo->prepare($deleteRevisions);
     $res->execute();
     if($res)
@@ -23,7 +22,7 @@ if(!$idCategory == 0 && !$idCompany==0){
     }
     if($soldProductsToDelete)
         foreach($soldProductsToDelete as $result){
-            $delete = "DELETE FROM Product_Data WHERE sold_product_id = ".$result;
+            $delete = "DELETE FROM Product_Data WHERE sold_product_id = ".$result['sold_product_id']." ";
             $res = $pdo->prepare($delete);
             $res->execute();
             if($res)

@@ -1,6 +1,6 @@
 <?php
 $db = [
-    'db_engine' => 'MariaDB',
+    'db_engine' => 'mysql',
     'db_host' => '15.188.73.19',
     'db_name' => 'alfatecnica2',
     'db_user' => 'alfatecnica',
