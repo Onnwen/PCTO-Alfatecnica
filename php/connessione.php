@@ -1,7 +1,7 @@
 <?php
 $db = [
     'db_engine' => 'mysql',
-    'db_host' => 'thecouriernv.tplinkdns.com',
+    'db_host' => '15.188.73.19',
     'db_name' => 'alfatecnica2',
     'db_user' => 'alfatecnica',
     'db_password' => '$Yne&Fu8hGVqu935rXeJV8Fo5',
