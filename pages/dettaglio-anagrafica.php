@@ -810,7 +810,7 @@ if (isset($_SESSION['session_id'])) {
             }
 
             $('#selectCategory').on('click', function () {
-                debugger;
+                
                 idCategoria = document.getElementById('chooseCategory').value;
                 console.log(idCategoria);
             })
@@ -967,7 +967,7 @@ if (isset($_SESSION['session_id'])) {
                             stage.batchDraw();
                         });
                         stage.addEventListener('dragend', function () {
-                            debugger;
+                            
                             document.getElementById("cX").value = parseInt(((nuovoProdotto.getX() * risposta.w) / sfondoImg.attrs.width).toPrecision(10));
                             document.getElementById("cY").value = parseInt(((nuovoProdotto.getY() * risposta.h) / sfondoImg.attrs.height) - ((div.clientHeight - newHeight) / 2) + (((25 * sfondoImg.attrs.height) / risposta.h) / 2));
                         });
@@ -981,7 +981,7 @@ if (isset($_SESSION['session_id'])) {
             }
 
             addPrdocuctModal.addEventListener('show.bs.modal', function (event) {
-                debugger;
+                
                 idCategoria = document.getElementById('chooseCategory').value;
                 if (idCategoria != null && idCategoria !== 0) {
                     fillAddProductModal();
@@ -1074,7 +1074,7 @@ if (isset($_SESSION['session_id'])) {
             //VISUALIZZAZIONE CONDIZIONATA DELLA PLANIMETRIA PRINCIPALE E STAMPA
 
             function vistaCategoria(categoria) {
-                debugger;
+                
                 for (let i = 0; i < group.children.length; i++) {
                     var prova = group.children[i];
                     if (group.children[i].attrs.category === categoria) {

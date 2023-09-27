@@ -40,7 +40,7 @@ if (isset($_SESSION['session_id'])) {
     <div class="container-fluid">
         <div class="row w-100">
             <div class="col-1">
-                <button style="float: right" type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addUserModal" data-bs-whatever="addUser" id="openAddUser">
+                <button disabled style="float: right" type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addUserModal" data-bs-whatever="addUser" id="openAddUser">
                     <i class="bi bi-person-plus-fill"></i></button>
             </div>
             <div class="col-7 d-inline-flex">
@@ -456,7 +456,7 @@ if (isset($_SESSION['session_id'])) {
             }, "json");
         })
          function selectionRoleChange(){
-             debugger;
+
              let val = $("#selectCompany").val();
              if(val === "1" || val === "0"){
                  $("#role").attr("disabled", true);
