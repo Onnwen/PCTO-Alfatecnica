@@ -192,7 +192,7 @@ if (isset($_SESSION['session_id'])) {
                     All'interno della tabella utenti puoi osservare che sono presenti due varianti di riga, le prime dove in fondo c'è la possibilità
                     di eliminare direttamente l'utente rappresentano tutte le credenziali già attivati e funzionanti. Il resto della tabella invece
                     rappresenta tutti gli utenti che devono ancora essere attivati da lei. Nell'ultima colonna infatti è possibile confermare l'utente
-                    o rifiutare e di cnseguenza eliinare del tutto le credenziale dell'utente. Sul bottone che hai appena premuto è presente un badge che indica
+                    o rifiutare e di conseguenza eliminare del tutto le credenziale dell'utente. Sul bottone che hai appena premuto è presente un badge che indica
                     numero di credenziali ancora da attivare. Si ricordi che finchè l'account non è attivo l'utente associato non può utilizzare i servizi che forniamo.
                 </div>
                 <div class="modal-footer">

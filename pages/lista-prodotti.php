@@ -83,27 +83,12 @@ if (isset($_SESSION['session_id'])) {
             </div>
         </div>
 
-        <!-- Loading Modal -->
-        <div class="modal fade" id="loadingModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="loadingModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="loadingModalLabel">Attendi</h5>
-                        <div class="spinner-border spinner-border-sm" role="status"></div>
-                    </div>
-                    <div class="modal-body">
-                        Caricamento dei dati in corso.
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Add/Edit Product Modal -->
         <div class="modal fade" id="productModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="productModalLabel">Aggiungi prodotto</h5>
+                        <h5 class="modal-title" id="productModalLabel">Aggiungi apparato</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -118,11 +103,11 @@ if (isset($_SESSION['session_id'])) {
                                 </div>
                                 <div class="col-2 hide-with-editing">
                                     <input type="radio" class="btn-check" name="form" id="isProduct" autocomplete="off" checked>
-                                    <label class="btn btn-outline-secondary w-100" for="isProduct">Prodotto</label>
+                                    <label class="btn btn-outline-secondary w-100" for="isProduct">Apparato</label>
                                 </div>
                                 <div class="col-2 hide-with-editing">
                                     <input type="radio" class="btn-check" name="form" id="isForm" autocomplete="off">
-                                    <label class="btn btn-outline-secondary w-100" for="isForm">Formulario</label>
+                                    <label class="btn btn-outline-secondary w-100" for="isForm">Impianto</label>
                                 </div>
                             </div>
                             <label for="basic-url" class="form-label">Attributi</label>
@@ -151,7 +136,7 @@ if (isset($_SESSION['session_id'])) {
             <div class="row w-100">
                 <div class="col">
                     <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#productModal" data-bs-whatever="addProduct" id="openProductModal">
-                        <i class="bi bi-box-fill"></i>&nbsp;&nbsp;Aggiungi prodotto
+                        <i class="bi bi-box-fill"></i>&nbsp;&nbsp;Aggiungi apparato o impianto
                     </button>
                 </div>
             </div>
@@ -179,14 +164,16 @@ if (isset($_SESSION['session_id'])) {
                                     foreach ($productsCategory as $productCategory) {
                                         echo "<tr>";
                                         echo "<th class='text-center align-middle'>{$productCategory['name']}</th>";
-                                        echo "<th class='text-center align-middle'>" . ($productCategory['type'] == 0 ? "Prodotto" : "Questionario") . "</th>";
-                                        echo '<td class="text-center align-middle"><button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#productModal" data-bs-whatever="' . $productCategory['product_category_id'] . '"><i class="fa-solid fa-pen"></i></button><button class="btn btn-outline-danger" onclick="deleteProductCategoryFromDatabase(' . $productCategory['product_category_id'] . ')"><i class="fa-solid fa-trash-can"></i></button></td>';
+                                        echo "<th class='text-center align-middle'>" . ($productCategory['type'] == 0 ? "Apparato" : "Impianto") . "</th>";
+                                        echo '<td class="text-center align-middle"><button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#productModal" data-bs-whatever="' . $productCategory['product_category_id'] . '"><i class="fa-solid fa-pen"></i></button>&nbsp;&nbsp;<button class="btn btn-outline-danger" onclick="deleteProductCategoryFromDatabase(' . $productCategory['product_category_id'] . ')"><i class="fa-solid fa-trash-can"></i></button></td>';
                                         echo "</tr>";
                                     }
                                     ?>
                                 </tr>
                             </tbody>
                         </table>
+                        <h1 style="margin-top: 3%;text-align: center;color: lightcoral;font-size: x-large">!!! Attenzione non si puo' cancellare una tipologia di apparato se questo e' presente in alcune anagrafiche !!!</h1>
+                        <h1 style="margin-top: 3%;text-align: center;color: burlywood;font-size: x-large">Lavori in corso per quanto riguarda gli impianti, per vedere un esempio della conformazione di un impianto <a href="Mdl-Imp-Sprinkler-a-secco.php">clicca qui</a></h1>
                     </div>
                 </div>
             </div>
@@ -209,7 +196,7 @@ if (isset($_SESSION['session_id'])) {
 
         let isEditingProduct = 0;
         let modalLabelMode = "Aggiungi";
-        let modalLabelType = "prodotto";
+        let modalLabelType = "apparato";
         let modalLabelFieldType = "Campo";
         let modalType = "addProduct";
 
@@ -264,7 +251,7 @@ if (isset($_SESSION['session_id'])) {
         });
 
         $("#isProduct").on('click', function() {
-            modalLabelType = "prodotto";
+            modalLabelType = "apparato";
             const modalTitle = productModal.querySelector('.modal-title');
             modalTitle.textContent = modalLabelMode + " " + modalLabelType;
             modalLabelFieldType = "Campo";
@@ -274,7 +261,7 @@ if (isset($_SESSION['session_id'])) {
         });
 
         $("#isForm").on('click', function() {
-            modalLabelType = "formulario";
+            modalLabelType = "impianto";
             const modalTitle = productModal.querySelector('.modal-title');
             modalTitle.textContent = modalLabelMode + " " + modalLabelType;
             modalLabelFieldType = "Domanda";
@@ -554,9 +541,7 @@ if (isset($_SESSION['session_id'])) {
                 .fail(function() {
                     modalError(true);
                 })
-                .always(function() {
-                    onlyModalLoading(false);
-                })
+            x
         }
 
         function suspendProductModal(suspended) {

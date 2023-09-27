@@ -10,7 +10,7 @@ echo '<nav class="navbar navbar-expand-lg navbar-light" style="background-color:
         <div class="collapse navbar-collapse header" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="lista-anagrafica.php">Anagrafica</a>
+                    <a class="nav-link" href="lista-anagrafica.php">Anagrafiche</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="lista_revisioni.php">Manutenzione programmata</a>

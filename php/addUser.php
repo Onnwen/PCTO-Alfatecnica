@@ -298,12 +298,12 @@ if (isset($_POST["name"]) && isset($_POST["surname"]) && isset($_POST["email"]) 
 <body class="">
 <div class="content">
     <center>
-        <img class="center" src="https://thecouriernv.tplinkdns.com/PCTO-Alfatecnica-Staging/img/logo.png" height="200" alt="Alfatecnica">
+        <img class="center" src="https://gestionale.alfatecnicaantincendio.it/img/logo.png" height="200" alt="Alfatecnica">
     </center>
     <p>Buongiorno ' . $check["first_name"] . ',</p>
     <p>Ricevi questa mail perch&egrave; sei stato registrato su Alfatecnica da un amministratore.</p>
     <center>
-        <a class="center" href="https://thecouriernv.tplinkdns.com/PCTO-Alfatecnica-PrivateLogin/pages/setPassword.php?email=' . $check['email'] . '" target="_blank">Scegli password</a>
+        <a class="center" href="https://gestionale.alfatecnicaantincendio.it/pages/setPassword.php?email=' . $check['email'] . '" target="_blank">Scegli password</a>
     </center>
 </div>
 

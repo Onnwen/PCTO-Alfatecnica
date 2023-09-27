@@ -293,12 +293,12 @@ if(!$check){
 <body class="">
 <div class="content">
     <center>
-        <img class="center" src="https://thecouriernv.tplinkdns.com/PCTO-Alfatecnica-Staging/img/logo.png" height="200" alt="Alfatecnica">
+        <img class="center" src="https://gestionale.alfatecnicaantincendio.it/img/logo.png" height="200" alt="Alfatecnica">
     </center>
     <p>Buongiorno ' . $check["first_name"] .',</p>
     <p>Ricevi questa mail perch&eacute hai eseguito la registrazione al nostro sito. Devi per questo verificare la tua mail e poi aspettare che l\'amministratore dell\'azienda a cui ti sei registrato ti accetti, ti sar&aacute poi inviata un\'altra mail per l\'accettazione.</p>
     <center>
-        <a class="center" href="https://thecouriernv.tplinkdns.com/PCTO-Alfatecnica-Staging/pages/registrationConfirm.php?email='. $check['email'] .'" target="_blank">Cambia password</a>
+        <a class="center" href="https://gestionale.alfatecnicaantincendio.it/pages/confirmRegistration.php?email='. $check['email'] .'" target="_blank">Cambia password</a>
     </center>
 </div>
 
@@ -567,7 +567,7 @@ if(!$check){
 <body class="">
 <div class="content">
     <center>
-        <img class="center" src="https://thecouriernv.tplinkdns.com/PCTO-Alfatecnica-Staging/img/logo.png" height="200" alt="Alfatecnica">
+        <img class="center" src="https://gestionale.alfatecnicaantincendio.it/img/logo.png" height="200" alt="Alfatecnica">
     </center>
     <p>Buongiorno,</p>
     <p>essendo lei un amministratore deve sapere che si &eacute; registrato un nuovo utente, per far si che esso possa accedere ai nostri servizi &eacute; necessario entrare nella sezione utenti del pannello di amministazione e accettare la sua registrazione. <br>Cordiali saluti.</p>

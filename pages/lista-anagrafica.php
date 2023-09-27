@@ -39,7 +39,7 @@ if (isset($_SESSION['session_id'])) {
                         L'operazione è avvenuta con successo.
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="location.reload()">Ok</button>
                     </div>
                 </div>
             </div>
@@ -294,6 +294,9 @@ if (isset($_SESSION['session_id'])) {
             </ul>
         </nav>
 
+        <h1 style="margin-top: 30px;text-align: center;color: lightcoral;font-size: x-large">!!! Attenzione non si puo' cancellare per una questione di potenziale errore una azienda contenente apparati revisionati e funzionanti, si perderebbero per sempre tutti i dati !!!</h1>
+
+
         <!-- FOOTER -->
 
         <?php require_once("footer.php"); ?>
@@ -337,8 +340,8 @@ if (isset($_SESSION['session_id'])) {
                 tabella.innerHTML += '<tr>' +
                     '<th style="text-align: center;">' + allCompanies[i].nome + '</th>' +
                     '<td style="text-align: center;">' +
-                    '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#companyModal" data-bs-whatever="' + allCompanies[i].id + '"><i class="fa-solid fa-pen"></i></button>' +
-                    '<button class="btn btn-outline-info" onclick="window.location.href=\'dettaglio-anagrafica.php?id_ana=' + allCompanies[i].id + '\'"><i class="fa-solid fa-circle-info"></i></button>' +
+                    '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#companyModal" data-bs-whatever="' + allCompanies[i].id + '"><i class="fa-solid fa-pen"></i></button>&nbsp;&nbsp;' +
+                    '<button class="btn btn-outline-info" onclick="window.location.href=\'dettaglio-anagrafica.php?id_ana=' + allCompanies[i].id + '\'"><i class="fa-solid fa-circle-info"></i></button>&nbsp;&nbsp;' +
                     '<button class="btn btn-outline-danger" onclick="deleteCompany(' + allCompanies[i].id + ')"><i class="fa-solid fa-trash-can"></i></button>' +
                     '</td>' +
                     '</tr>';
@@ -451,7 +454,6 @@ if (isset($_SESSION['session_id'])) {
         }
 
         function deleteCompany(id) {
-            // modalLoading(true);
 
             $.ajax({
                 url: '../php/deleteCompany.php',

@@ -27,12 +27,12 @@ if (isset($_SESSION['session_id'])) {
             <div class="modal-dialog modal-xl modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="revisionModalLabel">Registra Revisione</h5>
+                        <h5 class="modal-title" id="revisionModalLabel">Registra Manutenzione</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <form>
-                            <label for="basic-url" class="form-label">Revisione</label>
+                            <label for="basic-url" class="form-label">Manutenzione</label>
                             <div class="row">
                                 <div class="col">
                                     <div class="input-group mb-3">
@@ -50,7 +50,7 @@ if (isset($_SESSION['session_id'])) {
                                 </div>
                             </div>
 
-                            <label for=" basic-url" class="form-label">Data Revisione</label>
+                            <label for=" basic-url" class="form-label">Data Manutenzione</label>
                             <div class="row">
                                 <div class="col">
                                     <div class="input-group mb-3">
@@ -78,7 +78,7 @@ if (isset($_SESSION['session_id'])) {
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <p>La registrazione di questa revisione è andata in errore!</p>
+                        <p>La registrazione di questa Manutenzione è andata in errore!</p>
                         <p id="revisionErrorDescription"></p>
                         <p>Codice errore: <span id="revisionErrorCode"></span></p>
                     </div>
@@ -94,11 +94,11 @@ if (isset($_SESSION['session_id'])) {
             <div class="modal-dialog modal-x1 modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="successModalLabel">Revisione registrata con successo!</h5>
+                        <h5 class="modal-title" id="successModalLabel">Manutenzione registrata con successo!</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <p>La registrazione di questa revisione è andata a buon fine!</p>
+                        <p>La registrazione di questa Manutenzione è andata a buon fine!</p>
                     </div>
                     <div class="modal-footer">
                         <button id="successModalCloseButton" type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="window.location.reload()">Chiudi</button>
@@ -114,7 +114,7 @@ if (isset($_SESSION['session_id'])) {
                 <div class="d-flex justify-content-center nome-azienda">
                     <div class="row">
                         <div class="col-12">
-                            <h4>Revisioni</h4>
+                            <h4>Manutenzioni programmate e controlli</h4>
                         </div>
                     </div>
                 </div>
@@ -136,10 +136,10 @@ if (isset($_SESSION['session_id'])) {
                                         Categoria Prodotto
                                     </th>
                                     <th scope="col">
-                                        Data Ultima Revisione
+                                        Data Ultima Manutenzione
                                     </th>
                                     <th scope="col">
-                                        Data Scadenza Revisione
+                                        Data Scadenza Manutenzione
                                     </th>
                                     <th scope="col">
                                         Stato
@@ -174,7 +174,7 @@ if (isset($_SESSION['session_id'])) {
                                 </ul>
                             </nav>
                             <div class="justify-content-center" style="display: flex;">
-                                <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#revisionModal" onclick="clearDataFromModal()">Registra Revisione</button>
+                                <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#revisionModal" onclick="clearDataFromModal()">Registra Manutenzione</button>
                             </div>
                     </div>
                 </div>
@@ -265,7 +265,7 @@ if (isset($_SESSION['session_id'])) {
 
                     $("#productName").html(generatedOptions);
 
-                    // Per fare in modo che il bottone "revisione rapida" possa richiedere di settare un prodotto in anticipo
+                    // Per fare in modo che il bottone "Manutenzione rapida" possa richiedere di settare un prodotto in anticipo
                     if (preselectedProduct !== null) {
                         $("#productName").val(preselectedProduct);
                     }
@@ -292,7 +292,7 @@ if (isset($_SESSION['session_id'])) {
                 let monthDifference = millisecondDifference / 2592000000;
 
                 if (monthDifference <= 0) {
-                    // Revisione scaduta
+                    // Manutenzione scaduta
                     statusColor = "red";
                     statusText = "Scaduta";
                 } else if (monthDifference <= 1) { // TODO: Definire precisamente cosa vuol dire "sta per scadere"
@@ -307,7 +307,7 @@ if (isset($_SESSION['session_id'])) {
                 tableString += "<tr style='text-align: center;'>";
                 tableString += ("<td scope='col'>" + revision.CompanyName + "</td>" + "<td scope='col'>" + revision.ProductCategoryName + "</td>" + "<td scope='col'>" + revision.LastRevision + "</td>" + "<td scope='col'>" + revision.Deadline + "</td><td style='color:" + statusColor + "'>" + statusText + "</td>");
                 // FIXME: Trovare un modo migliore per passare i dati al modal; per adesso setRevisionData funziona, ma non è molto elegante
-                tableString += "<td scope='col'><button class='btn btn-sm btn-outline-success' data-bs-toggle='modal' data-bs-target='#revisionModal' onclick='setRevisionData(" + revision.CompanyID + "," + revision.ProductCategoryID + ")'>Revisione Rapida</button></td>";
+                tableString += "<td scope='col'><button class='btn btn-sm btn-outline-success' data-bs-toggle='modal' data-bs-target='#revisionModal' onclick='setRevisionData(" + revision.CompanyID + "," + revision.ProductCategoryID + ")'>Manutenzione Rapida</button></td>";
                 tableString += "</tr>";
             }
 

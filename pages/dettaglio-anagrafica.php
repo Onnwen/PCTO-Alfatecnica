@@ -234,9 +234,6 @@ if (isset($_SESSION['session_id'])) {
                         </div>
                     </div>
                 </div>
-                <div class="col">
-                    <button class="stampa">Stampa</button>
-                </div>
             </div>
 
 
@@ -282,7 +279,7 @@ if (isset($_SESSION['session_id'])) {
 
         <hr>
 
-        <!-- Tabella -->
+        <!-- Tabella apparati-->
         <div class="container">
             <div class="row">
                 <div class="d-flex justify-content-center nome-azienda">
@@ -309,7 +306,7 @@ if (isset($_SESSION['session_id'])) {
                             <thead>
                             <tr style="text-align: center;">
                                 <th scope="col"><a href="Mdl-Imp-Sprinkler-a-secco.php"
-                                                   style="color: black; text-decoration: none;">Impianti</a></th>
+                                                   style="color: black; text-decoration: none;">Tipologia apparato</a></th>
                                 <th scope="col">Quantità</th>
                                 <th scope="col">Data ultima manutenzione</th>
                                 <th scope="col"></th>
@@ -319,6 +316,30 @@ if (isset($_SESSION['session_id'])) {
 
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- Tabella impianti -->
+        <div class="container">
+            <div class="row">
+                <div class="d-flex justify-content-center nome-azienda">
+                    <div class="row">
+                        <div class="col-12">
+                            <h4>Lista impianti</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="table-responsive">
+                        <h1 style="margin-top: 3%;text-align: center;color: burlywood;font-size: xxx-large">... Lavori in corso ...</h1>
                     </div>
                 </div>
             </div>
@@ -430,6 +451,24 @@ if (isset($_SESSION['session_id'])) {
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="modal fade" id="printProductModal" tabindex="-1" aria-labelledby="printProductModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="printProductTitle">Stampa di una singola categoria di apparati o impianti - Informazioni</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Per poter stampare una singola categoria di apparati o impianti, è necessario selezionare la categoria di apparati
+                    o impianti desiderata, e premere il tasto di colore azzurro con l'icona di una stampante sulla planimetria.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Ho capito</button>
+                </div>
+            </div>
+        </div>
         </div>
 
         <br>
@@ -670,7 +709,7 @@ if (isset($_SESSION['session_id'])) {
                 var day = convertedStartDate.getDate();
                 var month = convertedStartDate.getMonth() + 1;
                 var year = convertedStartDate.getFullYear();
-                return day + "/" + month + "/" + year + " " + hours + ":" + minutes;
+                return day + "/" + month + "/" + year;
             }
 
             $(window).on('load', function () {
@@ -690,7 +729,7 @@ if (isset($_SESSION['session_id'])) {
                                 '<button style="margin: 2" class="btn btn-outline-success" onclick="window.location.href=\'modifica-categoria.php?product_category_id=' + resp[i].idCategoria + '&company_id=' + idAnag + '\'"><i class="fa-solid fa-pen"></i></button>' +
                                 '<button style="margin: 2" class="btn btn-outline-info" onclick="window.location.href=\'dettaglio-categoria.php?product_category_id=' + resp[i].idCategoria + '&company_id=' + idAnag + '\'"><i class="fa-solid fa-circle-info"></i></button>' +
                                 '<button style="margin: 2" class="btn btn-outline-danger" onclick="onDeleteClick(' + resp[i].idCategoria + ',value)" value="' + resp[i].nomeCategoria + '"><i class="fa-solid fa-trash-can"></i></button>' +
-                                '<button style="margin: 2" class="btn btn-outline-success" onclick="onPrintClick(value)" value="' + resp[i].nomeCategoria + '"><i class="fa-solid fa-print"></i></button>' +
+                                '<button style="margin: 2" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#printProductModal" data-bs-whatever="printProductModal"><i class="fa-solid fa-print"></i></button>' +
                                 '</td>' +
                                 '</tr>';
                         }
@@ -716,26 +755,6 @@ if (isset($_SESSION['session_id'])) {
                     });
                     location.reload()
                 })
-            }
-
-            function onPrintClick(categoria) {
-                for (let i = 0; i < group.children.length; i++) {
-                    let prova = group.children[i];
-                    if (group.children[i].attrs.name !== categoria) {
-                        prova.visible(false);
-                    } else {
-                        prova.visible(true);
-                    }
-                }
-                var nomeAz = '<?php echo $arrayAna['nomeAzienda']; ?>';
-                var dataURL = stage.toDataURL({
-                    pixelRatio: 3
-                });
-                downloadURI(dataURL, 'planimetria' + nomeAz + categoria + '.png');
-                for (let i = 0; i < group.children.length; i++) {
-                    let prova = group.children[i];
-                    prova.visible(true);
-                }
             }
 
 
