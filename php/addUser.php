@@ -11,28 +11,18 @@ require '../vendor/autoload.php';
 
 require_once('connessione.php');
 
-if (isset($_POST["name"]) && isset($_POST["surname"]) && isset($_POST["email"]) && isset($_POST["company_id"]) && isset($_POST["activedByCompany"])) {
-
-
+if (isset($_POST["name"]) && isset($_POST["surname"]) && isset($_POST["email"]) && isset($_POST["role"]) && isset($_POST["company_id"])) {
     $name = isset($_POST['name']) ? $_POST['name'] : '';
     $surname = isset($_POST['surname']) ? $_POST['surname'] : '';
     $email = isset($_POST['email']) ? $_POST['email'] : '';
     $companyId = isset($_POST['company_id']) ? $_POST['company_id'] : '';
-    $activedByCompany = isset($_POST['$activedByCompany']) ? $_POST['$activedByCompany'] : '';
+    $role = isset($_POST['role']) ? $_POST['role'] : '';
 
     $insertUser =
-        "INSERT INTO Users (`email`,`hashed_password`,`first_name`,`last_name`,`role`,`active`, `activedByCompany`)
-        values ('" . $email . "' , '' , '" . $name . "' , '" . $surname . "' , 0 , 0, 0)"; //after everyone must be only user and not admin(1)
+        "INSERT INTO Users (`email`,`hashed_password`,`first_name`,`last_name`,`role`,`active`, `activedByCompany`) values ('" . $email . "' , '' , '" . $name . "' , '" . $surname . "' , " . $role . " , 1, 0)"; //after everyone must be only user and not admin(1)
     $insertUser_Company =
-        "INSERT INTO User_Company (`user_id`,`company_id`)
-        VALUES ((SELECT Users.user_id FROM Users WHERE Users.email = '" . $email . "'), (SELECT id FROM Companies WHERE Companies.unique_Code = '" . $companyCode . "'))";
-    $select = "SELECT email, first_name
-           FROM Users
-           WHERE email = '" . $email . "';";
-    $getMailOfAdmins = "SELECT email
-                   FROM Users
-                   WHERE role = 1";
-
+        "INSERT INTO User_Company (`user_id`,`company_id`) VALUES ((SELECT Users.user_id FROM Users WHERE Users.email = '" . $email . "'), $companyId)";
+    $select = "SELECT email, first_name FROM Users WHERE email = '" . $email . "';";
     $pre = $pdo->prepare($select);
     $pre->execute();
     $check = $pre->fetch(PDO::FETCH_ASSOC);
@@ -300,10 +290,10 @@ if (isset($_POST["name"]) && isset($_POST["surname"]) && isset($_POST["email"]) 
     <center>
         <img class="center" src="https://gestionale.alfatecnicaantincendio.it/img/logo.png" height="200" alt="Alfatecnica">
     </center>
-    <p>Buongiorno ' . $check["first_name"] . ',</p>
+    <p>Buongiorno ' . $name . ',</p>
     <p>Ricevi questa mail perch&egrave; sei stato registrato su Alfatecnica da un amministratore.</p>
     <center>
-        <a class="center" href="https://gestionale.alfatecnicaantincendio.it/pages/setPassword.php?email=' . $check['email'] . '" target="_blank">Scegli password</a>
+        <a class="center" href="https://gestionale.alfatecnicaantincendio.it/pages/setPassword.php?email=' . $email . '" target="_blank">Scegli password</a>
     </center>
 </div>
 

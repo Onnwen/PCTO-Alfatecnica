@@ -63,6 +63,7 @@ if (isset($_SESSION['session_id'])) {
                     );
                 };
                 function updateDB() {
+                    debugger;
                     let newPassword = $('#newPassword');
                     let confirmPassword = $('#confirmPassword');
                     valueControl = true;

@@ -40,7 +40,7 @@ if (isset($_SESSION['session_id'])) {
     <div class="container-fluid">
         <div class="row w-100">
             <div class="col-1">
-                <button disabled style="float: right" type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addUserModal" data-bs-whatever="addUser" id="openAddUser">
+                <button style="float: right" type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addUserModal" data-bs-whatever="addUser" id="openAddUser">
                     <i class="bi bi-person-plus-fill"></i></button>
             </div>
             <div class="col-7 d-inline-flex">
@@ -123,7 +123,7 @@ if (isset($_SESSION['session_id'])) {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form onchange="checkForm()">
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="addNameLabel">Nome</span>
                             <input class="form-control" type="text" id="name" aria-describedby="addNameLabel">
@@ -447,6 +447,7 @@ if (isset($_SESSION['session_id'])) {
         }
 
         $("#addUserModal").on("show.bs.modal", function () {
+            checkForm();
             $.post("../php/getCompanies.php", function (response) {
                 let toPrint = "<option></option>";
                 for (let company of response){
@@ -456,7 +457,6 @@ if (isset($_SESSION['session_id'])) {
             }, "json");
         })
          function selectionRoleChange(){
-
              let val = $("#selectCompany").val();
              if(val === "1" || val === "0"){
                  $("#role").attr("disabled", true);
@@ -465,38 +465,54 @@ if (isset($_SESSION['session_id'])) {
              }
          }
 
+        function checkForm() {
+            let name = $("#name").val();
+            let surname = $("#surname").val();
+            let email = $("#email").val();
+            let role = $("#role").val();
+            let company = $("#selectCompany").val();
+            if (name === "" || surname === "" || email === "" || role === "" || company === "") {
+                $("#addUserButton").attr("disabled", true);
+            } else {
+                $("#addUserButton").removeAttr("disabled");
+            }
+        }
+
 
         function addUser() {
             const confirmButton = $("#addUserButton");
-            confirmButton.click(function () {
-                confirmButton.prop('disabled', true);
-                confirmButton.html('<div class="spinner-border spinner-border-sm" role="status"></div>');
-                $.post("../php/addUser.php", {})
-                    .done(function (resp) {
-                        if (resp === '1') {
-                            $('#activationModal').modal('hide');
-                            confirmButton.removeAttr('disabled');
-                            confirmButton.html('Aggiungi');
-                            $('#successModal').modal('show');
-                        } else if (resp === '0') {
-                            $('#activationModal').modal('hide');
-                            confirmButton.removeAttr('disabled');
-                            confirmButton.html('Aggiungi');
-                            $('#errorModal').modal('show');
-                        } else {
-                            $('#activationModal').modal('hide');
-                            confirmButton.removeAttr('disabled');
-                            confirmButton.html('Aggiungi');
-                            $("#errorModal").modal('show');
-                        }
-                    })
-                    .fail(function () {
-                        $('#activationModal').modal('hide');
+            confirmButton.prop('disabled', true);
+            confirmButton.html('<div class="spinner-border spinner-border-sm" role="status"></div>');
+            let name = $("#name").val();
+            let surname = $("#surname").val();
+            let email = $("#email").val();
+            let role = $("#role").val();
+            let company = $("#selectCompany").val();
+            $.post("../php/addUser.php", {name: name, surname: surname, email: email, role: role, company_id: company})
+                .done(function (resp) {
+                    if (resp === 'mailDone') {
+                        $('#addUserModal').modal('hide');
+                        confirmButton.removeAttr('disabled');
+                        confirmButton.html('Aggiungi');
+                        $('#successModal').modal('show');
+                    } else if (resp === 'userAlreadyRegistered') {
+                        $('#addUserModal').modal('hide');
+                        confirmButton.removeAttr('disabled');
+                        confirmButton.html('Aggiungi');
+                        $('#errorModal').modal('show');
+                    } else {
+                        $('#addUserModal').modal('hide');
                         confirmButton.removeAttr('disabled');
                         confirmButton.html('Aggiungi');
                         $("#errorModal").modal('show');
-                    })
-            })
+                    }
+                })
+                .fail(function () {
+                    $('#activationModal').modal('hide');
+                    confirmButton.removeAttr('disabled');
+                    confirmButton.html('Aggiungi');
+                    $("#errorModal").modal('show');
+                })
         }
 
         function search() {
