@@ -13,10 +13,10 @@ echo '<nav class="navbar navbar-expand-lg navbar-light" style="background-color:
                     <a class="nav-link" href="lista-anagrafica.php">Anagrafica</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="lista_revisioni.php">Revisioni</a>
+                    <a class="nav-link" href="lista_revisioni.php">Manutenzione programmata</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="lista-prodotti.php">Prodotti</a>
+                    <a class="nav-link" href="lista-prodotti.php">Apparati ed impianti</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="lista-utenti.php">Utenti</a>

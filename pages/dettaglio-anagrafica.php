@@ -288,7 +288,7 @@ if (isset($_SESSION['session_id'])) {
                 <div class="d-flex justify-content-center nome-azienda">
                     <div class="row">
                         <div class="col-12">
-                            <h4>Lista voci</h4>
+                            <h4>Lista apparati</h4>
                         </div>
                     </div>
                 </div>
