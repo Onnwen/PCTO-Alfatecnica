@@ -3,7 +3,7 @@ session_start();
 require_once("../php/connessione.php");
 if (isset($_SESSION['session_id'])) {
 ?>
-
+    <!DOCTYPE html>
     <html>
 
     <head>
@@ -22,13 +22,99 @@ if (isset($_SESSION['session_id'])) {
     <body>
         <?php require_once("navbar.php"); ?>
 
+        <!-- Modal Revisioni-->
+        <div class="modal fade" id="revisionModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="revisionModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="revisionModalLabel">Registra Manutenzione</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <label for="basic-url" class="form-label">Manutenzione</label>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="companyNameLabel">Azienda</span>
+                                        <select class="form-control" id="companyName" aria-describedby="companyNameLabel">
+                                            <option disabled selected value="">Seleziona Azienda</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="productNameLabel">Prodotto</span>
+                                        <select class="form-control" id="productName" aria-describedby="productNameLabel">
+                                            <option disabled selected value="">Seleziona Prodotto</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <label for=" basic-url" class="form-label">Data Manutenzione</label>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="addDateLabel">Data</span>
+                                        <input class="form-control" type="date" id="revisionDate" aria-describedby="addDateLabel">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="revisionModalCloseButton" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                        <button id="revisionModalConfirmButton" type="button" class="btn btn-success" onclick="makeNewRevision()">Conferma</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Errori -->
+        <div class="modal fade" id="errorModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-x1 modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="errorModalLabel">Errore registrazione!</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>La registrazione di questa Manutenzione è andata in errore!</p>
+                        <p id="revisionErrorDescription"></p>
+                        <p>Codice errore: <span id="revisionErrorCode"></span></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="errorModalCloseButton" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Successo -->
+        <div class="modal fade" id="successModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-x1 modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="successModalLabel">Manutenzione registrata con successo!</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>La registrazione di questa Manutenzione è andata a buon fine!</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="successModalCloseButton" type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="window.location.reload()">Chiudi</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         <!-- Tabella -->
         <div class="container">
             <div class="row">
                 <div class="d-flex justify-content-center nome-azienda">
                     <div class="row">
                         <div class="col-12">
-                            <h4>Revisioni</h4>
+                            <h4>Manutenzioni programmate e controlli</h4>
                         </div>
                     </div>
                 </div>
@@ -50,16 +136,46 @@ if (isset($_SESSION['session_id'])) {
                                         Categoria Prodotto
                                     </th>
                                     <th scope="col">
-                                        Data Ultima Revisione
+                                        Data Ultima Manutenzione
                                     </th>
                                     <th scope="col">
-                                        Data Scadenza Revisione
+                                        Data Scadenza Manutenzione
+                                    </th>
+                                    <th scope="col">
+                                        Stato
+                                    </th>
+                                    <th scope="col">
+                                        Azioni
                                     </th>
                                 </tr>
                             </thead>
                             <tbody id="ToFill">
                             </tbody>
                         </table>
+                        <nav>
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination justify-content-center ">
+                                    <li class="page-item">
+                                        <button class="page-link" id="previousPageButton" aria-label="Previous " disabled onclick="previousPage();">
+                                            <span aria-hidden="true">«</span>
+
+                                        </button>
+                                    </li>
+                                    <li class="page-item">
+                                        <div class="page-link" aria-label="Pagina corrente">
+                                            <span id="pageNumber"></span>
+                                        </div>
+                                    </li>
+                                    <li class="page-item">
+                                        <button class="page-link" id="nextPageButton" aria-label="Next " onclick="nextPage();">
+                                            <span aria-hidden="true">»</span>
+                                        </button>
+                                    </li>
+                                </ul>
+                            </nav>
+                            <div class="justify-content-center" style="display: flex;">
+                                <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#revisionModal" onclick="clearDataFromModal()">Registra Manutenzione</button>
+                            </div>
                     </div>
                 </div>
             </div>
@@ -70,43 +186,179 @@ if (isset($_SESSION['session_id'])) {
         <?php require_once("footer.php"); ?>
     </body>
     <script>
-        $(document).ready(function() {
-            $.get("../php/getRevisions.php", function(response) {
-                // Stampa le revisioni nella tabella
+        let preselectedProduct = null;
+        let revisionsPerPage = 5; // TODO: Trovare il valore ottimale in base alla dimensione dello schermo
+        let maxPageNumber = 0;
+        let currentPage = 0;
+        let allRevisions = [];
 
-                let tableString = "";
+        function makeNewRevision() {
+            let productId = $("#productName").val();
+            let companyId = $("#companyName").val();
+            let revisionDate = $("#revisionDate").val();
 
-                for (let i = 0; i < response.length; i++) { // TODO: Fare paginatore? 
-                    revision = response[i];
+            $.post("../php/revisions/makeRevision.php", {
+                product: productId,
+                company: companyId,
+                revisionDate: revisionDate
+            }, function(response) {
+                $("#revisionModal").modal("hide");
+                $("#successModal").modal("show");
+            }).fail(function(response) {
 
-                    let statusColor = "";
+                $("#revisionErrorCode").html(response.status);
+                let errorDescriptionString = "";
 
-                    let DeadlineDate = new Date(revision.Deadline);
-                    let today = new Date();
-
-                    let millisecondDifference = DeadlineDate - today;
-                    let monthDifference = millisecondDifference / 2592000000;
-
-                    console.log(monthDifference);
-
-                    if (monthDifference <= 0) {
-                        // Revisione scaduta
-                        statusColor = "red";
-                    } else if (monthDifference <= 1) { // TODO: Definire precisamente cosa vuol dire "sta per scadere"
-                        // Manca circa un mese; considero come "Poco"
-                        statusColor = "orange";
-                    } else {
-                        statusColor = "green";
-                    }
-
-                    tableString += "<tr style='text-align: center; color: " + statusColor + "'>";
-                    tableString += ("<td scope='col'>" + revision.CompanyName + "</td>" + "<td scope='col'>" + revision.ProductCategoryName + "</td>" + "<td scope='col'>" + revision.LastRevision + "</td>" + "<td scope='col'>" + revision.Deadline + "</td>");
-
-                    tableString += "</tr>";
+                switch (response.status) {
+                    case 400:
+                        errorDescriptionString = "Il modulo della registrazione non è stato compilato correttamente!";
+                        break;
+                    case 500:
+                        errorDescriptionString = "Il server ha un problema tecnico!";
+                        break;
+                    default:
+                        errorDescriptionString = "Errore non riconosciuto; Comunicare il codice errore qua sotto agli sviluppatori!";
+                        break;
                 }
 
-                $("#ToFill").html(tableString);
-            }, "json");
+                $("#revisionErrorDescription").html(errorDescriptionString);
+
+                $("#revisionModal").modal("hide");
+                $("#errorModal").modal('show');
+            });
+        }
+
+        function setRevisionData(companyId, productId) {
+            preselectedProduct = productId;
+
+            $("#companyName").val(companyId);
+            $("#companyName").change();
+        }
+
+        function clearDataFromModal() {
+            $("#companyName").val("");
+            $("#productName").val("");
+
+            changeSelectedCompany();
+
+            preselectedProduct = null;
+        }
+
+        function changeSelectedCompany() {
+            // Fai in modo che quando seleziono un'azienda vengono automaticamente aggiornate le opzioni per i prodotti
+            let selectedCompany = $("#companyName").val();
+
+            let generatedOptions = "<option disabled selected value=''>Seleziona Prodotto</option>";
+
+            if (selectedCompany === null) {
+                // Non è necessario fare una chiamata se stiamo deselezionando l'azienda
+                $("#productName").html(generatedOptions);
+            } else {
+                $.post("../php/viewCategories.php", {
+                    idAnag: selectedCompany
+                }, function(response) {
+                    let receivedProducts = JSON.parse(response);
+
+                    receivedProducts.forEach(product => {
+                        generatedOptions += ("<option value='" + product.idCategoria + "'>" + product.nomeCategoria + "</option>");
+                    });
+
+                    $("#productName").html(generatedOptions);
+
+                    // Per fare in modo che il bottone "Manutenzione rapida" possa richiedere di settare un prodotto in anticipo
+                    if (preselectedProduct !== null) {
+                        $("#productName").val(preselectedProduct);
+                    }
+                });
+            }
+
+        }
+
+        function loadRevisions(pageNumber) {
+            // Stampa le revisioni nella tabella
+
+            let tableString = "";
+
+            for (let i = revisionsPerPage * pageNumber; i < revisionsPerPage * (pageNumber + 1) && i < allRevisions.length; i++) {
+                revision = allRevisions[i];
+
+                let statusColor = "";
+                let statusText = "";
+
+                let DeadlineDate = new Date(revision.Deadline);
+                let today = new Date();
+
+                let millisecondDifference = DeadlineDate - today;
+                let monthDifference = millisecondDifference / 2592000000;
+
+                if (monthDifference <= 0) {
+                    // Manutenzione scaduta
+                    statusColor = "red";
+                    statusText = "Scaduta";
+                } else if (monthDifference <= 1) { // TODO: Definire precisamente cosa vuol dire "sta per scadere"
+                    // Manca circa un mese; considero come "Poco"
+                    statusColor = "orange";
+                    statusText = "In Scadenza";
+                } else {
+                    statusColor = "green";
+                    statusText = "Regolare";
+                }
+
+                tableString += "<tr style='text-align: center;'>";
+                tableString += ("<td scope='col'>" + revision.CompanyName + "</td>" + "<td scope='col'>" + revision.ProductCategoryName + "</td>" + "<td scope='col'>" + revision.LastRevision + "</td>" + "<td scope='col'>" + revision.Deadline + "</td><td style='color:" + statusColor + "'>" + statusText + "</td>");
+                // FIXME: Trovare un modo migliore per passare i dati al modal; per adesso setRevisionData funziona, ma non è molto elegante
+                tableString += "<td scope='col'><button class='btn btn-sm btn-outline-success' data-bs-toggle='modal' data-bs-target='#revisionModal' onclick='setRevisionData(" + revision.CompanyID + "," + revision.ProductCategoryID + ")'>Manutenzione Rapida</button></td>";
+                tableString += "</tr>";
+            }
+
+            $("#ToFill").html(tableString);
+        }
+
+        function nextPage() {
+            if (currentPage + 1 < maxPageNumber) {
+                currentPage++;
+                loadCurrentPage();
+            }
+        }
+
+        function previousPage() {
+            if (currentPage > 0) {
+                currentPage--;
+                loadCurrentPage();
+            }
+        }
+
+        function loadCurrentPage() {
+            let shouldDisablePreviousPageButton = currentPage == 0;
+            let shouldDisableNextPageButton = currentPage + 1 == maxPageNumber;
+
+            $("#previousPageButton").prop("disabled", shouldDisablePreviousPageButton);
+            $("#nextPageButton").prop("disabled", shouldDisableNextPageButton);
+
+            $("#pageNumber").html((currentPage + 1) + "/" + Math.ceil(maxPageNumber));
+            loadRevisions(currentPage);
+        }
+
+        $(document).ready(function() {
+            $("#companyName").change(changeSelectedCompany);
+
+            $.getJSON("../php/revisions/getRevisions.php", function(response) {
+                allRevisions = response;
+
+                maxPageNumber = response.length / revisionsPerPage;
+
+                loadCurrentPage();
+            });
+
+            $.getJSON("../php/viewAnagr.php", function(response) {
+                let generatedCompanyOptions = "<option disabled selected value=''>Seleziona Azienda</option>";
+
+                response.forEach(company => {
+                    generatedCompanyOptions += ("<option value='" + company.id + "'>" + company.nome + "</option>");
+                });
+
+                $("#companyName").html(generatedCompanyOptions);
+            });
         });
     </script>
 

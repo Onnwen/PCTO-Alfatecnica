@@ -14,3 +14,7 @@ deploy.sh
 .idea
 ._*
 .DS_Store
+
+# Merda di composer
+composer.phar
+/vendor/
