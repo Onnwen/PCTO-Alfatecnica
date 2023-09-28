@@ -465,13 +465,24 @@ if (isset($_SESSION['session_id'])) {
              }
          }
 
+         //controll if mail is sintex coorect with regex
+            function checkMail() {
+            debugger;
+                let mail = $("#email").val();
+                let regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+                if (regex.test(mail)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
         function checkForm() {
             let name = $("#name").val();
             let surname = $("#surname").val();
             let email = $("#email").val();
             let role = $("#role").val();
             let company = $("#selectCompany").val();
-            if (name === "" || surname === "" || email === "" || role === "" || company === "") {
+            if (name === "" || surname === "" || email === "" || role === "" || company === "" || !checkMail()) {
                 $("#addUserButton").attr("disabled", true);
             } else {
                 $("#addUserButton").removeAttr("disabled");

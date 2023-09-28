@@ -1,17 +1,14 @@
 <?php
 session_start();
 require_once('../php/connessione.php');
-if (isset($_SESSION['session_id'])) {
-    header('location: pages/lista-anagrafica.php');
-} else {
-    $email = $_GET['email'];
-    if (isset($email)) {
-        $query = "SELECT user_id as idUser FROM Users WHERE email = '$email'";
-        $pre = $pdo->prepare($query);
-        $pre->execute();
-        $check = $pre->fetch(PDO::FETCH_ASSOC);
-        $idUser = $check['idUser'];
-        ?>
+$email = $_GET['stringRetrievePassword'];
+if (isset($email)) {
+    $query = "SELECT user_id as idUser FROM Users WHERE stringRetrievePassword = '$email'";
+    $pre = $pdo->prepare($query);
+    $pre->execute();
+    $check = $pre->fetch(PDO::FETCH_ASSOC);
+    $idUser = $check['idUser'];
+    ?>
         <html>
 
         <head>
@@ -271,6 +268,5 @@ if (isset($_SESSION['session_id'])) {
 
         </html>
         <?php
-    }
 }
 ?>

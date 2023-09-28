@@ -8,7 +8,16 @@ require '../vendor/phpmailer/phpmailer/src/Exception.php';
 require '../vendor/phpmailer/phpmailer/src/PHPMailer.php';
 require '../vendor/phpmailer/phpmailer/src/SMTP.php';
 require '../vendor/autoload.php';
-
+function generateRandomString($length = 20)
+{
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $charactersLength = strlen($characters);
+    $randomString = '';
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[rand(0, $charactersLength - 1)];
+    }
+    return $randomString;
+}
 require_once('connessione.php');
 
 if (isset($_POST["name"]) && isset($_POST["surname"]) && isset($_POST["email"]) && isset($_POST["role"]) && isset($_POST["company_id"])) {
@@ -17,9 +26,10 @@ if (isset($_POST["name"]) && isset($_POST["surname"]) && isset($_POST["email"]) 
     $email = isset($_POST['email']) ? $_POST['email'] : '';
     $companyId = isset($_POST['company_id']) ? $_POST['company_id'] : '';
     $role = isset($_POST['role']) ? $_POST['role'] : '';
+    $stringRetrievePassword = generateRandomString();
 
     $insertUser =
-        "INSERT INTO Users (`email`,`hashed_password`,`first_name`,`last_name`,`role`,`active`, `activedByCompany`) values ('" . $email . "' , '' , '" . $name . "' , '" . $surname . "' , " . $role . " , 1, 0)"; //after everyone must be only user and not admin(1)
+        "INSERT INTO Users (`email`,`hashed_password`,`first_name`,`last_name`,`role`,`stringRetrievePassword`,`active`, `activedByCompany`) values ('" . $email . "' , '' , '" . $name . "' , '" . $surname . "' , " . $role . " ," . $stringRetrievePassword . ",1, 0)"; //after everyone must be only user and not admin(1)
     $insertUser_Company =
         "INSERT INTO User_Company (`user_id`,`company_id`) VALUES ((SELECT Users.user_id FROM Users WHERE Users.email = '" . $email . "'), $companyId)";
     $select = "SELECT email, first_name FROM Users WHERE email = '" . $email . "';";
@@ -32,6 +42,7 @@ if (isset($_POST["name"]) && isset($_POST["surname"]) && isset($_POST["email"]) 
             $pre->execute();
             $pre = $pdo->prepare($insertUser_Company);
             $pre->execute();
+
 
             //mail to user
             $mailer = new PHPMailer;
@@ -293,7 +304,7 @@ if (isset($_POST["name"]) && isset($_POST["surname"]) && isset($_POST["email"]) 
     <p>Buongiorno ' . $name . ',</p>
     <p>Ricevi questa mail perch&egrave; sei stato registrato su Alfatecnica da un amministratore.</p>
     <center>
-        <a class="center" href="https://gestionale.alfatecnicaantincendio.it/pages/setPassword.php?email=' . $email . '" target="_blank">Scegli password</a>
+        <a class="center" href="https://gestionale.alfatecnicaantincendio.it/pages/setPassword.php?stringRetrievePassword=' . $stringRetrievePassword . '" target="_blank">Scegli password</a>
     </center>
 </div>
 
