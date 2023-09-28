@@ -417,7 +417,7 @@ if (isset($_SESSION['session_id'])) {
                 confirmButton.click(function () {
                 confirmButton.prop('disabled', true);
                 confirmButton.html('<div class="spinner-border spinner-border-sm" role="status"></div>');
-                $.post("../php/confirmUser.php", {user_id: id,confirmed: 1})
+                $.post("../php/confirmUser.php", {user_id: id,confirmed: 0})
                     .done(function (resp) {
                         if (resp === '1') {
                             $('#activationModal').modal('hide');

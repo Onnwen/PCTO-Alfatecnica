@@ -29,7 +29,7 @@ if (isset($_POST["name"]) && isset($_POST["surname"]) && isset($_POST["email"]) 
     $stringRetrievePassword = generateRandomString();
 
     $insertUser =
-        "INSERT INTO Users (`email`,`hashed_password`,`first_name`,`last_name`,`role`,`stringRetrievePassword`,`active`, `activedByCompany`) values ('" . $email . "' , '' , '" . $name . "' , '" . $surname . "' , " . $role . " ," . $stringRetrievePassword . ",1, 0)"; //after everyone must be only user and not admin(1)
+        "INSERT INTO Users (`email`,`hashed_password`,`first_name`,`last_name`,`role`,`stringRetrievePassword`,`active`, `activedByCompany`) values ('" . $email . "' , '' , '" . $name . "' , '" . $surname . "' , " . $role . " ,'" . $stringRetrievePassword . "',1, 0)"; //after everyone must be only user and not admin(1)
     $insertUser_Company =
         "INSERT INTO User_Company (`user_id`,`company_id`) VALUES ((SELECT Users.user_id FROM Users WHERE Users.email = '" . $email . "'), $companyId)";
     $select = "SELECT email, first_name FROM Users WHERE email = '" . $email . "';";
