@@ -1,4 +1,5 @@
 <?php
+require_once('../connessione.php');
 
 require_once('connessione.php');
 
