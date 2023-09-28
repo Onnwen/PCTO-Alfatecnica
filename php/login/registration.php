@@ -300,7 +300,7 @@ if(!$check){
     <p>Buongiorno ' . $name .',</p>
     <p>Ricevi questa mail perch&eacute hai eseguito la registrazione al nostro sito. Devi per questo verificare la tua mail e poi aspettare che l\'amministratore dell\'azienda a cui ti sei registrato ti accetti, ti sar&aacute poi inviata un\'altra mail per l\'accettazione.</p>
     <center>
-        <a class="center" href="https://gestionale.alfatecnicaantincendio.it/pages/confirmRegistration.php?email='. $email .'" target="_blank">Cambia password</a>
+        <a class="center" href="https://gestionale.alfatecnicaantincendio.it/pages/registrationConfirm.php?email='. $email .'" target="_blank">Cambia password</a>
     </center>
 </div>
 
