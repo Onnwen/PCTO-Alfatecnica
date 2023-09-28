@@ -15,6 +15,7 @@ $password = isset($_POST['password']) ? $_POST['password'] : '';
 $companyCode = isset($_POST['companyCode']) ? $_POST['companyCode'] : '';
 $password = password_hash($password,PASSWORD_DEFAULT);
 
+
 $insertUser =
     "INSERT INTO Users (`email`,`hashed_password`,`first_name`,`last_name`,`role`,`active`, `activedByCompany`)
         values ('".$email."' , '".$password."' , '".$name."' , '".$surname."' , 0 , 0, 0)"; //after everyone must be only user and not admin(1)
@@ -30,6 +31,7 @@ $getMailOfAdmins = "SELECT email
 
 $pre = $pdo->prepare($select);
 $pre->execute();
+$selectResult = array();
 $check = $pre->fetch(PDO::FETCH_ASSOC);
 if(!$check){
     try {
@@ -295,10 +297,10 @@ if(!$check){
     <center>
         <img class="center" src="https://gestionale.alfatecnicaantincendio.it/img/logo.png" height="200" alt="Alfatecnica">
     </center>
-    <p>Buongiorno ' . $check["first_name"] .',</p>
+    <p>Buongiorno ' . $name .',</p>
     <p>Ricevi questa mail perch&eacute hai eseguito la registrazione al nostro sito. Devi per questo verificare la tua mail e poi aspettare che l\'amministratore dell\'azienda a cui ti sei registrato ti accetti, ti sar&aacute poi inviata un\'altra mail per l\'accettazione.</p>
     <center>
-        <a class="center" href="https://gestionale.alfatecnicaantincendio.it/pages/confirmRegistration.php?email='. $check['email'] .'" target="_blank">Cambia password</a>
+        <a class="center" href="https://gestionale.alfatecnicaantincendio.it/pages/confirmRegistration.php?email='. $email .'" target="_blank">Cambia password</a>
     </center>
 </div>
 
