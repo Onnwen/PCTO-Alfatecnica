@@ -7,11 +7,12 @@ $visualizationType = $_POST["type"];
 if (isset($_FILES["icon"])) {
     $icon_image = $_FILES["icon"];
     $target_dir_icon = "img/prodotti/";
-    $target_file_icon = $target_dir_icon . $productCategoryName;
+    $icon_image_file_type = strtolower(pathinfo($icon_image["name"], PATHINFO_EXTENSION));
+    $target_file_icon = $target_dir_icon . $productCategoryName . "." . $icon_image_file_type;
     $image_data = getimagesize($icon_image["tmp_name"]);
     $logo_image_width = $image_data[0];
     $logo_image_height = $image_data[1];
-    move_uploaded_file($icon_image["tmp_name"], getcwd() . "/../../" . $target_file_icon);
+    move_uploaded_file($icon_image["tmp_name"], getcwd() . "/../../" . $target_file_icon );
 }
 
 try {
@@ -24,8 +25,10 @@ try {
     if ($visualizationType == 0) {
         $fieldId = 0;
         $pdo->beginTransaction();
-        while ($_POST[$fieldId . "input"] !== null) {
-            $pdo->query("INSERT INTO Product_Fields (product_category_id, name) VALUES ('" . $newProductCategoryId . "', '" . $_POST[$fieldId . "input"] . "')");
+        while ($_POST[$fieldId . "input"]) {
+            $fieldIdForQuery=$_POST[$fieldId . "input"];
+            $queryInsertField = "INSERT INTO Product_Fields (product_category_id, name) VALUES ('" . $newProductCategoryId . "', '" . $fieldIdForQuery . "')";
+            $pdo->query($queryInsertField);
             $fieldId++;
         }
         $pdo->commit();
