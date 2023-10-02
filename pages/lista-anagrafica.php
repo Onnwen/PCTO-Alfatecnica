@@ -107,7 +107,7 @@ if (isset($_SESSION['session_id'])) {
                                         <span class="input-group-text" id="addCityLabel">Città</span>
                                         <input class="form-control" type="text" id="city" aria-describedby="addCityLabel">
                                         <span class="input-group-text" id="addCapLabel">CAP</span>
-                                        <input class="form-control" type="text" id="CAP" aria-describedby="addCapLabel">
+                                        <input class="form-control" type="number" id="CAP" aria-describedby="addCapLabel">
                                     </div>
                                 </div>
                                 <div class="col">
