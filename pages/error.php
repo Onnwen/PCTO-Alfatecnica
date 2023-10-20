@@ -1,11 +1,3 @@
-<?php
-    $error = $_SERVER['REDIRECT_STATUS'];
-    $error_title = '';
-    $error_message = '';
-    $error_title = 'Error '.$error;
-    $error_message = 'Unknown error';
-?>
-
 <!DOCTYPE html>
 <html lang="it" dir="ltr">
   <head>
@@ -21,7 +13,7 @@
         integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
         crossorigin="anonymous"></script>
     <script src="https://www.myersdaily.org/joseph/javascript/md5.js"></script>
-    <title>Error 404</title>
+    <title></title>
     <link rel="icon" href="../img/LogoBlack.png">
     <style>
         html,
@@ -44,8 +36,8 @@
             <div class="d-flex justify-content-center">
                 <img class="mb-4" src="../img/LogoBlack.png" alt="" width="250" height="200" style="margin-right: 20px;">
             </div>
-            <h1><?php  $error_title;  ?> </h1>
-            <p><?php  $error_title;  ?></p>
+            <h1>Errore</h1>
+            <p><b>È stato riscontrato un errore inaspettato</b></p>
         </main>
   </body>
 </html>
