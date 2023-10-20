@@ -28,7 +28,6 @@ if (isset($_SESSION['session_id'])) {
         }
         ?>
         <html>
-
         <head>
             <meta charset="UTF-8">
             <link rel="icon" href="../img/LogoBlack.png">
@@ -84,6 +83,22 @@ if (isset($_SESSION['session_id'])) {
             </div>
         </div>
 
+        <!-- Loading Modal -->
+        <div class="modal fade" id="loadingModal" data-bs-backdrop="static" tabindex="-1"
+             aria-labelledby="loadingModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="loadingModalLabel">Attendi</h5>
+                        <div class="spinner-border spinner-border-sm" role="status"></div>
+                    </div>
+                    <div class="modal-body">
+                        Caricamento dei dati in corso.
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Error Modal -->
         <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -104,22 +119,7 @@ if (isset($_SESSION['session_id'])) {
             </div>
         </div>
 
-        <!-- Loading Modal -->
-        <div class="modal fade" id="loadingModal" data-bs-backdrop="static" tabindex="-1"
-             aria-labelledby="loadingModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="loadingModalLabel">Attendi</h5>
-                        <div class="spinner-border spinner-border-sm" role="status"></div>
-                    </div>
-                    <div class="modal-body">
-                        Caricamento dei dati in corso.
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Cards -->
+        <!-- Informazioni azienda -->
         <div class="container">
             <div class="row">
                 <div class="d-flex justify-content-center nome-azienda">
@@ -239,11 +239,9 @@ if (isset($_SESSION['session_id'])) {
 
         </div>
 
-        <!-- Fine -->
-
         <hr>
 
-        <!-- Immagine -->
+        <!-- Planimetria -->
         <div class="container">
             <div class="row">
                 <div class="d-flex justify-content-center nome-azienda">
@@ -265,17 +263,6 @@ if (isset($_SESSION['session_id'])) {
                 <button class="stampa" id="stampaPDFPlan"><i class="fa-solid fa-print"></i></button>
             </div>
         </div>
-        <div class="container">
-            <div class="row">
-                <div class="d-flex justify-content-center bottone-mappa">
-                    <div class="col-12">
-                        <button class="btn btn-outline-info">Visualizza la mappa</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Fine -->
 
         <hr>
 
@@ -452,6 +439,7 @@ if (isset($_SESSION['session_id'])) {
             </div>
         </div>
 
+        <!-- Modal stampa di una singola categoria di apparati o impianti-->
         <div class="modal fade" id="printProductModal" tabindex="-1" aria-labelledby="printProductModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -479,8 +467,6 @@ if (isset($_SESSION['session_id'])) {
 
         <script type="text/javascript">
             var idAnag = <?php echo $idAnagrafica; ?>;
-
-            //PLANIMETRIA PAGINA PRINCIPALE
             var productsToShow;
             var sfondo;
             var div;
@@ -493,6 +479,7 @@ if (isset($_SESSION['session_id'])) {
             var srcSfondo;
             var tooltipLayer;
 
+            //Gestione della planimetria principale
             function loadPlanimetry(resp) {
                 sfondo = new Image();
                 div = document.getElementById('planimetria');
@@ -699,12 +686,9 @@ if (isset($_SESSION['session_id'])) {
             }
 
 
-            //TABELLA PRODOTTI
-
+            //Lista apparati
             function printData(startDate) {
                 var convertedStartDate = new Date(startDate);
-                var minutes = convertedStartDate.getMinutes();
-                var hours = convertedStartDate.getHours();
                 var day = convertedStartDate.getDate();
                 var month = convertedStartDate.getMonth() + 1;
                 var year = convertedStartDate.getFullYear();
@@ -756,13 +740,10 @@ if (isset($_SESSION['session_id'])) {
                 })
             }
 
-
-            //AGGIUNTA PRODOTTI
-
-            //SCELTA CATEGORIA PRODOTTO
+            //Aggiunta apparati
+            //Scelta categoria
             const selectCategoryModal = document.getElementById('modalSelectCategory');
             var idCategoria = null;
-
             function fillSelectProductModal(categoriesName) {
                 if (categoriesName) {
                     const select = document.getElementById('chooseCategory');
@@ -816,10 +797,8 @@ if (isset($_SESSION['session_id'])) {
 
 
             //Aggiunta del prodotto
-
             const addPrdocuctModal = document.getElementById("addProduct");
             var myInterval;
-
             function fillAddProductModal(attributesNames) {
                 if (attributesNames) {
                     const form = document.getElementById('formAddProduct');
@@ -984,12 +963,10 @@ if (isset($_SESSION['session_id'])) {
                 idCategoria = document.getElementById('chooseCategory').value;
                 if (idCategoria != null && idCategoria !== 0) {
                     fillAddProductModal();
-
                     $.post('../php/getProductFields.php', {
                         idCategoria: idCategoria
                     })
                         .always(function () {
-                            modalLoading();
                         })
                         .done(function (response) {
                             const categoryAttributes = JSON.parse(response);
@@ -1000,7 +977,6 @@ if (isset($_SESSION['session_id'])) {
                         })
                 }
             })
-
 
             function addProductToDB(productType) {
                 clearInterval(myInterval);
@@ -1019,7 +995,6 @@ if (isset($_SESSION['session_id'])) {
                 console.log(fields);
                 $.post('../php/addProduct.php', fields)
                     .always(function (response) {
-                        modalLoading();
                         if (response.status === 400) {
                             modalError(true);
                         }
@@ -1059,21 +1034,13 @@ if (isset($_SESSION['session_id'])) {
                 $("#errorModal").modal(!error ? 'hide' : 'show');
             }
 
-            function modalLoading(loading) {
-                $("#addProduct").modal(loading ? 'hide' : 'show');
-                $("#loadingModal").modal(!loading ? 'hide' : 'show');
-            }
-
             function modalConfirmation(confirmed) {
                 $("#addProduct").modal(confirmed ? 'hide' : 'show');
                 $("#confirmedModal").modal(!confirmed ? 'hide' : 'show');
             }
 
-
-            //VISUALIZZAZIONE CONDIZIONATA DELLA PLANIMETRIA PRINCIPALE E STAMPA
-
+            //Visualizzazione condizionata agli apparati
             function vistaCategoria(categoria) {
-
                 for (let i = 0; i < group.children.length; i++) {
                     var prova = group.children[i];
                     if (group.children[i].attrs.category === categoria) {
@@ -1090,7 +1057,8 @@ if (isset($_SESSION['session_id'])) {
                     prova.visible(true);
                 }
             });
-            //STAMPA DELLA PLANIMETRIA
+
+            //Stampa della planimetria
             $('#stampaPDFPlan').click(function () {
                 var nomeAz = '<?php echo $arrayAna['nomeAzienda']; ?>';
                 var dataURL = stage.toDataURL({
@@ -1111,9 +1079,8 @@ if (isset($_SESSION['session_id'])) {
 
         </script>
         </body>
-
         </html>
-        <?php
+<?php
     }
 } else {
     include_once('error.php');

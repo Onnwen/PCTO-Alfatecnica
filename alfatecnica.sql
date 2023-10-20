@@ -166,7 +166,7 @@ CREATE TABLE `planimetrie` (
 --
 
 INSERT INTO `planimetrie` (`id`, `path_img`, `width`, `height`) VALUES
-(1, 'img/planimetrie/download.png', 532, 392),
+(1, 'img/planimetrie/Dallara.png', 532, 392),
 (2, 'img/planimetrie/checojon-scaled.png', 532, 392),
 (3, 'img/planimetrie/planimetrie-case.jpg', 952, 692);
 
