@@ -1,5 +1,5 @@
 <?php
-    require_once('connessione.php');
+    require_once('connection/connection.php');
 
     $userNameSurname = isset($_POST['userNameSurname']) ? $_POST['userNameSurname'] : '';
     $company = isset($_POST['company']) ? $_POST['company'] : '';

@@ -1,5 +1,5 @@
 <?php
-require_once("../connessione.php");
+require_once("../connection/connection.php");
 
 $revisionedProduct = isset($_POST["product"]) ? $_POST["product"] : "";
 $revisionedCompany = isset($_POST["company"]) ? $_POST["company"] : "";

@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once("../php/connessione.php");
+require_once("../php/connection/connection.php");
 if(isset($_SESSION['session_id'])){
     $companyId = isset($_GET['id_ana']) ? $_GET['id_ana'] : '';
 
@@ -61,7 +61,7 @@ if(isset($_SESSION['session_id'])){
             let companyNotes = $('#companyNotes').val();
             let clientNotes = $('#clientNotes').val();
 
-            $.post('../php/modifyCompany.php', {
+            $.post('../php/updateCompany.php', {
                 id: id,
                 name: name,
                 site: site,

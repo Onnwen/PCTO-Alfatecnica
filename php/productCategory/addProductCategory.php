@@ -1,5 +1,5 @@
 <?php
-require_once('../connessione.php');
+require_once('../connection/connection.php');
 
 $productCategoryName = $_POST["name"];
 $visualizationType = $_POST["type"];

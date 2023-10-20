@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once("../php/connessione.php");
+require_once("../php/connection/connection.php");
 if (isset($_SESSION['session_id'])) {
 
 ?>
@@ -18,7 +18,7 @@ if (isset($_SESSION['session_id'])) {
         <script src="https://kit.fontawesome.com/c0c3eed4d9.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <title>Alfatecnica - Lista Anagrafica</title>
-        <link rel="icon" href="../img/logo.png">
+        <link rel="icon" href="../img/LogoBlack.png">
     </head>
 
     <body>
@@ -365,9 +365,9 @@ if (isset($_SESSION['session_id'])) {
             };
 
             if (requestedCompany === "" && requestedSite === "" && requestedDate === "") { //TODO: Controllare se la query string è vuota
-                requestDestination = "../php/viewAnagr.php";
+                requestDestination = "../php/getCompany.php";
             } else { // Renderizza i risultati del motore di ricerca
-                requestDestination = "../php/searchEngine.php";
+                requestDestination = "../php/getCompanyBySearch.php";
                 searchedQuery.nome_azienda = requestedCompany;
                 searchedQuery.sede = requestedSite;
                 searchedQuery.data = requestedDate;
@@ -433,7 +433,7 @@ if (isset($_SESSION['session_id'])) {
             formData.append('logo', logo);
 
             $.ajax({
-                url: isUpdating ? '../php/modifyCompany.php' : '../php/addCompany.php',
+                url: isUpdating ? '../php/updateCompany.php' : '../php/addCompany.php',
                 type: 'post',
                 data: formData,
                 contentType: false,
@@ -516,7 +516,7 @@ if (isset($_SESSION['session_id'])) {
                 editingCompany = modalType;
                 // modalLoading(true);
                 confirmButton.attr("onclick", "insertInDatabase(true)");
-                $.get('../php/companyInformations.php', {
+                $.get('../php/getCompanyInformations.php', {
                         id_ana: modalType
                     })
                     .always(function() {

@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('../connessione.php');
+require_once('../connection/connection.php');
 
 $email = isset($_POST['email']) ? $_POST['email'] : '';
 $pw = isset($_POST['pw']) ? $_POST['pw'] : '';

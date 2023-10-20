@@ -1,5 +1,5 @@
 <?php
-require_once('connessione.php');
+require_once('connection/connection.php');
 
 $idAnag = isset($_POST['idAnag']) ? $_POST['idAnag'] : 0;
 

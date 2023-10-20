@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('../php/connessione.php');
+require_once('../php/connection/connection.php');
 if (isset($_SESSION['session_id'])) {
     header('location: pages/lista-anagrafica.php');
 } else {
@@ -138,7 +138,7 @@ if (isset($_SESSION['session_id'])) {
                     <div class="row justify-content-center">
                         <div class="col-sm-12 col-md-10 col-lg-8 col-xl-8" >
                             <div class="form-wrap w-100 p-md-5 p-sm-1" style="background: rgba(109,109,109,0.09);width: 500px;border-radius: 20px">
-                                <img src="../img/logo.png" style="width: 100%;height: auto" alt="logo">
+                                <img src="../img/LogoBlack.png" style="width: 100%;height: auto" alt="logo">
                                 <p style="width: 100%;color: #1fa67b;font-size: 30px;text-align: center">Conferma dell'account</p>
                                 <label style="width: 100%; text-align: center">La tua registrazione è stata confermata, ora potrai accedere ai servizi della tua azienda, premendo sul tasto conferma verrai reindirizzato al login, potrai quinci eseguirlo senza problemi. Grazie per la tua registrazione.</label>
                                 <div class="d-flex justify-content-center">

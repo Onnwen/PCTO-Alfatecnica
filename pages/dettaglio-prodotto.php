@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('../php/connessione.php');
+require_once('../php/connection/connection.php');
 if(isset($_SESSION['session_id'])){
  ?>
 <!DOCTYPE html>
@@ -16,7 +16,7 @@ if(isset($_SESSION['session_id'])){
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
   <script src="https://kit.fontawesome.com/c0c3eed4d9.js" crossorigin="anonymous"></script>
   <title>Alfatecnica - Dettaglio Prodotti</title>
-  <link rel="icon" href="img/logo.png">
+  <link rel="icon" href="img/LogoBlack.png">
 </head>
 
 <body>

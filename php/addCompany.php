@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('connessione.php');
+require_once('connection/connection.php');
 
 $name = isset($_POST['name']) ? $_POST['name'] : '';
 $site = isset($_POST['site']) ? $_POST['site'] : '';
@@ -23,8 +23,8 @@ $logo = $_FILES["logo"];
 $target_dir_logo = "img/loghi/";
 $target_dir_planimetry = "img/planimetrie/";
 
-$target_file_logo = $target_dir_logo . $name; # FIXME: Controlla che il file non esista di già!
-$target_file_planimetry = $target_dir_planimetry . $name; #FIXME: Controlla che il file non esista di già!
+$target_file_logo = $target_dir_logo . $name . "." . strtolower(pathinfo($logo["name"], PATHINFO_EXTENSION)); # FIXME: Controlla che il file non esista di già!
+$target_file_planimetry = $target_dir_planimetry . $name  . "." . strtolower(pathinfo($planimetry_image["name"], PATHINFO_EXTENSION)); #FIXME: Controlla che il file non esista di già!
 
 $image_data = getimagesize($planimetry_image["tmp_name"]);
 

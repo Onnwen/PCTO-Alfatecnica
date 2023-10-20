@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('connessione.php');
+require_once('connection/connection.php');
 
 $id = isset($_POST['id']) ? $_POST['id'] : ''; # TODO: valida che l'id deve esserci
 $name = isset($_POST['name']) ? $_POST['name'] : '';

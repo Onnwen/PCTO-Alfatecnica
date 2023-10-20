@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once("../php/connessione.php");
+require_once("../php/connection/connection.php");
 
 $companyId = isset($_GET['id_ana']) ? $_GET['id_ana'] : '';
 

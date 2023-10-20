@@ -1,5 +1,5 @@
 <?php
-require_once('connessione.php');
+require_once('connection/connection.php');
 $select = "SELECT COUNT(*) AS countUsers
                    FROM Users
                    WHERE activedByCompany = 0;";

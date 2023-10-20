@@ -1,5 +1,5 @@
 <?php
-require_once('../connessione.php');
+require_once('../connection/connection.php');
 if (isset($_GET['id'])) {
     $productCategoryDataSql = "SELECT name as product_category_name, type, product_category_id FROM Product_Category WHERE product_category_id = :product_category_id;";
     $productCategoryData = $pdo->prepare($productCategoryDataSql);

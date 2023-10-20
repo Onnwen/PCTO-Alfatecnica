@@ -18,7 +18,7 @@ function generateRandomString($length = 20)
     }
     return $randomString;
 }
-require_once('connessione.php');
+require_once('connection/connection.php');
 
 if (isset($_POST["name"]) && isset($_POST["surname"]) && isset($_POST["email"]) && isset($_POST["role"]) && isset($_POST["company_id"])) {
     $name = isset($_POST['name']) ? $_POST['name'] : '';
@@ -299,7 +299,7 @@ if (isset($_POST["name"]) && isset($_POST["surname"]) && isset($_POST["email"]) 
 <body class="">
 <div class="content">
     <center>
-        <img class="center" src="https://gestionale.alfatecnicaantincendio.it/img/logo.png" height="200" alt="Alfatecnica">
+        <img class="center" src="https://gestionale.alfatecnicaantincendio.it/img/LogoBlack.png" height="200" alt="Alfatecnica">
     </center>
     <p>Buongiorno ' . $name . ',</p>
     <p>Ricevi questa mail perche\' sei stato registrato su Alfatecnica da un amministratore.</p>

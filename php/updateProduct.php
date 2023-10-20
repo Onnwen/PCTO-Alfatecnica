@@ -1,5 +1,5 @@
 <?php
-require_once('connessione.php');
+require_once('connection/connection.php');
 
 $idProd = isset($_POST['id']) ? $_POST['id'] : 0;
 $newPosX = isset($_POST['newPosX']) ? $_POST['newPosX'] : 0;

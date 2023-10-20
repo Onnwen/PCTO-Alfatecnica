@@ -1,5 +1,5 @@
 <?php
-require_once('../connessione.php');
+require_once('../connection/connection.php');
 
 $productCategoryId = $_POST["product_category_id"];
 $productCategoryType = $_POST["type"];

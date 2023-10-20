@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('php/connessione.php');
+require_once('php/connection/connection.php');
 if (isset($_SESSION['session_id'])) {
     header('location: pages/lista-anagrafica.php');
 } else {
@@ -139,7 +139,7 @@ if (isset($_SESSION['session_id'])) {
                     <div class="col-sm-12 col-md-10 col-lg-8 col-xl-8">
                         <div class="form-wrap w-100 p-md-5 p-sm-1"
                              style="background: rgba(109,109,109,0.09);width: 500px;border-radius: 20px">
-                            <img src="img/logo.png" style="width: 100%;height: auto" alt="logo">
+                            <img src="img/LogoBlack.png" style="width: 100%;height: auto" alt="logo">
                             <label id="errorLabel" style="width: 100%;color: red; text-align: center"></label>
                             <form role="form" action="javascript:0;" method="post" id="login-form" autocomplete="on">
                                 <div class="form-group">

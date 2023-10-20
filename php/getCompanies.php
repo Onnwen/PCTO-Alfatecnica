@@ -1,5 +1,5 @@
 <?php
-    require_once('connessione.php');
+    require_once('connection/connection.php');
     $getCompanies = "SELECT * FROM Companies";
     $companies = array();
     $res = $pdo->prepare($getCompanies);

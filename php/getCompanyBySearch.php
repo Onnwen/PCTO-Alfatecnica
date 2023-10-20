@@ -1,5 +1,5 @@
 <?php
-require_once('connessione.php');
+require_once('connection/connection.php');
 
 $nomeAzienda = $_POST['nome_azienda'];
 $sede = $_POST['sede'];

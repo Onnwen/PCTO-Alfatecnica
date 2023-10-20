@@ -1,5 +1,5 @@
 <?php
-require_once('connessione.php');
+require_once('connection/connection.php');
 $user_id = $_POST['user_id'];
 $select = "SELECT *
                    FROM Users

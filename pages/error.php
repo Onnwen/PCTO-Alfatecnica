@@ -1,3 +1,11 @@
+<?php
+    $error = $_SERVER['REDIRECT_STATUS'];
+    $error_title = '';
+    $error_message = '';
+    $error_title = 'Error '.$error;
+    $error_message = 'Unknown error';
+?>
+
 <!DOCTYPE html>
 <html lang="it" dir="ltr">
   <head>
@@ -14,7 +22,7 @@
         crossorigin="anonymous"></script>
     <script src="https://www.myersdaily.org/joseph/javascript/md5.js"></script>
     <title>Error 404</title>
-    <link rel="icon" href="../img/logo.png">
+    <link rel="icon" href="../img/LogoBlack.png">
     <style>
         html,
         body {
@@ -34,10 +42,10 @@
   <body class="text-center login">
         <main class="form-signin">
             <div class="d-flex justify-content-center">
-                <img class="mb-4" src="../img/logo.png" alt="" width="250" height="200" style="margin-right: 20px;">
+                <img class="mb-4" src="../img/LogoBlack.png" alt="" width="250" height="200" style="margin-right: 20px;">
             </div>
-            <h1>Error 404</h1>
-            <p>Page not found</p>
+            <h1><?php  $error_title;  ?> </h1>
+            <p><?php  $error_title;  ?></p>
         </main>
   </body>
 </html>

@@ -1,5 +1,5 @@
 <?php
-require_once('connessione.php');
+require_once('connection/connection.php');
 $query = "SELECT name as productCategoryName, product_category_id as idCategory FROM Product_Category order by product_category_id ASC";
 $categoriesName = array();
 $res = $pdo->prepare($query);

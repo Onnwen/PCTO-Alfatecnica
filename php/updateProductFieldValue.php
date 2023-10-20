@@ -1,5 +1,5 @@
 <?php
-require_once('connessione.php');
+require_once('connection/connection.php');
 
 $productId = $_POST['product_id'];
 $fieldId = $_POST['field_id'];

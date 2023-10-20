@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('../php/connessione.php');
+require_once('../php/connection/connection.php');
 $email = $_GET['stringRetrievePassword'];
 if (isset($email)) {
     $query = "SELECT user_id as idUser FROM Users WHERE stringRetrievePassword = '$email'";

@@ -1,5 +1,5 @@
 <?php
-require_once('connessione.php');
+require_once('connection/connection.php');
 
 $query = "SELECT id, name, site, path_logo FROM Companies";
 $risultato = $pdo->query($query);

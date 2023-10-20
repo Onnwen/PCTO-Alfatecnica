@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('../php/connessione.php');
+require_once('../php/connection/connection.php');
 
 if (isset($_SESSION['session_id'])) {
     $productsCategorySql = "select product_category_id, name, type from Product_Category;";
@@ -28,7 +28,7 @@ if (isset($_SESSION['session_id'])) {
         <script src="https://kit.fontawesome.com/c0c3eed4d9.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <title>Alfatecnica - Lista Prodotti</title>
-        <link rel="icon" href="img/logo.png">
+        <link rel="icon" href="img/LogoBlack.png">
 
         <style>
             .removeField {

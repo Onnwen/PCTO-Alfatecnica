@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('../php/connessione.php');
+require_once('../php/connection/connection.php');
 if (isset($_SESSION['session_id'])) {
     header('location: pages/lista-anagrafica.php');
 } else {

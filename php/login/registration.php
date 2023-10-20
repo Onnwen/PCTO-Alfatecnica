@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('../connessione.php');
+require_once('../connection/connection.php');
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 require '../../vendor/phpmailer/phpmailer/src/Exception.php';
@@ -295,7 +295,7 @@ if(!$check){
 <body class="">
 <div class="content">
     <center>
-        <img class="center" src="https://gestionale.alfatecnicaantincendio.it/img/logo.png" height="200" alt="Alfatecnica">
+        <img class="center" src="https://gestionale.alfatecnicaantincendio.it/img/LogoBlack.png" height="200" alt="Alfatecnica">
     </center>
     <p>Buongiorno ' . $name .',</p>
     <p>Ricevi questa mail perch&eacute hai eseguito la registrazione al nostro sito. Devi per questo verificare la tua mail e poi aspettare che l\'amministratore dell\'azienda a cui ti sei registrato ti accetti, ti sar&aacute poi inviata un\'altra mail per l\'accettazione.</p>
@@ -569,7 +569,7 @@ if(!$check){
 <body class="">
 <div class="content">
     <center>
-        <img class="center" src="https://gestionale.alfatecnicaantincendio.it/img/logo.png" height="200" alt="Alfatecnica">
+        <img class="center" src="https://gestionale.alfatecnicaantincendio.it/img/LogoBlack.png" height="200" alt="Alfatecnica">
     </center>
     <p>Buongiorno,</p>
     <p>essendo lei un amministratore deve sapere che si &eacute; registrato un nuovo utente, per far si che esso possa accedere ai nostri servizi &eacute; necessario entrare nella sezione utenti del pannello di amministazione e accettare la sua registrazione. <br>Cordiali saluti.</p>

@@ -1,5 +1,5 @@
 <?php
-require_once('../connessione.php');
+require_once('../connection/connection.php');
 $mail = isset($_POST['email']) ? $_POST['email'] : 0;
 
 if ($mail != 0) {

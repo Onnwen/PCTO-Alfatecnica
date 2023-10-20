@@ -1,5 +1,5 @@
 <?php
-require_once('../connessione.php');
+require_once('../connection/connection.php');
 error_reporting(E_ERROR | E_PARSE);
 $idUser = $_POST['idUser'];
 $oldPassword = $_POST['oldPassword'];

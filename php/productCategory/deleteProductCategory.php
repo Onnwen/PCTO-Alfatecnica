@@ -1,5 +1,5 @@
 <?php
-require_once('../connessione.php');
+require_once('../connection/connection.php');
 
 $productCategoryId = isset($_POST['id']) ? $_POST['id'] : 0;
 if(!$productCategoryId == 0){

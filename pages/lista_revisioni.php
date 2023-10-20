@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once("../php/connessione.php");
+require_once("../php/connection/connection.php");
 if (isset($_SESSION['session_id'])) {
 ?>
     <!DOCTYPE html>
@@ -8,7 +8,7 @@ if (isset($_SESSION['session_id'])) {
 
     <head>
         <meta charset="UTF-8">
-        <link rel="icon" href="../img/logo.png">
+        <link rel="icon" href="../img/LogoBlack.png">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
@@ -197,7 +197,7 @@ if (isset($_SESSION['session_id'])) {
             let companyId = $("#companyName").val();
             let revisionDate = $("#revisionDate").val();
 
-            $.post("../php/revisions/makeRevision.php", {
+            $.post("../php/revisions/addRevision.php", {
                 product: productId,
                 company: companyId,
                 revisionDate: revisionDate
@@ -254,7 +254,7 @@ if (isset($_SESSION['session_id'])) {
                 // Non è necessario fare una chiamata se stiamo deselezionando l'azienda
                 $("#productName").html(generatedOptions);
             } else {
-                $.post("../php/viewCategories.php", {
+                $.post("../php/getCategories.php", {
                     idAnag: selectedCompany
                 }, function(response) {
                     let receivedProducts = JSON.parse(response);
@@ -350,7 +350,7 @@ if (isset($_SESSION['session_id'])) {
                 loadCurrentPage();
             });
 
-            $.getJSON("../php/viewAnagr.php", function(response) {
+            $.getJSON("../php/getCompany.php", function(response) {
                 let generatedCompanyOptions = "<option disabled selected value=''>Seleziona Azienda</option>";
 
                 response.forEach(company => {

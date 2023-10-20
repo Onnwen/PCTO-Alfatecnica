@@ -1,5 +1,5 @@
 <?php
-require_once('connessione.php');
+require_once('connection/connection.php');
 
 $idCategoria= isset($_POST['idCategoria']) ? $_POST['idCategoria'] : 0;
 $idCompagnia= isset($_POST['idCompagnia']) ? $_POST['idCompagnia'] : 0;

@@ -9,7 +9,7 @@
         }
         return $randomString;
     }
-    require('../connessione.php');
+    require('../connection/connection.php');
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
@@ -300,7 +300,7 @@
                             <body class="">
                             <div class="content">
                                 <center>
-                                    <img class="center" src="https://gestionale.alfatecnicaantincendio.it/img/logo.png" height="200" alt="Alfatecnica">
+                                    <img class="center" src="https://gestionale.alfatecnicaantincendio.it/img/LogoBlack.png" height="200" alt="Alfatecnica">
                                 </center>
                                 <p>Buongiorno ' . $check["name"] .',</p>
                                 <p>Ricevi questa mail perche\' hai segnalato di aver dimenticato la tua password. Utilizza il tasto sottostante per cambiare credenziali di accesso.</p>
