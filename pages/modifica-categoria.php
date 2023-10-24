@@ -71,6 +71,62 @@ if(isset($_SESSION['session_id'])) {
 
 <?php require_once("navbar.php"); ?>
 
+<!-- Deleting confirmation Modal -->
+<div class="modal fade" id="deletingModal" tabindex="-1" aria-labelledby="deletingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" style="color: red" id="confirmedModalLabel">Conferma eliminazione</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Sei sicuro di eliminare l'apparato selezionato ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                <button type="button" id="deletingConfirmationButton" class="btn btn-danger" onclick="deleteProduct()">Conferma</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div class="modal fade" id="confirmedModal" tabindex="-1" aria-labelledby="confirmedModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" style="color: darkgreen" id="confirmedModalLabel">Effettuato con successo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                L'operazione è avvenuta con successo. La pagina sarà ricaricata per applicare le modifiche.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="location.reload()">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Error Modal -->
+<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" style="color: darkred" id="errorModalLabel">È stato riscontrato un problema</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                È stato riscontrato un errore durante il caricamento dei dati. Nessuna modifica è stata applicata.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <!-- Tabella -->
 <div class="container">
     <div class="row">
@@ -109,7 +165,7 @@ if(isset($_SESSION['session_id'])) {
                         foreach ($soldProducts[$soldProductIndex] as $field) {
                             echo "<th scope='col'><input id='field{$field['field_id']}-{$soldProducts[$soldProductIndex][0]["sold_product_id"]}' class='form-control' type='text' value='{$field['value']}' onchange='dataChanged({$soldProducts[$soldProductIndex][0]["sold_product_id"]}, {$field['field_id']})'></th>";
                         }
-                        echo "<th scope='col' style='text-align: center; min-width: 250px; display: inline-block;'><button id='saveButton{$soldProducts[$soldProductIndex][0]["sold_product_id"]}' type='button' class='btn btn-success' disabled style='margin-right: 5px;' onclick='updateProduct({$soldProducts[$soldProductIndex][0]["sold_product_id"]})'>Salva</button><button type='button' class='btn btn-danger' onclick='deleteProduct({$soldProducts[$soldProductIndex][0]["sold_product_id"]})'>Elimina $lowerCategoryName</button></th>";
+                        echo "<th scope='col' style='text-align: center; min-width: 250px; display: inline-block;'><button id='saveButton{$soldProducts[$soldProductIndex][0]["sold_product_id"]}' type='button' class='btn btn-success' disabled style='margin-right: 5px;' onclick='updateProduct({$soldProducts[$soldProductIndex][0]["sold_product_id"]})'>Salva</button><button type='button' class='btn btn-danger' data-bs-toggle='modal' data-bs-target='#deletingModal' data-bs-whatever='{$soldProducts[$soldProductIndex][0]["sold_product_id"]}'>Elimina $lowerCategoryName</button></th>";
                         echo "</tr>";
                     }
                     ?>
@@ -127,11 +183,24 @@ if(isset($_SESSION['session_id'])) {
 <script>
     var changedFields = [];
 
-    function deleteProduct(id) {
-        $.post("../php/deleteProduct.php", {id: id},
-            function(){
+    let id = 0;
+    const deletingModal = document.getElementById('deletingModal');
+    deletingModal.addEventListener('show.bs.modal', function(event) {
+        const button = event.relatedTarget;
+        id = button.getAttribute('data-bs-whatever');
+        console.log(id);
+    });
+
+    function deleteProduct() {
+        $.post("../php/deleteProduct.php", {id: id})
+            .done(function() {
+                modalConfirm(true);
+                modalDeleting(false);
                 console.log("Prodotto " + id  + " cancellato.");
-                location.reload();
+            })
+            .fail(function() {
+                modalDeleting(false);
+                modalError(false);
             });
     }
 
@@ -145,12 +214,28 @@ if(isset($_SESSION['session_id'])) {
         changedFields.forEach(changedField => {
             changedFields.indexOf(changedField) === 0 ? changedFields = [] : changedFields = changedFields.slice(changedFields.indexOf(changedField), 1);
             if (changedField[0] === productId) {
-                $.post("../php/updateProductFieldValue.php", {product_id: productId, field_id: changedField[1], value: document.getElementById("field" + changedField[1] + "-" + changedField[0]).value},
-                    function(){
+                $.post("../php/updateProductFieldValue.php", {product_id: productId, field_id: changedField[1], value: document.getElementById("field" + changedField[1] + "-" + changedField[0]).value})
+                    .done(function() {
+                        modalConfirm(true);
                         console.log("Campo " + changedField[1]  + " del prodotto " + changedField[0] + " aggiornato col valore " + document.getElementById("field" + changedField[1] + "-" + changedField[0]).value + ".");
+                    })
+                    .fail(function() {
+                        modalError(false);
+                        console.log("Errore nell'aggiornamento del campo " + changedField[1]  + " del prodotto " + changedField[0] + " col valore " + document.getElementById("field" + changedField[1] + "-" + changedField[0]).value + ".");
                     });
+
             }
         });
+    }
+
+    function modalConfirm(confirmed) {
+        $("#confirmedModal").modal(!confirmed ? 'hide' : 'show');
+    }
+    function modalError(error) {
+        $("#errorModal").modal(!error ? 'hide' : 'show');
+    }
+    function modalDeleting(deleting) {
+        $("#deletingModal").modal(!deleting ? 'hide' : 'show');
     }
 </script>
 

@@ -42,6 +42,12 @@ $pre->bindParam(':emailAddress2', $emailAddress2, PDO::PARAM_STR);
 $pre->bindParam(':companyNotes', $companyNotes, PDO::PARAM_STR);
 $pre->bindParam(':clientNotes', $clientNotes, PDO::PARAM_STR);
 
-$pre->execute();
 
+try {
+    $pre->execute();
+    echo '1';
+} catch (Exception $e) {
+    echo $e->getMessage();
+    exit;
+}
 exit;

@@ -45,6 +45,25 @@ if (isset($_SESSION['session_id'])) {
             </div>
         </div>
 
+        <!-- Deleting confirmation Modal -->
+        <div class="modal fade" id="deletingModal" tabindex="-1" aria-labelledby="deletingModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" style="color: red" id="confirmedModalLabel">Conferma eliminazione</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Sei sicuro di eliminare l'azienda selezionata ?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                        <button type="button" id="deletingConfirmationButton" class="btn btn-danger" onclick="deleteCompany()">Conferma</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Error Modal -->
         <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -330,7 +349,7 @@ if (isset($_SESSION['session_id'])) {
                     '<div class="card-body">' +
                     '<h4 class="card-title">' + allCompanies[i].nome + '</h4>' +
                     '<p class="card-text">' + allCompanies[i].sede + '</p>' +
-                    '<a href="javascript:deleteCompany(' + allCompanies[i].id + ')"><i class="fa-solid fa-trash-can trash" style="float: left;"></i></a>' +
+                    '<a href="#" data-bs-toggle="modal" data-bs-target="#deletingModal" data-bs-whatever="' + allCompanies[i].id + '"><i class="fa-solid fa-trash-can trash" style="float: left;"></i></a>' +
                     '<button type="button" class="btn btn-outline-dark" onclick="window.location.href=\'dettaglio-anagrafica.php?id_ana=' + allCompanies[i].id + '\'">Guarda</button>' +
                     '<a href="#" data-bs-toggle="modal" data-bs-target="#companyModal" data-bs-whatever="' + allCompanies[i].id + '"><i class="fa-solid fa-pen-to-square edit"' +
                     'style="float: right; vertical-align: middle;"></i></a>' +
@@ -342,7 +361,7 @@ if (isset($_SESSION['session_id'])) {
                     '<td style="text-align: center;">' +
                     '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#companyModal" data-bs-whatever="' + allCompanies[i].id + '"><i class="fa-solid fa-pen"></i></button>&nbsp;&nbsp;' +
                     '<button class="btn btn-outline-info" onclick="window.location.href=\'dettaglio-anagrafica.php?id_ana=' + allCompanies[i].id + '\'"><i class="fa-solid fa-circle-info"></i></button>&nbsp;&nbsp;' +
-                    '<button class="btn btn-outline-danger" onclick="deleteCompany(' + allCompanies[i].id + ')"><i class="fa-solid fa-trash-can"></i></button>' +
+                    '<button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deletingModal" data-bs-whatever="' + allCompanies[i].id + '"><i class="fa-solid fa-trash-can"></i></button>' +
                     '</td>' +
                     '</tr>';
             }
@@ -392,69 +411,20 @@ if (isset($_SESSION['session_id'])) {
             });
         });
 
-        function insertInDatabase(isUpdating) {
-            suspendCompanyModal(true);
 
-            let name = $('#name').val();
-            let site = $('#site').val();
-            let address = $('#address').val();
-            let CAP = $('#CAP').val();
-            let city = $('#city').val();
-            let province = $('#province').val();
-            let phoneNumber = $('#phoneNumber').val();
-            let emailAddress = $('#emailAddress').val();
-            let personalReference = $('#personalReference').val();
-            let phoneNumber2 = $('#phoneNumber2').val();
-            let cellPhoneNumber = $('#cellPhoneNumber').val();
-            let emailAddress2 = $('#emailAddress2').val();
-            let companyNotes = $('#companyNotes').val();
-            let clientNotes = $('#clientNotes').val();
+        let id = 0;
+        const deletingModal = document.getElementById('deletingModal');
+        deletingModal.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            id = button.getAttribute('data-bs-whatever');
+            const modalTitle = deletingModal.querySelector('.modal-title');
+            const modalBody = deletingModal.querySelector('.modal-body');
+            modalTitle.textContent = 'Conferma eliminazione azienda';
+            modalBody.textContent = 'Sei sicuro di voler eliminare l\'azienda?';
+        });
 
-            let planimetry_image = $('#planimetry_image').prop('files')[0];
-            let logo = $('#logo').prop('files')[0];
-
-            let formData = new FormData();
-
-            formData.append('name', name);
-            formData.append('site', site);
-            formData.append('address', address);
-            formData.append('CAP', CAP);
-            formData.append('city', city);
-            formData.append('province', province);
-            formData.append('phoneNumber', phoneNumber);
-            formData.append('emailAddress', emailAddress);
-            formData.append('personalReference', personalReference);
-            formData.append('phoneNumber2', phoneNumber2);
-            formData.append('cellPhoneNumber', cellPhoneNumber);
-            formData.append('emailAddress2', emailAddress2);
-            formData.append('companyNotes', companyNotes);
-            formData.append('clientNotes', clientNotes);
-            formData.append('planimetry_image', planimetry_image);
-            formData.append('logo', logo);
-
-            $.ajax({
-                url: isUpdating ? '../php/updateCompany.php' : '../php/addCompany.php',
-                type: 'post',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                    suspendCompanyModal(false);
-                    if (response === 'invalidInsert') {
-                        modalError(true);
-                    } else {
-                        modalConfirmation(true);
-                    }
-                },
-                fail: function() {
-                    suspendCompanyModal(false);
-                    modalError(true);
-                },
-            });
-        }
-
-        function deleteCompany(id) {
-
+        function deleteCompany() {
+            suspendDeletingModal(true);
             $.ajax({
                 url: '../php/deleteCompany.php',
                 type: 'post',
@@ -462,15 +432,31 @@ if (isset($_SESSION['session_id'])) {
                     id: id
                 },
                 success: function() {
+                    suspendDeletingModal(false);
                     modalConfirmation(true);
                 },
                 fail: function() {
+                    suspendDeletingModal(false);
                     modalError(true);
                 },
                 always: function() {
                     // modalLoading(false);
                 }
             });
+        }
+
+        function suspendDeletingModal(suspended) {
+            if (suspended) {
+                $('#deletingModalConfirmButton').prop('disabled', true);
+                const confirmButton = $('#deletingModalConfirmButton');
+                confirmButton.prop('disabled', true);
+                confirmButton.html('<div class="spinner-border spinner-border-sm" role="status"/>');
+            } else {
+                $('#deletingModalConfirmButton').removeAttr('disabled');
+                const confirmButton = $('#deletingModalConfirmButton');
+                confirmButton.removeAttr('disabled');
+                confirmButton.html("Aggiungi");
+            }
         }
 
         function suspendCompanyModal(suspended) {
@@ -492,17 +478,20 @@ if (isset($_SESSION['session_id'])) {
                 $.each(companyInformation, function(key, data) {
                     $('#' + key).val(data);
                 })
+                $("#companyModalConfirmButton").attr("onclick", "insertInDatabase(true)");
             } else {
                 companyModal.querySelector('form').reset();
             }
         }
 
         var editingCompany = 0;
+        let idAnaToModify;
         const companyModal = document.getElementById('companyModal')
         companyModal.addEventListener('show.bs.modal', function(event) {
             fillCompanyModal();
             const button = event.relatedTarget;
             const modalType = button.getAttribute('data-bs-whatever');
+            idAnaToModify = modalType;
 
             const modalTitle = companyModal.querySelector('.modal-title');
             const confirmButton = $('#companyModalConfirmButton');
@@ -535,18 +524,86 @@ if (isset($_SESSION['session_id'])) {
             }
         })
 
+        function insertInDatabase(isUpdating) {
+            suspendCompanyModal(true);
+
+            let name = $('#name').val();
+            let site = $('#site').val();
+            let address = $('#address').val();
+            let CAP = $('#CAP').val();
+            let city = $('#city').val();
+            let province = $('#province').val();
+            let phoneNumber = $('#phoneNumber').val();
+            let emailAddress = $('#emailAddress').val();
+            let personalReference = $('#personalReference').val();
+            let phoneNumber2 = $('#phoneNumber2').val();
+            let cellPhoneNumber = $('#cellPhoneNumber').val();
+            let emailAddress2 = $('#emailAddress2').val();
+            let companyNotes = $('#companyNotes').val();
+            let clientNotes = $('#clientNotes').val();
+
+            let planimetry_image = $('#planimetry_image').prop('files')[0];
+            let logo = $('#logo').prop('files')[0];
+
+            let formData = new FormData();
+
+            if(isUpdating){
+                formData.append('id', idAnaToModify);
+            }
+
+            formData.append('name', name);
+            formData.append('site', site);
+            formData.append('address', address);
+            formData.append('CAP', CAP);
+            formData.append('city', city);
+            formData.append('province', province);
+            formData.append('phoneNumber', phoneNumber);
+            formData.append('emailAddress', emailAddress);
+            formData.append('personalReference', personalReference);
+            formData.append('phoneNumber2', phoneNumber2);
+            formData.append('cellPhoneNumber', cellPhoneNumber);
+            formData.append('emailAddress2', emailAddress2);
+            formData.append('companyNotes', companyNotes);
+            formData.append('clientNotes', clientNotes);
+            formData.append('planimetry_image', planimetry_image);
+            formData.append('logo', logo);
+
+            $.ajax({
+                url: isUpdating ? '../php/updateCompany.php' : '../php/addCompany.php',
+                type: 'post',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    suspendCompanyModal(false);
+                    if (response !== '1') {
+                        modalError(true);
+                    } else {
+                        modalConfirmation(true);
+                    }
+                },
+                fail: function() {
+                    suspendCompanyModal(false);
+                    modalError(true);
+                },
+            });
+        }
+
         function modalError(error) {
             $("#companyModal").modal(error ? 'hide' : 'show');
+            $("#deletingModal").modal(error ? 'hide' : 'show');
             $("#errorModal").modal(!error ? 'hide' : 'show');
         }
 
         function modalLoading(loading) {
             $("#companyModal").modal(loading ? 'hide' : 'show');
+            $("#deletingModal").modal(loading ? 'hide' : 'show');
             $("#loadingModal").modal(!loading ? 'hide' : 'show');
         }
 
         function modalConfirmation(confirmed) {
             $("#companyModal").modal(confirmed ? 'hide' : 'show');
+            $("#deletingModal").modal(confirmed ? 'hide' : 'show');
             $("#confirmedModal").modal(!confirmed ? 'hide' : 'show');
         }
 

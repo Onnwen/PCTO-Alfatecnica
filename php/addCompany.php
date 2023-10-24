@@ -72,6 +72,12 @@ $pre->bindParam(':planimetry_image_width', $planimetry_image_width, PDO::PARAM_I
 $pre->bindParam(':planimetry_image_height', $planimetry_image_height, PDO::PARAM_INT);
 $pre->bindParam(':unique_Code', $randomString, PDO::PARAM_STR);
 
-$pre->execute();
+try {
+    $pre->execute();
+    echo '1';
+} catch (Exception $e) {
+    echo $e->getMessage();
+    exit;
+}
 
 exit;

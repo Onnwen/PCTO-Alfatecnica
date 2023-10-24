@@ -44,6 +44,25 @@ if (isset($_SESSION['session_id'])) {
     <body>
         <?php require_once("navbar.php"); ?>
 
+        <!-- Deleting confirmation Modal -->
+        <div class="modal fade" id="deletingModal" tabindex="-1" aria-labelledby="deletingModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" style="color: red" id="confirmedModalLabel">Conferma eliminazione</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Sei sicuro di eliminare l'apparato selezionato ?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                        <button type="button" id="deletingConfirmationButton" class="btn btn-danger" onclick="deleteProductCategoryFromDatabase()">Conferma</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <hr>
         <br>
 
@@ -165,7 +184,7 @@ if (isset($_SESSION['session_id'])) {
                                         echo "<tr>";
                                         echo "<th class='text-center align-middle'>{$productCategory['name']}</th>";
                                         echo "<th class='text-center align-middle'>" . ($productCategory['type'] == 0 ? "Apparato" : "Impianto") . "</th>";
-                                        echo '<td class="text-center align-middle"><button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#productModal" data-bs-whatever="' . $productCategory['product_category_id'] . '"><i class="fa-solid fa-pen"></i></button>&nbsp;&nbsp;<button class="btn btn-outline-danger" onclick="deleteProductCategoryFromDatabase(' . $productCategory['product_category_id'] . ')"><i class="fa-solid fa-trash-can"></i></button></td>';
+                                        echo '<td class="text-center align-middle"><button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#productModal" data-bs-whatever="' . $productCategory['product_category_id'] . '"><i class="fa-solid fa-pen"></i></button>&nbsp;&nbsp;<button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deletingModal" data-bs-whatever="' . $productCategory['product_category_id'] . '" )"><i class="fa-solid fa-trash-can"></i></button></td>';
                                         echo "</tr>";
                                     }
                                     ?>
@@ -530,15 +549,24 @@ if (isset($_SESSION['session_id'])) {
                 })
         }
 
-        function deleteProductCategoryFromDatabase(productCategoryId) {
+
+        let id = 0;
+        const deletingModal = document.getElementById('deletingModal');
+        deletingModal.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            id = button.getAttribute('data-bs-whatever');
+        });
+        function deleteProductCategoryFromDatabase() {
             modalLoading(true);
             $.post('../php/productCategory/deleteProductCategory.php', {
-                    id: productCategoryId
+                    id: id
                 })
                 .done(function() {
+                    modalDeleting(false);
                     modalConfirmation(true);
                 })
                 .fail(function() {
+                    modalDeleting(false);
                     modalError(true);
                 })
             x
@@ -583,6 +611,10 @@ if (isset($_SESSION['session_id'])) {
         function modalConfirmation(confirmed) {
             $("#productModal").modal(confirmed ? 'hide' : 'show');
             $("#confirmedModal").modal(!confirmed ? 'hide' : 'show');
+        }
+
+        function modalDeleting(deleted) {
+            $("#deletingModal").modal(!deleted ? 'hide' : 'show');
         }
 
         function reload() {
