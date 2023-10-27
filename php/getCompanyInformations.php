@@ -5,7 +5,7 @@ require_once("../php/connection/connection.php");
 $companyId = isset($_GET['id_ana']) ? $_GET['id_ana'] : '';
 
 if($companyId !== ''){
-    $selectQuery = "SELECT name, site, address, CAP, city, province, phoneNumber1, emailAddress1, personalReference, phoneNumber2, cellPhoneNumber, emailAddress2, companyNotes, clientNotes
+    $selectQuery = "SELECT name, site, address, CAP, city, province, phoneNumber1, emailAddress1, personalReference, phoneNumber2, cellPhoneNumber, emailAddress2, companyNotes, clientNotes, path_logo, planimetry_image_url
     FROM Companies WHERE id = :id";
     $pre = $pdo -> prepare($selectQuery);
     $pre -> bindParam(':id', $companyId, PDO::PARAM_INT);
@@ -25,7 +25,9 @@ if($companyId !== ''){
         'cellPhoneNumber' => $row['cellPhoneNumber'],
         'emailAddress2' => $row['emailAddress2'],
         'companyNotes' => $row['companyNotes'],
-        'clientNotes' => $row['clientNotes']
+        'clientNotes' => $row['clientNotes'],
+        'path_logo' => $row['path_logo'],
+        'planimetry_image_url' => $row['planimetry_image_url']
     ];
     echo json_encode($companyArray);
 }

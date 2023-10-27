@@ -772,8 +772,8 @@ if (isset($_SESSION['session_id'])) {
                         //modalLoading
                     })
                     .done(function (response) {
-                        const companyInformations = JSON.parse(response);
-                        fillSelectProductModal(companyInformations);
+                        const categories = JSON.parse(response);
+                        fillSelectProductModal(categories);
                     })
                     .fail(function () {
                         //modalError;
@@ -790,7 +790,6 @@ if (isset($_SESSION['session_id'])) {
             }
 
             $('#selectCategory').on('click', function () {
-
                 idCategoria = document.getElementById('chooseCategory').value;
                 console.log(idCategoria);
             })

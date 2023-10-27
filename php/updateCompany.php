@@ -17,6 +17,31 @@ $cellPhoneNumber = isset($_POST['cellPhoneNumber']) ? $_POST['cellPhoneNumber'] 
 $emailAddress2 = isset($_POST['emailAddress2']) ? $_POST['emailAddress2'] : '';
 $companyNotes = isset($_POST['companyNotes']) ? $_POST['companyNotes'] : '';
 $clientNotes = isset($_POST['clientNotes']) ? $_POST['clientNotes'] : '';
+/*
+ * #FIXME inserire i nuovi file ed eliminare i vecchi sovrascirverli con i nuovi
+$planimetry_image = $_FILES["planimetry_image"];
+$logo = $_FILES["logo"];
+
+$target_dir_logo = "img/loghi/";
+$target_dir_planimetry = "img/planimetrie/";
+
+$target_file_logo = $target_dir_logo . $name . "." . strtolower(pathinfo($logo["name"], PATHINFO_EXTENSION)); #FIXME: Controlla che il file non esista di già!
+$target_file_planimetry = $target_dir_planimetry . $name  . "." . strtolower(pathinfo($planimetry_image["name"], PATHINFO_EXTENSION)); #FIXME: Controlla che il file non esista di già!
+
+$image_data = getimagesize($planimetry_image["tmp_name"]);
+
+$planimetry_image_width = $image_data[0];
+$planimetry_image_height = $image_data[1];
+*/
+$queryName = "SELECT COUNT(*) as numbersOfNames FROM Companies WHERE name = :name";
+$pre = $pdo->prepare($queryName);
+$pre->bindParam(':name', $name, PDO::PARAM_STR);
+$pre->execute();
+$check = $pre->fetch(PDO::FETCH_ASSOC);
+if($check['numbersOfNames']!==0){
+    echo "Name already exists";
+    exit;
+}
 
 $Query = "UPDATE Companies SET name = :name, site = :site, address = :address, CAP = :CAP, city = :city, province = :province, phoneNumber1 = :phoneNumber, emailAddress1 = :emailAddress, personalReference = :personalReference, phoneNumber2 = :phoneNumber2, cellPhoneNumber = :cellPhoneNumber, emailAddress2 = :emailAddress2, companyNotes = :companyNotes, clientNotes = :clientNotes WHERE id = :id";
 try {

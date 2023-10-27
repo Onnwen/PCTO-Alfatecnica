@@ -53,7 +53,7 @@ CREATE TABLE `anagrafica` (
 --
 
 INSERT INTO `anagrafica` (`id`, `nome`, `sede`, `path_logo`, `indirizzo`, `CAP`, `citta`, `provincia`, `telefono1`, `email1`, `rif_personale`, `telefono2`, `cellulare`, `email2`, `noteAziendali`, `noteCliente`) VALUES
-(1, 'Dallara', 'Varano de Melegari', 'img/loghi/azienda1.png', 'Via Provinciale, 33', 43040, 'Varano de Melegari', 'PR', '3408871542', 'dallarastradale@dallara.auto', NULL, '0521887265', '6528716254', NULL, NULL, NULL),
+(1, 'Dallara', 'Varano de Melegari', 'img/loghi/Dallara.png', 'Via Provinciale, 33', 43040, 'Varano de Melegari', 'PR', '3408871542', 'dallarastradale@dallara.auto', NULL, '0521887265', '6528716254', NULL, NULL, NULL),
 (2, 'Bercella', 'Varano de Melegari', 'img/loghi/azienda2.png', 'Via Enzo Ferrari, 10', 43040, 'Varano de Melegari', 'PR', '3338765298', 'bercella@bercella.it', NULL, '0521829983', '9992837625', NULL, NULL, NULL),
 (3, 'NonSoloTabacchi', 'Ozzano Taro', 'img/loghi/azienda3.png', 'Via Nazionale, 64', 43044, 'Ozzano Taro', 'PR', '3762983625', 'nonsolotabacchi@gmail.com', NULL, '0521765287', '7725276534', 'tabaccheriaozzano_64@nonsolotabacchi.it', NULL, NULL);
 

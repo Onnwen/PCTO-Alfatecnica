@@ -2,10 +2,15 @@
 session_start();
 require_once('connection/connection.php');
 
+function changeName($name, $numberOfNames){
+    $name = $name . " " .$numberOfNames;
+    return $name;
+}
+
 $name = isset($_POST['name']) ? $_POST['name'] : '';
 $site = isset($_POST['site']) ? $_POST['site'] : '';
 $address = isset($_POST['address']) ? $_POST['address'] : '';
-$CAP = isset($_POST['CAP']) ? $_POST['CAP'] : 0;
+$CAP = isset($_POST['CAP'])&&$_POST['CAP']!=="null" ? $_POST['CAP'] : 0;
 $city = isset($_POST['city']) ? $_POST['city'] : '';
 $province = isset($_POST['province']) ? $_POST['province'] : '';
 $phoneNumber = isset($_POST['phoneNumber']) ? $_POST['phoneNumber'] : '';
@@ -16,6 +21,14 @@ $cellPhoneNumber = isset($_POST['cellPhoneNumber']) ? $_POST['cellPhoneNumber'] 
 $emailAddress2 = isset($_POST['emailAddress2']) ? $_POST['emailAddress2'] : '';
 $companyNotes = isset($_POST['companyNotes']) ? $_POST['companyNotes'] : '';
 $clientNotes = isset($_POST['clientNotes']) ? $_POST['clientNotes'] : '';
+
+$queryName = "SELECT COUNT(*) as numbersOfNames FROM Companies WHERE name LIKE '". $name ."%'";
+$pre = $pdo->prepare($queryName);
+$pre->execute();
+$check = $pre->fetch(PDO::FETCH_ASSOC);
+if($check !== 0){
+    $name = changeName($name, $check['numbersOfNames']);
+}
 
 $planimetry_image = $_FILES["planimetry_image"];
 $logo = $_FILES["logo"];
@@ -31,8 +44,7 @@ $image_data = getimagesize($planimetry_image["tmp_name"]);
 $planimetry_image_width = $image_data[0];
 $planimetry_image_height = $image_data[1];
 
-move_uploaded_file($logo["tmp_name"], getcwd() . "/../" . $target_file_logo);
-move_uploaded_file($planimetry_image["tmp_name"], getcwd() . "/../" . $target_file_planimetry);
+
 
 $Query = "INSERT INTO Companies(name, site, path_logo, address, CAP, city, province, phoneNumber1, emailAddress1, personalReference, phoneNumber2, cellPhoneNumber, emailAddress2, companyNotes, clientNotes, planimetry_image_url, planimetry_image_width, planimetry_image_height, unique_Code) 
     VALUES (:name, :site, :path_logo, :address, :CAP, :city, :province, :phoneNumber, :emailAddress, :personalReference, :phoneNumber2, :cellPhoneNumber, :emailAddress2, :companyNotes, :clientNotes, :planimetry_image_url, :planimetry_image_width, :planimetry_image_height, :unique_Code)";
@@ -74,6 +86,8 @@ $pre->bindParam(':unique_Code', $randomString, PDO::PARAM_STR);
 
 try {
     $pre->execute();
+    move_uploaded_file($logo["tmp_name"], getcwd() . "/../" . $target_file_logo);
+    move_uploaded_file($planimetry_image["tmp_name"], getcwd() . "/../" . $target_file_planimetry);
     echo '1';
 } catch (Exception $e) {
     echo $e->getMessage();

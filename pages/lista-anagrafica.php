@@ -73,7 +73,9 @@ if (isset($_SESSION['session_id'])) {
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        È stato riscontrato un errore durante il caricamento dei dati. Nessuna modifica è stata applicata.
+                        <p id="errorText">
+                            È stato riscontrato un errore durante il caricamento dei dati. Nessuna modifica è stata applicata.
+                        </p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
@@ -106,7 +108,7 @@ if (isset($_SESSION['session_id'])) {
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form>
+                        <form onchange="onChangeForm()">
                             <label for="basic-url" class="form-label">Informazioni generali</label>
                             <div class="input-group mb-3">
                                 <span class="input-group-text" id="addNameLabel">Nome</span>
@@ -197,13 +199,13 @@ if (isset($_SESSION['session_id'])) {
                                     <div class="col">
                                         <div class="input-group mb-3">
                                             <span class="input-group-text" id="addPlanimetryLabel">Planimetria</span>
-                                            <input class="form-control" type="file" id="planimetry_image" aria-describedby="addPlanimetryLabel">
+                                            <input class="form-control" type="file" id="planimetry_image" aria-describedby="addPlanimetryLabel" value="">
                                         </div>
                                     </div>
                                     <div class="col">
                                         <div class="input-group mb-3">
                                             <span class="input-group-text" id="addLogoLabel">Logo</span>
-                                            <input class="form-control" type="file" id="logo" aria-describedby="addLogoLabel">
+                                            <input class="form-control" type="file" id="logo" aria-describedby="addLogoLabel" value="">
                                         </div>
                                     </div>
                                 </div>
@@ -431,9 +433,16 @@ if (isset($_SESSION['session_id'])) {
                 data: {
                     id: id
                 },
-                success: function() {
-                    suspendDeletingModal(false);
-                    modalConfirmation(true);
+                success: function(response) {
+                    if (response === '1') {
+                        suspendDeletingModal(false);
+                        modalConfirmation(true);
+                    } else {
+                        suspendDeletingModal(false);
+                        modalError(true);
+                        $('#errorText').html("È stato riscontrato un errore durante il caricamento dei dati. Nessuna modifica è stata applicata. <b>L'azienda avendo al su interno prodotti attivi on può essere cancellata.</b>")
+
+                    }
                 },
                 fail: function() {
                     suspendDeletingModal(false);
@@ -515,14 +524,38 @@ if (isset($_SESSION['session_id'])) {
                         const companyInformations = JSON.parse(response);
                         modalTitle.textContent = 'Modifica ' + companyInformations["name"];
                         fillCompanyModal(companyInformations);
-                        $('#filesInput').hide();
+
+                        $('#filesInput').show();
+                        const logoFile = new File([""], companyInformations["path_logo"]);
+                        const planimetryFile = new File([""], companyInformations["planimetry_image_url"]);
+
+                        const dataTransferLogo = new DataTransfer();
+                        dataTransferLogo.items.add(logoFile);
+                        $('#logo').prop('files', dataTransferLogo.files);
+
+                        const dataTransferPlanimetry = new DataTransfer();
+                        dataTransferPlanimetry.items.add(planimetryFile);
+                        $('#planimetry_image').prop('files', dataTransferPlanimetry.files);
+
                         $('#companyModalConfirmButton').text("Conferma modifiche");
                     })
                     .fail(function() {
                         modalError(true);
                     })
             }
+            onChangeForm();
         })
+
+        function onChangeForm() {
+            let name = $('#name');
+            let planimetry_image = $('#planimetry_image').prop('files')[0];
+            let logo = $('#logo').prop('files')[0];
+            if (!name.val() || !planimetry_image || !logo) {
+                $('#companyModalConfirmButton').prop('disabled', true);
+            } else {
+                $('#companyModalConfirmButton').removeAttr('disabled');
+            }
+        }
 
         function insertInDatabase(isUpdating) {
             suspendCompanyModal(true);
@@ -554,7 +587,7 @@ if (isset($_SESSION['session_id'])) {
             formData.append('name', name);
             formData.append('site', site);
             formData.append('address', address);
-            formData.append('CAP', CAP);
+            CAP === "" ? formData.append('CAP', null) : formData.append('CAP', CAP);
             formData.append('city', city);
             formData.append('province', province);
             formData.append('phoneNumber', phoneNumber);
@@ -576,16 +609,20 @@ if (isset($_SESSION['session_id'])) {
                 processData: false,
                 success: function(response) {
                     suspendCompanyModal(false);
-                    if (response !== '1') {
+                    if (response === 'Name already exists') {
+                        modalError(true);
+                        $('#errorText').html("È stato riscontrato un errore durante il caricamento dei dati. Nessuna modifica è stata applicata. <b>Il nome inserito esiste giá nel database.</b>")
+                    } else if (response !== '1') {
                         modalError(true);
                     } else {
                         modalConfirmation(true);
+                        console.log(response);
                     }
                 },
                 fail: function() {
+                    debugger;
                     suspendCompanyModal(false);
-                    modalError(true);
-                },
+                    modalError(true);},
             });
         }
 
