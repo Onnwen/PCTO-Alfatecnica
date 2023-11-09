@@ -86,8 +86,8 @@ $pre->bindParam(':unique_Code', $randomString, PDO::PARAM_STR);
 
 try {
     $pre->execute();
-    move_uploaded_file($logo["tmp_name"], $target_file_logo);
-    move_uploaded_file($planimetry_image["tmp_name"], $target_file_planimetry);
+    move_uploaded_file($logo["tmp_name"], getcwd() . "/../" . $target_file_logo);
+    move_uploaded_file($planimetry_image["tmp_name"], getcwd() . "/../" . $target_file_planimetry);
     echo '1';
 } catch (Exception $e) {
     echo $e->getMessage();
