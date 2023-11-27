@@ -877,7 +877,7 @@ if (isset($_SESSION['session_id'])) {
                         let layer = new Konva.Layer({
                             scaleX: 1,
                             scaleY: 1,
-                            draggable: false
+                            draggable: true
                         });
                         stage.add(layer);
                         let groupSfondo = new Konva.Group({
