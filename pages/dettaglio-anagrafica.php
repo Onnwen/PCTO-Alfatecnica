@@ -513,6 +513,7 @@ if (isset($_SESSION['session_id'])) {
                     width: div.clientWidth,
                     height: div.clientHeight,
                     draggable: false
+
                 });
                 groupSfondo.add(sfondoImg);
                 srcSfondo = "";
@@ -893,13 +894,18 @@ if (isset($_SESSION['session_id'])) {
                         let bestRatio = Math.min(widthRatio, heightRatio);
                         let newWidth = risposta.w * bestRatio;
                         let newHeight = risposta.h * bestRatio;
-                        let sfondoImg = new Konva.Image({
+                        sfondoImg.setAttr('width', newWidth);
+                        sfondoImg.setAttr('height', newHeight);
+                        sfondoImg.setAttr('y', (div.clientHeight - newHeight) / 2);
+                        sfondoImg.setAttr('x', (div.clientWidth - newWidth) / 2);
+                        sfondoImg.setAttr('draggable', false);
+                        /*let sfondoImg = new Konva.Image({
                             image: sfondo,
                             width: newWidth,
                             height: newHeight,
                             y: (div.clientHeight - newHeight) / 2,
                             draggable: false
-                        });
+                        });*/
                         groupSfondo.add(sfondoImg);
 
                         //canvas to move on the stage
