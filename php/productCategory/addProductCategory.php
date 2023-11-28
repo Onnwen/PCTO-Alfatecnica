@@ -17,7 +17,7 @@ if (isset($_FILES["icon"])) {
 
 try {
     $pdo->beginTransaction();
-    $pdo->query("INSERT INTO Product_Category (name, type, icon_image_path) VALUES ('" . $productCategoryName . "', '" . $visualizationType . "', '" . $target_file_icon . "')");
+    $pdo->query("INSERT INTO Product_Category (name, type, icon_image_path, revisionMonthDuration) VALUES ('" . $productCategoryName . "', '" . $visualizationType . "', '" . $target_file_icon . "', '6')");
 
     $newProductCategoryId = $pdo->lastInsertId();
     $pdo->commit();
