@@ -36,6 +36,7 @@ if (isset($_GET['id'])) {
                 $productCategory['attributes'][] = [
                     "id" => $sectionData['section_id'],
                     "name" => $sectionData['name'],
+                    "isSection" => true,
                     "fields" => array()
                 ];
             }

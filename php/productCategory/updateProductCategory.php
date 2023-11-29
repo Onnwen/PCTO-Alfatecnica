@@ -1,4 +1,5 @@
 <?php
+
 require_once('../connection/connection.php');
 
 $productCategoryId = $_POST["product_category_id"];
@@ -29,37 +30,51 @@ try {
         }
     }
     else {
-        foreach($_POST['sectionsToUpdate'] as $sectionToUpdate) {
-            $pdo->query("UPDATE Form_Sections SET name = '" . $sectionToUpdate['name'] . "' WHERE section_id = '" . $sectionToUpdate['id'] . "';");
+        $updateSectionIndex = 0;
+        while ($_POST[$updateSectionIndex . "updateSectionId"] !== null) {
+            $pdo->query("UPDATE Form_Sections SET name = '" . $_POST[$updateSectionIndex . "updateSectionName"] . "' WHERE section_id = '" . $_POST[$updateSectionIndex . "updateSectionId"] . "';");
+            $updateSectionIndex++;
         }
 
-        foreach($_POST['fieldsToUpdate'] as $fieldToUpdate) {
-            $pdo->query("UPDATE Form_Fields SET question = '" . $fieldToUpdate['name'] . "' WHERE field_id = '" . $fieldToUpdate['id'] . "';");
-        }
-
-        foreach($_POST['fieldsToAdd'] as $fieldToAdd) {
-            $pdo->query("INSERT INTO Form_Fields (product_category_id, question, section_id) VALUES ('" . $productCategoryId . "', '" . $fieldToAdd['name'] . "', '" . $fieldToAdd['section_id'] . "');");
-        }
-
-        foreach($_POST['sectionsToDelete'] as $sectionToDelete) {
-            $pdo->query("DELETE FROM Form_Sections where section_id = '" . $sectionToDelete['id'] . "';");
-        }
-
-        foreach($_POST['fieldsToDelete'] as $fieldToDelete) {
-            $pdo->query("DELETE FROM Form_Fields where field_id = '" . $fieldToDelete['id'] . "';");
-        }
-
-        foreach($_POST['sectionsToAdd'] as $sectionToAdd) {
-            $pdo->commit();
-            $pdo->beginTransaction();
-            $pdo->query("INSERT INTO Form_Sections (name) VALUES ('" . $sectionToAdd['name'] . "')");
+        $newSectionIndex = 0;
+        while ($_POST[$newSectionIndex . "newSectionName"] !== null) {
+            $pdo->query("INSERT INTO Form_Sections (name) VALUES ('" . $_POST[$newSectionIndex . "newSectionName"] . "');");
             $newSectionId = $pdo->lastInsertId();
-            $pdo->commit();
 
-            $pdo->beginTransaction();
-            foreach($sectionToAdd['fields'] as $field) {
-                $pdo->query("INSERT INTO Form_Fields (product_category_id, question, section_id) VALUES ('" . $productCategoryId . "', '" . $field['name'] . "', '" . $newSectionId . "')");
+            $newFieldIndex = 0;
+            while ($_POST[$newFieldIndex . "newFieldNameWithoutSection"] !== null) {
+                $question = $_POST[$newFieldIndex . "newFieldWithoutSection"];
+                $sectionIdFromFrontend = $_POST[$newSectionIndex . "newSectionId"];
+                if ($_POST[$newFieldIndex . "newFieldWithoutSection"] == $_POST[$newSectionIndex . "newSectionId"]){
+                    $pdo->query("INSERT INTO Form_Fields (product_category_id, question, section_id) VALUES ('" . $productCategoryId . "', '" . $_POST[$newFieldIndex . "newFieldNameWithoutSection"] . "', '" . $newSectionId . "');");
+                }
+                $newFieldIndex++;
             }
+            $newSectionIndex++;
+        }
+
+        $deleteSectionIndex = 0;
+        while ($_POST[$deleteSectionIndex . "deleteSectionId"] !== null) {
+            $pdo->query("DELETE FROM Form_Sections WHERE section_id = '" . $_POST[$deleteSectionIndex . "deleteSectionId"] . "';");
+            $deleteSectionIndex++;
+        }
+
+        $deleteFieldIndex = 0;
+        while ($_POST[$deleteFieldIndex . "deleteFieldId"] !== null) {
+            $pdo->query("DELETE FROM Form_Fields WHERE field_id = '" . $_POST[$deleteFieldIndex . "deleteFieldId"] . "';");
+            $deleteFieldIndex++;
+        }
+
+        $newFieldIndex = 0;
+        while ($_POST[$newFieldIndex . "newFieldName"] !== null) {
+            $pdo->query("INSERT INTO Form_Fields (product_category_id, question, section_id) VALUES ('" . $productCategoryId . "', '" . $_POST[$newFieldIndex . "newFieldName"] . "', '" . $_POST[$newFieldIndex . "newFieldSectionId"] . "');");
+            $newFieldIndex++;
+        }
+
+        $updateFieldIndex = 0;
+        while ($_POST[$updateFieldIndex . "updateFieldId"] !== null) {
+            $pdo->query("UPDATE Form_Fields SET question = '" . $_POST[$updateFieldIndex . "updateFieldName"] . "' WHERE field_id = '" . $_POST[$updateFieldIndex . "updateFieldId"] . "';");
+            $updateFieldIndex++;
         }
     }
 
