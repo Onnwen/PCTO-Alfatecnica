@@ -11,7 +11,7 @@ if (isset($_SESSION['session_id'])) {
         $productsCategory[] = $productCategory;
     }
 
-?>
+    ?>
 
     <!DOCTYPE html>
     <html lang="it">
@@ -42,170 +42,170 @@ if (isset($_SESSION['session_id'])) {
     </head>
 
     <body>
-        <?php require_once("navbar.php"); ?>
+    <?php require_once("navbar.php"); ?>
 
-        <!-- Deleting confirmation Modal -->
-        <div class="modal fade" id="deletingModal" tabindex="-1" aria-labelledby="deletingModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" style="color: red" id="confirmedModalLabel">Conferma eliminazione</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        Sei sicuro di eliminare l'apparato selezionato ?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-                        <button type="button" id="deletingConfirmationButton" class="btn btn-danger" onclick="deleteProductCategoryFromDatabase()">Conferma</button>
-                    </div>
+    <!-- Deleting confirmation Modal -->
+    <div class="modal fade" id="deletingModal" tabindex="-1" aria-labelledby="deletingModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" style="color: red" id="confirmedModalLabel">Conferma eliminazione</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Sei sicuro di eliminare l'apparato selezionato ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                    <button type="button" id="deletingConfirmationButton" class="btn btn-danger" onclick="deleteProductCategoryFromDatabase()">Conferma</button>
                 </div>
             </div>
         </div>
+    </div>
 
-        <hr>
-        <br>
+    <hr>
+    <br>
 
-        <!-- Confirmation Modal -->
-        <div class="modal fade" id="confirmedModal" tabindex="-1" aria-labelledby="confirmedModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" style="color: darkgreen" id="confirmedModalLabel">Effettuato con successo</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        L'operazione è avvenuta con successo. La pagina sarà ricaricata per applicare le modifiche.
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="reload()">Ok</button>
-                    </div>
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmedModal" tabindex="-1" aria-labelledby="confirmedModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" style="color: darkgreen" id="confirmedModalLabel">Effettuato con successo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    L'operazione è avvenuta con successo. La pagina sarà ricaricata per applicare le modifiche.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="reload()">Ok</button>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Error Modal -->
-        <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" style="color: darkred" id="errorModalLabel">È stato riscontrato un problema</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        È stato riscontrato un errore durante il caricamento dei dati. Nessuna modifica è stata applicata.
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
-                    </div>
+    <!-- Error Modal -->
+    <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" style="color: darkred" id="errorModalLabel">È stato riscontrato un problema</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    È stato riscontrato un errore durante il caricamento dei dati. Nessuna modifica è stata applicata.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Add/Edit Product Modal -->
-        <div class="modal fade" id="productModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="productModalLabel">Aggiungi apparato</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form>
-                            <label for="basic-url" class="form-label">Dati generali</label>
-                            <div class="row gx-2">
-                                <div class="col me-4">
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text disabled-with-editing" id="addNameLabel">Nome</span>
-                                        <input class="form-control field-input" type="text" id="name" aria-describedby="addNameLabel" placeholder="Nome">
-                                    </div>
-                                </div>
-                                <div class="col-2 hide-with-editing">
-                                    <input type="radio" class="btn-check" name="form" id="isProduct" autocomplete="off" checked>
-                                    <label class="btn btn-outline-secondary w-100" for="isProduct">Apparato</label>
-                                </div>
-                                <div class="col-2 hide-with-editing">
-                                    <input type="radio" class="btn-check" name="form" id="isForm" autocomplete="off">
-                                    <label class="btn btn-outline-secondary w-100" for="isForm">Impianto</label>
+    <!-- Add/Edit Product Modal -->
+    <div class="modal fade" id="productModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productModalLabel">Aggiungi apparato</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <label for="basic-url" class="form-label">Dati generali</label>
+                        <div class="row gx-2">
+                            <div class="col me-4">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text disabled-with-editing" id="addNameLabel">Nome</span>
+                                    <input class="form-control field-input" type="text" id="name" aria-describedby="addNameLabel" placeholder="Nome">
                                 </div>
                             </div>
-                            <label for="basic-url" class="form-label">Attributi</label>
-                            <div id="modalFields">
+                            <div class="col-2 hide-with-editing">
+                                <input type="radio" class="btn-check" name="form" id="isProduct" autocomplete="off" checked>
+                                <label class="btn btn-outline-secondary w-100" for="isProduct">Apparato</label>
                             </div>
-                            <div id="filesInput hide-with-editing">
-                                <label for="basic-url" class="form-label hide-with-editing">Icona</label>
-                                <div class="col hide-with-editing">
-                                    <div class="input-group mb-3">
-                                        <input class="form-control hide-with-editing" type="file" id="icon" aria-describedby="addIconLabel">
-                                    </div>
+                            <div class="col-2 hide-with-editing">
+                                <input type="radio" class="btn-check" name="form" id="isForm" autocomplete="off">
+                                <label class="btn btn-outline-secondary w-100" for="isForm">Impianto</label>
+                            </div>
+                        </div>
+                        <label for="basic-url" class="form-label">Attributi</label>
+                        <div id="modalFields">
+                        </div>
+                        <div id="filesInput hide-with-editing">
+                            <label for="basic-url" class="form-label hide-with-editing">Icona</label>
+                            <div class="col hide-with-editing">
+                                <div class="input-group mb-3">
+                                    <input class="form-control hide-with-editing" type="file" id="icon" aria-describedby="addIconLabel">
                                 </div>
                             </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button id="productModalCloseButton" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-                        <button id="productModalConfirmButton" type="button" class="btn btn-success" onclick="confirmModalButton();">Aggiungi</button>
-                    </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="productModalCloseButton" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                    <button id="productModalConfirmButton" type="button" class="btn btn-success" onclick="confirmModalButton();">Aggiungi</button>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Aggiunta e ricerca -->
-        <div class="container">
-            <div class="row w-100">
-                <div class="col">
-                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#productModal" data-bs-whatever="addProduct" id="openProductModal">
-                        <i class="bi bi-box-fill"></i>&nbsp;&nbsp;Aggiungi apparato o impianto
-                    </button>
+    <!-- Aggiunta e ricerca -->
+    <div class="container">
+        <div class="row w-100">
+            <div class="col">
+                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#productModal" data-bs-whatever="addProduct" id="openProductModal">
+                    <i class="bi bi-box-fill"></i>&nbsp;&nbsp;Aggiungi apparato o impianto
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <hr>
+
+    <!-- Lista prodotti -->
+    <div class="container">
+        <div class="row row-tabella">
+            <div class="col-sm-12">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr style="text-align: center;">
+                            <th scope="col">Nome</th>
+                            <th scope="col">Tipologia</th>
+                            <th scope="col" style="width: 200px">Gestione</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr style="text-align: center;">
+                            <?php
+                            foreach ($productsCategory as $productCategory) {
+                                echo "<tr>";
+                                echo "<th class='text-center align-middle'>{$productCategory['name']}</th>";
+                                echo "<th class='text-center align-middle'>" . ($productCategory['type'] == 0 ? "Apparato" : "Impianto") . "</th>";
+                                echo '<td class="text-center align-middle"><button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#productModal" data-bs-whatever="' . $productCategory['product_category_id'] . '"><i class="fa-solid fa-pen"></i></button>&nbsp;&nbsp;<button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deletingModal" data-bs-whatever="' . $productCategory['product_category_id'] . '" )"><i class="fa-solid fa-trash-can"></i></button></td>';
+                                echo "</tr>";
+                            }
+                            ?>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <h1 style="margin-top: 3%;text-align: center;color: lightcoral;font-size: x-large">!!! Attenzione non si puo' cancellare una tipologia di apparato se questo e' presente in alcune anagrafiche !!!</h1>
+                    <h1 style="margin-top: 3%;text-align: center;color: burlywood;font-size: x-large">Lavori in corso per quanto riguarda gli impianti, per vedere un esempio della conformazione di un impianto <a href="Mdl-Imp-Sprinkler-a-secco.php">clicca qui</a></h1>
                 </div>
             </div>
         </div>
+    </div>
 
-        <br>
-        <hr>
+    <br>
+    <br>
+    <!-- FOOTER -->
 
-        <!-- Lista prodotti -->
-        <div class="container">
-            <div class="row row-tabella">
-                <div class="col-sm-12">
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr style="text-align: center;">
-                                    <th scope="col">Nome</th>
-                                    <th scope="col">Tipologia</th>
-                                    <th scope="col" style="width: 200px">Gestione</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr style="text-align: center;">
-                                    <?php
-                                    foreach ($productsCategory as $productCategory) {
-                                        echo "<tr>";
-                                        echo "<th class='text-center align-middle'>{$productCategory['name']}</th>";
-                                        echo "<th class='text-center align-middle'>" . ($productCategory['type'] == 0 ? "Apparato" : "Impianto") . "</th>";
-                                        echo '<td class="text-center align-middle"><button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#productModal" data-bs-whatever="' . $productCategory['product_category_id'] . '"><i class="fa-solid fa-pen"></i></button>&nbsp;&nbsp;<button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deletingModal" data-bs-whatever="' . $productCategory['product_category_id'] . '" )"><i class="fa-solid fa-trash-can"></i></button></td>';
-                                        echo "</tr>";
-                                    }
-                                    ?>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <h1 style="margin-top: 3%;text-align: center;color: lightcoral;font-size: x-large">!!! Attenzione non si puo' cancellare una tipologia di apparato se questo e' presente in alcune anagrafiche !!!</h1>
-                        <h1 style="margin-top: 3%;text-align: center;color: burlywood;font-size: x-large">Lavori in corso per quanto riguarda gli impianti, per vedere un esempio della conformazione di un impianto <a href="Mdl-Imp-Sprinkler-a-secco.php">clicca qui</a></h1>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <br>
-        <br>
-        <!-- FOOTER -->
-
-        <hr>
-        <footer class="py-3 my-4">
-            <p class="text-center text-muted ">© 2022 Alfatecnica, Inc</p>
-        </footer>
+    <hr>
+    <footer class="py-3 my-4">
+        <p class="text-center text-muted ">© 2022 Alfatecnica, Inc</p>
+    </footer>
     </body>
 
     <script>
@@ -245,8 +245,8 @@ if (isset($_SESSION['session_id'])) {
                 $('#productModalConfirmButton').text(modalLabelMode);
 
                 $.get('../php/productCategory/getProductCategory.php', {
-                        id: modalType
-                    })
+                    id: modalType
+                })
                     .done(function(response) {
                         let fieldsNames = JSON.parse(response);
 
@@ -255,10 +255,6 @@ if (isset($_SESSION['session_id'])) {
                         $("#name").val(fieldsNames["product_category_name"]);
                         modalAttributes = fieldsNames["attributes"];
                         modalLabelFieldType = fieldsNames["type"] === 0 ? "Campo" : "Domanda";
-
-                        if (fieldsNames["type"] === 1) {
-                            $("#productModalConfirmButton").prop("disabled", true);
-                        }
 
                         loadNewProductFields();
                     })
@@ -357,7 +353,7 @@ if (isset($_SESSION['session_id'])) {
                             fieldsHtml += `<button class="btn btn-outline-secondary removeField" type="button" onclick="removeField('${fieldIndex}', '${sectionIndex}')"><i class="bi bi-trash3"></i></button> `;
                         }
                         if (fieldIndex === section['fields'].length - 1) {
-                            fieldsHtml += `<button class="btn btn-outline-primary" type="button" onclick="addField(${sectionIndex})"><i class="bi bi-plus-circle"></i></button> `;
+                            fieldsHtml += `<button class="btn btn-outline-primary" type="button" onclick="addField(${sectionIndex}, ${section['id']})"><i class="bi bi-plus-circle"></i></button> `;
                         }
                         fieldsHtml += `</div>`;
                     })
@@ -368,7 +364,7 @@ if (isset($_SESSION['session_id'])) {
             $("#modalFields").html(fieldsHtml);
         }
 
-        function addField(sectionId) {
+        function addField(sectionId, section) {
             if (sectionId === undefined) {
                 modalAttributes.push({
                     'id': (modalAttributes.length + 1) * -1,
@@ -377,7 +373,8 @@ if (isset($_SESSION['session_id'])) {
             } else {
                 modalAttributes[sectionId]['fields'].push({
                     'id': (modalAttributes.length + 1) * -1,
-                    'name': ""
+                    'name': "",
+                    'section': section
                 })
             }
             loadNewProductFields();
@@ -385,11 +382,12 @@ if (isset($_SESSION['session_id'])) {
 
         function addSection() {
             modalAttributes.push({
-                'id': modalAttributes.length,
+                'id': (modalAttributes.length +1) * -1 ,
                 'name': "",
-                'fields': []
+                'fields': [],
+                'isSection': true
             });
-            addField(modalAttributes.length - 1);
+            addField(modalAttributes.length - 1, modalAttributes.at(-1)['id']);
         }
 
         function removeField(fieldIndex, sectionIndex) {
@@ -508,9 +506,8 @@ if (isset($_SESSION['session_id'])) {
                 "name": $("#name").val()
             };
 
-            if (isForm()) {
-                console.log("Not supported");
-            } else {
+            if (!isForm()) {
+                parameters["type"] = 0;
                 modalNewAttribues.forEach((newField, index) => {
                     if (modalDeletedAttributes.indexOf(newField) !== -1) {
                         modalNewAttribues.splice(index, 1);
@@ -524,6 +521,7 @@ if (isset($_SESSION['session_id'])) {
                 modalNewAttribues.forEach(newField => {
                     if (newField['id'] < 0) {
                         parameters[newFields + "newFieldName"] = newField['name'];
+
                         newFields++;
                     } else {
                         parameters[updatedFields + "updateFieldId"] = newField['id'];
@@ -535,7 +533,62 @@ if (isset($_SESSION['session_id'])) {
                     parameters[deletedFields + "deleteFieldId"] = deletedField['id'];
                     deletedFields++;
                 });
+            } else {
+                parameters["type"] = 1;
+                modalNewAttribues.forEach((newField, index) => {
+                    if (modalDeletedAttributes.indexOf(newField) !== -1) {
+                        modalNewAttribues.splice(index, 1);
+                    }
+                });
+
+                let newSections = 0;
+                let updatedSections = 0;
+                let deletedSections = 0;
+
+                let newFields = 0;
+                let updatedFields = 0;
+                let deletedFields = 0;
+
+                modalNewAttribues.forEach(newField => {
+                    if (newField['isSection']) {
+                        if (newField['id'] < 0) {
+                            parameters[newSections + "newSectionName"] = newField['name'];
+                            parameters[newSections + "newSectionId"] = newField['id'];
+                            newSections++;
+                        } else {
+                            parameters[updatedSections + "updateSectionId"] = newField['id'];
+                            parameters[updatedSections + "updateSectionName"] = newField['name'];
+                            updatedSections++;
+                        }
+                    } else {
+                        if (newField['id'] < 0) {
+                            if (newField['section'] < 0) {
+                                parameters[newFields + "newFieldNameWithoutSection"] = newField['name'];
+                                parameters[newFields + "newFieldWithoutSection"] = newField['section'];
+                            } else {
+                                parameters[newFields + "newFieldName"] = newField['name'];
+                                parameters[newFields + "newFieldSectionId"] = newField['section'];
+                            }
+                            newFields++;
+                        } else {
+                            parameters[updatedFields + "updateFieldId"] = newField['id'];
+                            parameters[updatedFields + "updateFieldName"] = newField['name'];
+                            updatedFields++;
+                        }
+                    }
+                });
+                modalDeletedAttributes.forEach(deletedField => {
+                    if (deletedField['isSection']) {
+                        parameters[deletedSections + "deleteSectionId"] = deletedField['id'];
+                        deletedSections++;
+                    } else {
+                        console.log(deletedField);
+                        parameters[deletedFields + "deleteFieldId"] = deletedField['field']['id'];
+                        deletedFields++;
+                    }
+                });
             }
+            console.log(parameters);
 
             suspendProductModal(true);
             $.post('../php/productCategory/updateProductCategory.php', parameters)
@@ -559,8 +612,8 @@ if (isset($_SESSION['session_id'])) {
         function deleteProductCategoryFromDatabase() {
             modalLoading(true);
             $.post('../php/productCategory/deleteProductCategory.php', {
-                    id: id
-                })
+                id: id
+            })
                 .done(function() {
                     modalDeleting(false);
                     modalConfirmation(true);
@@ -624,7 +677,7 @@ if (isset($_SESSION['session_id'])) {
 
     </html>
 
-<?php
+    <?php
 } else {
     echo "<script>window.location.replace('../index.php');</script>";
 }
