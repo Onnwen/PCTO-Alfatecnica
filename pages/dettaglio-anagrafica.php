@@ -899,7 +899,8 @@ if (isset($_SESSION['session_id'])) {
                             width: newWidth,
                             height: newHeight,
                             y: (div.clientHeight - newHeight) / 2,
-                            draggable: false
+                            draggable: true
+
                         });
                         groupSfondo.add(sfondoImg);
 
