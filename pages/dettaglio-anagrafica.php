@@ -282,7 +282,7 @@ if (isset($_SESSION['session_id'])) {
             <div class="row">
                 <div class="col-sm-12">
                     <button type="button" class="btn btn btn-outline-warning" data-bs-toggle="modal"
-                            data-bs-target="#modalSelectCategory" data-bs-whatever="selectCategory">Aggiungi
+                            data-bs-target="#modalSelectCategory" data-bs-whatever="selectCategory">Aggiungi apparato
                     </button>
                 </div>
             </div>
@@ -322,10 +322,29 @@ if (isset($_SESSION['session_id'])) {
             </div>
         </div>
         <div class="container">
-            <div class="row">
+            <div class="row" style="margin-bottom: 20px;">
+                <div class="col-sm-12">
+                    <button type="button" class="btn btn btn-outline-warning" data-bs-toggle="modal"
+                            data-bs-target="#modalSelectCategory" data-bs-whatever="selectCategory">Aggiungi impianto
+                    </button>
+                </div>
+            </div>
+            <div class="row row-tabella">
                 <div class="col-sm-12">
                     <div class="table-responsive">
-                        <h1 style="margin-top: 3%;text-align: center;color: burlywood;font-size: xxx-large">... Lavori in corso ...</h1>
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr style="text-align: center;">
+                                <th scope="col">Tipologia impianto</th>
+                                <th scope="col">Quantità</th>
+                                <th scope="col">Data ultima manutenzione</th>
+                                <th scope="col"></th>
+                            </tr>
+                            </thead>
+                            <tbody id="tabellaImpianti">
+                            <!-- Dati -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
