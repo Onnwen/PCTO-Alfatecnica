@@ -18,7 +18,7 @@ if (isset($_GET['id'])) {
             $productCategory['attributes'][] = $field;
         }
     } else {
-        $productCategoryFieldsSql = "SELECT field_id as id, question as name, section_id FROM Form_Fields WHERE product_category_id = :product_category_id;";
+        $productCategoryFieldsSql = "SELECT field_id as id, question as name, section_id FROM Form_Fields WHERE product_category_id = :product_category_id ORDER BY section_id;";
         $productCategoryFields = $pdo->prepare($productCategoryFieldsSql);
         $productCategoryFields->bindParam(":product_category_id", $_GET['id'], PDO::PARAM_INT);
         $productCategoryFields->execute();

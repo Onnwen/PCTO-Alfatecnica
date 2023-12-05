@@ -372,7 +372,7 @@ if (isset($_SESSION['session_id'])) {
                 });
             } else {
                 modalAttributes[sectionId]['fields'].push({
-                    'id': (modalAttributes.length + 1) * -1,
+                    'id': (modalAttributes[sectionId]['fields'].length + 1) * -1,
                     'name': "",
                     'section': section
                 })
@@ -411,18 +411,34 @@ if (isset($_SESSION['session_id'])) {
         }
 
         function updateField(fieldIndex, sectionIndex) {
+            debugger;
             if (sectionIndex === undefined) {
                 modalAttributes[fieldIndex]["name"] = $("#" + fieldIndex + "input").val()
                 modalNewAttribues.push(modalAttributes[fieldIndex]);
             } else {
                 modalAttributes[sectionIndex]["fields"][fieldIndex]["name"] = $("#" + sectionIndex + "" + fieldIndex + "input").val()
-                modalNewAttribues.push(modalAttributes[sectionIndex]["fields"][fieldIndex]);
-                modalNewAttribues.at(-1)['isSection'] = false;
+                modalNewAttribues.forEach((newField) => {
+                    if (newField['id'] === modalAttributes[sectionIndex]['fields'][fieldIndex]['id'] && newField['section'] === modalAttributes[sectionIndex]['id'] && newField['isSection'] === false) {
+                        modalNewAttribues.splice(modalNewAttribues.indexOf(newField), 1);
+                    }
+                });
+                modalNewAttribues.push({
+                    'name': modalAttributes[sectionIndex]["fields"][fieldIndex]["name"],
+                    'id': modalAttributes[sectionIndex]["fields"][fieldIndex]["id"],
+                    'section': modalAttributes[sectionIndex]["fields"][fieldIndex]["section"],
+                    'isSection': false
+                });
             }
         }
 
         function updateSection(index) {
-            modalAttributes[index]["name"] = $("#" + index + "inputSection").val()
+            debugger;
+            modalAttributes[index]["name"] = $("#" + index + "inputSection").val();
+            modalNewAttribues.forEach((newField) => {
+                if (newField['id'] === modalAttributes[index]['id'] && newField['isSection'] === true) {
+                    modalNewAttribues.splice(modalNewAttribues.indexOf(newField), 1);
+                }
+            });
             modalNewAttribues.push({
                 'name': modalAttributes[index]["name"],
                 'id': modalAttributes[index]["id"],
@@ -547,7 +563,9 @@ if (isset($_SESSION['session_id'])) {
 
                 let newFields = 0;
                 let updatedFields = 0;
-                let deletedFields = 0;
+                let deletedFields = 0
+
+                console.log(modalNewAttribues);
 
                 modalNewAttribues.forEach(newField => {
                     if (newField['isSection']) {
