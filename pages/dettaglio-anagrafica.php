@@ -742,7 +742,6 @@ if (isset($_SESSION['session_id'])) {
                             '<td colspan="3"><b>Nessun dato trovato</b></td>' +
                             '</tr>'
                     }
-
                 }, "json");
             });
 

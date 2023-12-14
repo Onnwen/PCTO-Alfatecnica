@@ -62,6 +62,8 @@ if (isset($_SESSION['session_id'])) {
         </div>
     </div>
 
+
+
     <hr>
     <br>
 
@@ -149,7 +151,59 @@ if (isset($_SESSION['session_id'])) {
         </div>
     </div>
 
-    <!-- Modal di visualizzazione formato impianto del tipo Mdl-Imp-Sprinkler-a-secco.php -->
+
+    <!--Example of an implant-->
+    <div class="modal fade" id="exampleImp" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleImpLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Visualizzazione impianto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row row-tabella">
+                            <div class="col-sm-12">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr style="text-align: center;">
+                                            <th scope="col">Pos</th>
+                                            <th scope="col" >&nbsp;</th>
+                                            <th scope="col">Intervento</th>
+                                            <th scope="col">Note</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="exampleTable">
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="12" class="table-active" style="text-align: center;">
+                                                    Note generali
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="12" style="text-align: left;">
+                                                    <div class="form-group" style="margin-top: 10px;">
+                                                        <label for="exampleFormControlTextarea1"></label>
+                                                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Aggiunta e ricerca -->
     <div class="container">
@@ -232,7 +286,6 @@ if (isset($_SESSION['session_id'])) {
                         </tbody>
                     </table>
                     <h1 style="margin-top: 3%;text-align: center;color: lightcoral;font-size: x-large">!!! Attenzione non si puo' cancellare una tipologia di apparato se questo e' presente in alcune anagrafiche !!!</h1>
-                    <h1 style="margin-top: 3%;text-align: center;color: burlywood;font-size: x-large">Lavori in corso per quanto riguarda gli impianti, per vedere un esempio della conformazione di un impianto <a href="Mdl-Imp-Sprinkler-a-secco.php">clicca qui</a></h1>
                 </div>
             </div>
         </div>
@@ -660,6 +713,90 @@ if (isset($_SESSION['session_id'])) {
                 })
         }
 
+        let idExample = 0;
+        const exampleModal = document.getElementById('exampleImp');
+        let exampleTable = $('#exampleTable');
+        exampleModal.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            idExample = button.getAttribute('data-bs-whatever');
+            $.post('../php/getImplant.php', {
+                product_category_id: idExample
+            })
+                .done(function(response) {
+                    response = JSON.parse(response);
+                    let pos = 1;
+                    for(let i=0; i<response.length; i++) {
+                        exampleTable.append(
+                            '<tr>' +
+                                '<td colspan="12" class="table-active" style="text-align: center;">'+ response[i]["section_name"] + '</td> ' +
+                            '</tr>'
+                        )
+                        /*for (let z=0;z<response[i]["fields"].length;i++){
+                            exampleTable.append(
+                                '<tr>' +
+                                    '<th scope="row"> '+ pos + '</th>' +
+                                    '<td style="text-align: left;">' + response[i]["fields"][z]["field_name"] +
+                                        '<div class="form-group" style=""> ' +
+                                            '<label for="exampleFormControlTextarea1"></label> ' +
+                                            '<textarea class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea> ' +
+                                        '</div> ' +
+                                    '</td>' +
+                                    '<td style="text-align: center;">' +
+                                        '<div class="btn-group btn-group-toggle" data-toggle="buttons"> ' +
+                                            '<label class="btn  active"> ' +
+                                                '<input type="radio" name="options" id="option1" autocomplete="off"> Si ' +
+                                            '</label> ' +
+                                            '<label class="btn "> ' +
+                                                '<input type="radio" name="options" id="option2" autocomplete="off"> No ' +
+                                            '</label> ' +
+                                        '</div> ' +
+                                    '<td>' +
+                                        '<div class="form-group">' +
+                                            '<label for="exampleFormControlTextarea1"></label>'+
+                                            '<textarea class="form-control" id="exampleFormControlTextarea1" rows="2"></textarea>'+
+                                        '</div>' +
+                                    '</td>' +
+                                '</tr>'
+                            );
+                            pos++;
+                        }*/
+                        for (let field of response[i]["fields"]){
+                            exampleTable.append(
+                                '<tr>' +
+                                    '<th scope="row"> '+ pos + '</th>' +
+                                    '<td style="text-align: left;">' + field["field_name"] +
+                                        '<div class="form-group" style=""> ' +
+                                            '<label for="exampleFormControlTextarea1"></label> ' +
+                                            '<textarea class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea> ' +
+                                        '</div> ' +
+                                    '</td>' +
+                                    '<td style="text-align: center;">' +
+                                        '<div class="btn-group btn-group-toggle" data-toggle="buttons"> ' +
+                                            '<label class="btn  active"> ' +
+                                                '<input type="radio" name="options" id="option1" autocomplete="off"> Si ' +
+                                            '</label> ' +
+                                            '<label class="btn "> ' +
+                                                '<input type="radio" name="options" id="option2" autocomplete="off"> No ' +
+                                            '</label> ' +
+                                        '</div> ' +
+                                    '</td>' +
+                                    '<td>' +
+                                        '<div class="form-group">' +
+                                            '<label for="exampleFormControlTextarea1"></label>'+
+                                            '<textarea class="form-control" id="exampleFormControlTextarea1" rows="2"></textarea>'+
+                                        '</div>' +
+                                    '</td>' +
+                                '</tr>'
+                            );
+                            pos++;
+                        }
+                    }
+                })
+                .fail(function() {
+                    console.log("error")
+                })
+        });
+
 
         let id = 0;
         const deletingModal = document.getElementById('deletingModal');
@@ -680,7 +817,6 @@ if (isset($_SESSION['session_id'])) {
                     modalDeleting(false);
                     modalError(true);
                 })
-            x
         }
 
         function suspendProductModal(suspended) {
