@@ -3,7 +3,7 @@ session_start();
 require_once('../php/connection/connection.php');
 
 if (isset($_SESSION['session_id'])) {
-    $productsCategorySql = "select product_category_id, name, type from Product_Category;";
+    $productsCategorySql = "select product_category_id, name, type from Product_Category ORDER BY type,name;";
     $productsCategory = array();
     $pre = $pdo->prepare($productsCategorySql);
     $pre->execute();
@@ -28,7 +28,6 @@ if (isset($_SESSION['session_id'])) {
         <script src="https://kit.fontawesome.com/c0c3eed4d9.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <title>Alfatecnica - Lista Prodotti</title>
-        <link rel="icon" href="img/LogoBlack.png">
 
         <style>
             .removeField {
@@ -150,6 +149,8 @@ if (isset($_SESSION['session_id'])) {
         </div>
     </div>
 
+    <!-- Modal di visualizzazione formato impianto del tipo Mdl-Imp-Sprinkler-a-secco.php -->
+
     <!-- Aggiunta e ricerca -->
     <div class="container">
         <div class="row w-100">
@@ -167,6 +168,9 @@ if (isset($_SESSION['session_id'])) {
     <!-- Lista prodotti -->
     <div class="container">
         <div class="row row-tabella">
+            <div class="col-sm-12 mb-2">
+                <h4 style="text-align: center">Lista apparati</h4>
+            </div>
             <div class="col-sm-12">
                 <div class="table-responsive">
                     <table class="table table-bordered">
@@ -181,10 +185,46 @@ if (isset($_SESSION['session_id'])) {
                         <tr style="text-align: center;">
                             <?php
                             foreach ($productsCategory as $productCategory) {
+                                if ($productCategory['type'] == 1) {
+                                    continue;
+                                }
                                 echo "<tr>";
                                 echo "<th class='text-center align-middle'>{$productCategory['name']}</th>";
                                 echo "<th class='text-center align-middle'>" . ($productCategory['type'] == 0 ? "Apparato" : "Impianto") . "</th>";
                                 echo '<td class="text-center align-middle"><button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#productModal" data-bs-whatever="' . $productCategory['product_category_id'] . '"><i class="fa-solid fa-pen"></i></button>&nbsp;&nbsp;<button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deletingModal" data-bs-whatever="' . $productCategory['product_category_id'] . '" )"><i class="fa-solid fa-trash-can"></i></button></td>';
+                                echo "</tr>";
+                            }
+                            ?>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-sm-12 mb-2 mt-3">
+                <h4 style="text-align: center">Lista impianti</h4>
+            </div>
+            <div class="col-sm-12">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr style="text-align: center;">
+                            <th scope="col">Nome</th>
+                            <th scope="col">Tipologia</th>
+                            <th scope="col" style="width: 200px">Gestione</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr style="text-align: center;">
+                            <?php
+                            foreach ($productsCategory as $productCategory) {
+                                if ($productCategory['type'] == 0) {
+                                    continue;
+                                }
+                                echo "<tr>";
+                                echo "<th class='text-center align-middle'>{$productCategory['name']}</th>";
+                                echo "<th class='text-center align-middle'>" . ($productCategory['type'] == 0 ? "Apparato" : "Impianto") . "</th>";
+                                echo '<td class="text-center align-middle"><button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#exampleImp" data-bs-whatever="' . $productCategory['product_category_id'] . '"><i class="fa-solid fa-circle-info"></i></button>&nbsp;&nbsp;<button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#productModal" data-bs-whatever="' . $productCategory['product_category_id'] . '"><i class="fa-solid fa-pen"></i></button>&nbsp;&nbsp;<button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deletingModal" data-bs-whatever="' . $productCategory['product_category_id'] . '" )"><i class="fa-solid fa-trash-can"></i></button></td>';
                                 echo "</tr>";
                             }
                             ?>
