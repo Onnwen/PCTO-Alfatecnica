@@ -3,7 +3,7 @@ session_start();
 require_once('../php/connection/connection.php');
 
 if (isset($_SESSION['session_id'])) {
-    $productsCategorySql = "select product_category_id, name, type from Product_Category;";
+    $productsCategorySql = "select product_category_id, name, type from Product_Category ORDER BY type,name;";
     $productsCategory = array();
     $pre = $pdo->prepare($productsCategorySql);
     $pre->execute();
@@ -28,7 +28,6 @@ if (isset($_SESSION['session_id'])) {
         <script src="https://kit.fontawesome.com/c0c3eed4d9.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <title>Alfatecnica - Lista Prodotti</title>
-        <link rel="icon" href="img/LogoBlack.png">
 
         <style>
             .removeField {
@@ -62,6 +61,8 @@ if (isset($_SESSION['session_id'])) {
             </div>
         </div>
     </div>
+
+
 
     <hr>
     <br>
@@ -150,6 +151,60 @@ if (isset($_SESSION['session_id'])) {
         </div>
     </div>
 
+
+    <!--Example of an implant-->
+    <div class="modal fade" id="exampleImp" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleImpLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Visualizzazione impianto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row row-tabella">
+                            <div class="col-sm-12">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr style="text-align: center;">
+                                            <th scope="col">Pos</th>
+                                            <th scope="col" >&nbsp;</th>
+                                            <th scope="col">Intervento</th>
+                                            <th scope="col">Note</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="exampleTable">
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="12" class="table-active" style="text-align: center;">
+                                                    Note generali
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="12" style="text-align: left;">
+                                                    <div class="form-group" style="margin-top: 10px;">
+                                                        <label for="exampleFormControlTextarea1"></label>
+                                                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <!-- Aggiunta e ricerca -->
     <div class="container">
         <div class="row w-100">
@@ -167,6 +222,9 @@ if (isset($_SESSION['session_id'])) {
     <!-- Lista prodotti -->
     <div class="container">
         <div class="row row-tabella">
+            <div class="col-sm-12 mb-2">
+                <h4 style="text-align: center">Lista apparati</h4>
+            </div>
             <div class="col-sm-12">
                 <div class="table-responsive">
                     <table class="table table-bordered">
@@ -181,6 +239,9 @@ if (isset($_SESSION['session_id'])) {
                         <tr style="text-align: center;">
                             <?php
                             foreach ($productsCategory as $productCategory) {
+                                if ($productCategory['type'] == 1) {
+                                    continue;
+                                }
                                 echo "<tr>";
                                 echo "<th class='text-center align-middle'>{$productCategory['name']}</th>";
                                 echo "<th class='text-center align-middle'>" . ($productCategory['type'] == 0 ? "Apparato" : "Impianto") . "</th>";
@@ -191,8 +252,40 @@ if (isset($_SESSION['session_id'])) {
                         </tr>
                         </tbody>
                     </table>
+                </div>
+            </div>
+
+            <div class="col-sm-12 mb-2 mt-3">
+                <h4 style="text-align: center">Lista impianti</h4>
+            </div>
+            <div class="col-sm-12">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr style="text-align: center;">
+                            <th scope="col">Nome</th>
+                            <th scope="col">Tipologia</th>
+                            <th scope="col" style="width: 200px">Gestione</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr style="text-align: center;">
+                            <?php
+                            foreach ($productsCategory as $productCategory) {
+                                if ($productCategory['type'] == 0) {
+                                    continue;
+                                }
+                                echo "<tr>";
+                                echo "<th class='text-center align-middle'>{$productCategory['name']}</th>";
+                                echo "<th class='text-center align-middle'>" . ($productCategory['type'] == 0 ? "Apparato" : "Impianto") . "</th>";
+                                echo '<td class="text-center align-middle"><button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#exampleImp" data-bs-whatever="' . $productCategory['product_category_id'] . '"><i class="fa-solid fa-circle-info"></i></button>&nbsp;&nbsp;<button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#productModal" data-bs-whatever="' . $productCategory['product_category_id'] . '"><i class="fa-solid fa-pen"></i></button>&nbsp;&nbsp;<button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deletingModal" data-bs-whatever="' . $productCategory['product_category_id'] . '" )"><i class="fa-solid fa-trash-can"></i></button></td>';
+                                echo "</tr>";
+                            }
+                            ?>
+                        </tr>
+                        </tbody>
+                    </table>
                     <h1 style="margin-top: 3%;text-align: center;color: lightcoral;font-size: x-large">!!! Attenzione non si puo' cancellare una tipologia di apparato se questo e' presente in alcune anagrafiche !!!</h1>
-                    <h1 style="margin-top: 3%;text-align: center;color: burlywood;font-size: x-large">Lavori in corso per quanto riguarda gli impianti, per vedere un esempio della conformazione di un impianto <a href="Mdl-Imp-Sprinkler-a-secco.php">clicca qui</a></h1>
                 </div>
             </div>
         </div>
@@ -620,6 +713,90 @@ if (isset($_SESSION['session_id'])) {
                 })
         }
 
+        let idExample = 0;
+        const exampleModal = document.getElementById('exampleImp');
+        let exampleTable = $('#exampleTable');
+        exampleModal.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            idExample = button.getAttribute('data-bs-whatever');
+            $.post('../php/getImplant.php', {
+                product_category_id: idExample
+            })
+                .done(function(response) {
+                    response = JSON.parse(response);
+                    let pos = 1;
+                    for(let i=0; i<response.length; i++) {
+                        exampleTable.append(
+                            '<tr>' +
+                                '<td colspan="12" class="table-active" style="text-align: center;">'+ response[i]["section_name"] + '</td> ' +
+                            '</tr>'
+                        )
+                        /*for (let z=0;z<response[i]["fields"].length;i++){
+                            exampleTable.append(
+                                '<tr>' +
+                                    '<th scope="row"> '+ pos + '</th>' +
+                                    '<td style="text-align: left;">' + response[i]["fields"][z]["field_name"] +
+                                        '<div class="form-group" style=""> ' +
+                                            '<label for="exampleFormControlTextarea1"></label> ' +
+                                            '<textarea class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea> ' +
+                                        '</div> ' +
+                                    '</td>' +
+                                    '<td style="text-align: center;">' +
+                                        '<div class="btn-group btn-group-toggle" data-toggle="buttons"> ' +
+                                            '<label class="btn  active"> ' +
+                                                '<input type="radio" name="options" id="option1" autocomplete="off"> Si ' +
+                                            '</label> ' +
+                                            '<label class="btn "> ' +
+                                                '<input type="radio" name="options" id="option2" autocomplete="off"> No ' +
+                                            '</label> ' +
+                                        '</div> ' +
+                                    '<td>' +
+                                        '<div class="form-group">' +
+                                            '<label for="exampleFormControlTextarea1"></label>'+
+                                            '<textarea class="form-control" id="exampleFormControlTextarea1" rows="2"></textarea>'+
+                                        '</div>' +
+                                    '</td>' +
+                                '</tr>'
+                            );
+                            pos++;
+                        }*/
+                        for (let field of response[i]["fields"]){
+                            exampleTable.append(
+                                '<tr>' +
+                                    '<th scope="row"> '+ pos + '</th>' +
+                                    '<td style="text-align: left;">' + field["field_name"] +
+                                        '<div class="form-group" style=""> ' +
+                                            '<label for="exampleFormControlTextarea1"></label> ' +
+                                            '<textarea class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea> ' +
+                                        '</div> ' +
+                                    '</td>' +
+                                    '<td style="text-align: center;">' +
+                                        '<div class="btn-group btn-group-toggle" data-toggle="buttons"> ' +
+                                            '<label class="btn  active"> ' +
+                                                '<input type="radio" name="options" id="option1" autocomplete="off"> Si ' +
+                                            '</label> ' +
+                                            '<label class="btn "> ' +
+                                                '<input type="radio" name="options" id="option2" autocomplete="off"> No ' +
+                                            '</label> ' +
+                                        '</div> ' +
+                                    '</td>' +
+                                    '<td>' +
+                                        '<div class="form-group">' +
+                                            '<label for="exampleFormControlTextarea1"></label>'+
+                                            '<textarea class="form-control" id="exampleFormControlTextarea1" rows="2"></textarea>'+
+                                        '</div>' +
+                                    '</td>' +
+                                '</tr>'
+                            );
+                            pos++;
+                        }
+                    }
+                })
+                .fail(function() {
+                    console.log("error")
+                })
+        });
+
 
         let id = 0;
         const deletingModal = document.getElementById('deletingModal');
@@ -640,7 +817,6 @@ if (isset($_SESSION['session_id'])) {
                     modalDeleting(false);
                     modalError(true);
                 })
-            x
         }
 
         function suspendProductModal(suspended) {

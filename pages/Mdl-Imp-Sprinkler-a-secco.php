@@ -38,9 +38,6 @@
         </div>
     </div>
     <div class="container">
-        <div class="row">
-
-        </div>
         <div class="row row-tabella">
             <div class="col-sm-12">
                 <div class="table-responsive">
@@ -1530,3 +1527,54 @@
 </body>
 
 </html>
+
+
+
+
+
+
+<tr>
+    <th scope="row">
+        <center>1</center>
+    </th>
+    <td style="text-align: left;">
+        Tipologia e caratteristiche impianto
+        <div class="form-group" style="">
+            <label for="exampleFormControlTextarea1"></label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea>
+        </div>
+    </td>
+    <td style="text-align: center;">
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="btn  active">
+                <input type="radio" name="options" id="option1" autocomplete="off"> Si
+            </label>
+
+            <label class="btn ">
+                <input type="radio" name="options" id="option2" autocomplete="off"> No
+            </label>
+        </div>
+
+    </td>
+    <td>
+        <div class="form-group">
+            <label for="exampleFormControlTextarea1"></label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="2"></textarea>
+        </div>
+    </td>
+</tr>
+<tr>
+    <td colspan="12" class="table-active" style="text-align: center;">
+        Note generali
+    </td>
+</tr>
+<tr>
+    <td colspan="12" style="text-align: left;">
+        <div class="form-group" style="margin-top: 10px;">
+            <label for="exampleFormControlTextarea1"></label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+        </div>
+    </td>
+
+
+</tr>
